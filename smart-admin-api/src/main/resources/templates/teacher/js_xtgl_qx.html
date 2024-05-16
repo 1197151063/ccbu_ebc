@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--main-->
+<div class="form-bg">
+	<div class="form-title">
+		<div class="form-title-left"><img src="../images/form_title.png" alt=""/>添加权限</div>
+		<div class="form-title-right"><el-button type="primary" size="small" onclick="window.location.href ='js_xtgl.html'">提交</el-button><el-button type="primary" plain size="small" onclick="window.location.href ='js_xtgl.html'">保存</el-button><el-button size="small" onclick="window.location.href ='js_xtgl.html'">返回</el-button></div>
+	</div>
+	<!--团队基本信息-->
+	<div class="team-content" style="padding-left:33rem;">
+		<ul>
+			<li><img src="../photo/user_photo1.png" alt=""/></li> 
+		</ul>
+		<dl>
+			<dt>姓名：</dt>
+			<dd>
+				<el-select v-model="value" placeholder="张林伟" size="small" style="width:30rem">
+					<el-option
+							   v-for="item in options"
+							   :key="item.value"
+							   :label="item.label"
+							   :value="item.value">
+					</el-option>
+				</el-select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>用户名：</dt>
+			<dd>
+				<el-select v-model="value" placeholder="zhanglinwei" size="small" style="width:30rem">
+					<el-option
+							   v-for="item in options"
+							   :key="item.value"
+							   :label="item.label"
+							   :value="item.value">
+					</el-option>
+				</el-select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>团队：</dt>
+			<dd>
+				<el-select v-model="value" placeholder="中国龙队银行" size="small" style="width:30rem">
+					<el-option
+							   v-for="item in options"
+							   :key="item.value"
+							   :label="item.label"
+							   :value="item.value">
+					</el-option>
+				</el-select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>权限：</dt>
+			<dd>
+				<el-transfer
+							 v-model="value"
+							 filterable
+							 :filter-method="filterMethod"
+							 filter-placeholder="权限名称"
+							 :data="data"/>
+			</dd>
+		</dl>
+	</div>
+	<!--团队基本信息-->
+</div>
+<!--main-->
+
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+
+	
+<script>
+	
+	//输入框
+	const { defineComponent, ref } = Vue
+
+
+	var Main = {
+		
+		//输入框
+		setup() {
+			return {
+				text: ref(''),
+				textarea: ref('')
+			}
+		},
+		
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				
+				//导航
+				activeIndex: '7',
+				//tabs
+				activeName: 'first',
+				//选择器
+				options: [{
+					value: '选项1',
+					label: '选项1'
+				}, {
+					value: '选项2',
+					label: '选项2'
+				}, {
+					value: '选项3',
+					label: '选项3'
+				}, {
+					value: '选项4',
+					label: '选项4'
+				}, {
+					value: '选项5',
+					label: '选项5'
+				}],
+				value: '',
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		methods: {
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepStockPriceDao">
+
+    <resultMap id="RepStockPriceVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepStockPriceVO"></resultMap>
+    <resultMap id="RepStockPriceExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepStockPriceExcelVO"></resultMap>
+    <sql id="query_rep_stock_price">
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          capital_adequacy_ratio,
+          asset_scale,
+          non_performing_loan_ratio,
+          liquidity_ratio,
+          return_on_net_assets,
+          share_out_bonus,
+          per_share_profit,
+          per_share_net_assets,
+          stock_price
+    </sql>
+
+    <select id="queryByPage" resultMap="RepStockPriceVO">
+        select
+        <include refid="query_rep_stock_price"/>
+        from rep_stock_price
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepStockPriceExcelVO">
+        select
+        <include refid="query_rep_stock_price"/>
+        from rep_stock_price
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepStockPriceExcelVO">
+        select
+        <include refid="query_rep_stock_price"/>
+        from rep_stock_price
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_stock_price where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_stock_price where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <select id="queryStockPriceByProid" resultMap="RepStockPriceVO">
+        select
+        <include refid="query_rep_stock_price"/>
+        from rep_stock_price
+        <where>
+            <if test="proId != null">
+                AND current_project_id = #{proId}
+            </if>
+        </where>
+    </select>
+</mapper>

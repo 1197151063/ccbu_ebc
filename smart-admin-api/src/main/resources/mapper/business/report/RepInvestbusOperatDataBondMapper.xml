@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepInvestbusOperatDataBondDao">
+
+    <resultMap id="RepInvestbusOperatDataBondVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataBondVO"></resultMap>
+    <resultMap id="RepInvestbusOperatDataBondExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataBondExcelVO"></resultMap>
+    <sql id="query_all_rep_bond">
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          bond_kind,
+          bond_price,
+          bond_type,
+          real_value,
+          nominal_value,
+          rate_interest,
+          interest,
+          account_profit_loss
+    </sql>
+
+    <select id="queryByPage" resultMap="RepInvestbusOperatDataBondVO">
+        select
+            <include refid="query_all_rep_bond"/>
+        from rep_investbus_operat_data_bond
+        <where>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepInvestbusOperatDataBondExcelVO">
+        select
+           <include refid="query_all_rep_bond"/>
+        from rep_investbus_operat_data_bond
+        <where>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepInvestbusOperatDataBondExcelVO">
+        select
+         <include refid="query_all_rep_bond"/>
+        from rep_investbus_operat_data_bond
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectInvestbusOperatDataBondPar" resultMap="RepInvestbusOperatDataBondVO">
+        select
+         id,
+         current_stage_id,
+         bond_kind,
+         bond_price,
+         bond_type,
+         real_value,
+         nominal_value,
+         rate_interest,
+         interest,
+         account_profit_loss
+        from par_initial_data_investbus_bond
+        where current_stage_id = #{currentStageId}
+        and bond_type = #{bondType}
+    </select>
+    <select id="selectInvestbusOperatDataBondRep" resultMap="RepInvestbusOperatDataBondVO">
+        select
+         <include refid="query_all_rep_bond"/>
+        from rep_investbus_operat_data_bond
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+        and bond_type = #{bondType}
+    </select>
+    <select id="query" resultMap="RepInvestbusOperatDataBondVO">
+        select
+        <include refid="query_all_rep_bond"/>
+        from rep_investbus_operat_data_bond
+        <where>
+            1=1
+            <if test="currentProjectId!=null">
+                and  current_project_id = #{currentProjectId}
+            </if>
+            <if test="currentTeamId!=null">
+                and current_team_id = #{currentTeamId}
+            </if>
+            <if test="currentStageId!=null">
+                and current_stage_id = #{currentStageId}
+            </if>
+            <if test="bondType!=null">
+                and bond_type = #{bondType}
+            </if>
+        </where>
+    </select>
+    <select id="selectInvestbusOperatDataBondPriceValueRep"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataBondVO">
+        select
+         <include refid="query_all_rep_bond"/>
+        from rep_investbus_operat_data_bond
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+        and bond_kind = #{bondKind}
+        and bond_type = #{bondType}
+    </select>
+
+    <select id="selectInvestbusOperatDataBondNum"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataBondVO">
+        select
+         <include refid="query_all_rep_bond"/>
+        from rep_investbus_operat_data_bond
+        where current_project_id = #{currentProjectId}
+        and current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+        and bond_kind = #{bondKind}
+    </select>
+
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataBondExcelVO">
+        select
+         r.id,
+         r.current_stage_id,
+         t.name,
+         r.bond_kind,
+         r.bond_price,
+         r.bond_type,
+         r.real_value,
+         r.nominal_value,
+         r.rate_interest,
+         r.interest,
+         r.account_profit_loss
+        from rep_investbus_operat_data_bond r left join t_department t on r.current_team_id=t.id
+                where r.current_Project_id = #{currentProjectId}
+        and r.current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_investbus_operat_data_bond where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_investbus_operat_data_bond where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

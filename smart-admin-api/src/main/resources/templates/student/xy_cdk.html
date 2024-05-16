@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--在线交流-->
+<!--<div class="zxjl"><a href="#"><img  th:src="@{/images/zxjl.png}" alt=""/></a></div>-->
+<!--在线交流-->
+<!--header-->
+<div th:include="include/header"></div>
+<!--main-->
+<div class="main">
+	<div class="breadcrumb">
+		<el-breadcrumb separator="-">
+			<el-breadcrumb-item :to="{ path: '/' }"><a th:href="@{/service/home}">首页</a></el-breadcrumb-item>
+			<el-breadcrumb-item><img  th:src="@{/images/form_title.png}" alt=""/>存贷款业务信息录入</el-breadcrumb-item>
+		</el-breadcrumb>
+	</div>
+	<div class="xxlr-main">
+		<el-row>
+			<el-col :span="12"  class="xxlr-bg">
+				<div class="xxlr-title">[[${session['app_user_login']!=null?session['app_user_login'].departmentName:'建设银行'}]]</div>
+				<el-form :model="form" ref="form" :hide-required-asterisk="false" show-message :rules="rules">
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">存放中央银行款项
+							<el-popover
+										placement="top"
+										title="存放中央银行款项"
+										:width="500"
+										trigger="click"
+										content="你可以根据自身流动性状况和盈利性要求等因素作出决定。这个项目的数额在各个阶段是独立的，你填入的数额就是各阶段资产负债中的数额。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="10">
+<!--							<el-tooltip content="dueCentralBank_msg" placement="right" effect="light">-->
+								<el-form-item prop="dueCentralBank">
+									<el-input v-model="form.dueCentralBank" placeholder="请输入" size="small" ></el-input>
+								</el-form-item>
+<!--							</el-tooltip>-->
+						</el-col>
+						<el-col :span="5" class="input-list-unit">百万元</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">存放同业款项
+							<el-popover
+										placement="top"
+										title="存放同业款项"
+										:width="300"
+										trigger="click"
+										content="适当数量的存放同业款项和拆出资金，可便于银行与同业间的日常清算，有肋于保持流动性和维持闲置资金的盈利能力。这两个项目的数额在各个阶段是独立的，你填入的数额就是各阶段资产负债表中的数额。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="10">
+<!--							<el-tooltip content="P1利率1.98，P2利率1.53" placement="right" effect="light">-->
+								<el-form-item prop="interbankDeposit">
+									<el-input v-model="form.interbankDeposit" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+<!--							</el-tooltip>-->
+						</el-col>
+						<el-col :span="5" class="input-list-unit">百万元</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">拆放同业
+							<el-popover
+										placement="top"
+										title="拆放同业"
+										:width="300"
+										trigger="click"
+										content="适当数量的存放同业款项和拆出资金，可便于银行与同业间的日常清算，有肋于保持流动性和维持闲置资金的盈利能力。这两个项目的数额在各个阶段是独立的，你填入的数额就是各阶段资产负债表中的数额。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="10">
+<!--							<el-tooltip content="P1利率3.75，P2利率3.00" placement="right" effect="light">-->
+								<el-form-item prop="loanTrade">
+									<el-input v-model="form.loanTrade" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+<!--							</el-tooltip>-->
+						</el-col>
+						<el-col :span="5" class="input-list-unit">百万元</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10" style="padding-top: 20px;">
+						<el-col :span="9" class="input-list-title"><strong>短期贷款</strong>
+							<el-popover
+										placement="top"
+										title="短期贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7" class="input-list-title2">增长率%</el-col>
+						<el-col :span="7" class="input-list-title2">利率%</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">抵押贷款
+							<el-popover
+										placement="top"
+										title="抵押贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+							<el-form-item prop="shortMortgageLoanAdd">
+								<el-input v-model="form.shortMortgageLoanAdd" placeholder="请输入" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.shortMortgageLoanRise_msg" placement="right" effect="light">
+								<el-form-item prop="shortMortgageLoanRise">
+									<el-input v-model="form.shortMortgageLoanRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">质押贷款
+							<el-popover
+										placement="top"
+										title="质押贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+							<el-form-item prop="shortHypothecatedLoanAdd">
+								<el-input v-model="form.shortHypothecatedLoanAdd" placeholder="请输入" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.shortHypothecatedLoanRise_msg" placement="right" effect="light">
+								<el-form-item prop="shortHypothecatedLoanRise">
+									<el-input v-model="form.shortHypothecatedLoanRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">保证贷款
+							<el-popover
+										placement="top"
+										title="保证贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+							<el-form-item prop="shortGuaranteeLoanAdd">
+								<el-input v-model="form.shortGuaranteeLoanAdd" placeholder="请输入" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.shortGuaranteeLoanRise_msg" placement="right" effect="light">
+								<el-form-item prop="shortGuaranteeLoanRise">
+									<el-input v-model="form.shortGuaranteeLoanRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">信用贷款
+							<el-popover
+										placement="top"
+										title="信用贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+								<el-form-item prop="shortLoanCreditRiseAdd">
+									<el-input v-model="form.shortLoanCreditRiseAdd" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.shortLoanCreditRise_msg" placement="right" effect="light">
+								<el-form-item prop="shortLoanCreditRise">
+									<el-input v-model="form.shortLoanCreditRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title"><strong>贴现</strong>
+							<el-popover
+										placement="top"
+										title="贴现"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+								<el-form-item prop="discountAdd">
+									<el-input v-model="form.discountAdd" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.discountRise_msg" placement="right" effect="light">
+								<el-form-item prop="discountRise">
+									<el-input v-model="form.discountRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10" style="padding-top: 20px;">
+						<el-col :span="9" class="input-list-title"><strong>中长期贷款</strong>
+							<el-popover
+										placement="top"
+										title="中长期贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7" class="input-list-title2">增长率%</el-col>
+						<el-col :span="7" class="input-list-title2">利率%</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">抵押贷款
+							<el-popover
+										placement="top"
+										title="抵押贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+								<el-form-item prop="mlongMortgageLoanAdd">
+									<el-input v-model="form.mlongMortgageLoanAdd" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.mlongMortgageLoanRise_msg" placement="right" effect="light">
+								<el-form-item prop="mlongMortgageLoanRise">
+									<el-input v-model="form.mlongMortgageLoanRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">质押贷款
+							<el-popover
+										placement="top"
+										title="质押贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+							<el-form-item prop="mlongHypothecatedLoanAdd">
+								<el-input v-model="form.mlongHypothecatedLoanAdd" placeholder="请输入" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.mlongHypothecatedLoanRise_msg" placement="right" effect="light">
+								<el-form-item prop="mlongHypothecatedLoanRise">
+									<el-input v-model="form.mlongHypothecatedLoanRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">保证贷款
+							<el-popover
+										placement="top"
+										title="保证贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+								<el-form-item prop="mlongGuaranteeLoanAdd">
+									<el-input v-model="form.mlongGuaranteeLoanAdd" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.mlongGuaranteeLoanRise_msg" placement="right" effect="light">
+								<el-form-item prop="mlongGuaranteeLoanRise">
+									<el-input v-model="form.mlongGuaranteeLoanRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">信用贷款
+							<el-popover
+										placement="top"
+										title="信用贷款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+								<el-form-item prop="mlongLoanCreditAdd">
+									<el-input v-model="form.mlongLoanCreditAdd" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.mlongLoanCreditRise_msg" placement="right" effect="light">
+								<el-form-item prop="mlongLoanCreditRise">
+									<el-input v-model="form.mlongLoanCreditRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<div class="xxlr-title">负债</div>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">同业拆入
+							<el-popover
+										placement="top"
+										title="同业拆入"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="10">
+<!--							<el-tooltip content="P1利率3.66，P2利率2.91" placement="right" effect="light">-->
+								<el-form-item prop="interBank">
+									<el-input v-model="form.interBank" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+<!--							</el-tooltip>-->
+						</el-col>
+						<el-col :span="5" class="input-list-unit">百万元</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">发行长期债券
+							<el-popover
+										placement="top"
+										title="发行长期债券"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="10">
+<!--							<el-tooltip content="P1利率4.20，P2利率3.63" placement="right" effect="light">-->
+								<el-form-item prop="issueLongBonds">
+									<el-input v-model="form.issueLongBonds" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+<!--							</el-tooltip>-->
+						</el-col>
+						<el-col :span="5" class="input-list-unit">百万元</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">发行次级债券
+							<el-popover
+										placement="top"
+										title="发行次级债券"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="10">
+<!--							<el-tooltip content="P1利率4.68，P2利率4.05" placement="right" effect="light">-->
+								<el-form-item prop="issueSecondaryBonds">
+									<el-input v-model="form.issueSecondaryBonds" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+<!--							</el-tooltip>-->
+						</el-col>
+						<el-col :span="5" class="input-list-unit">百万元</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10" style="padding-top: 20px;">
+						<el-col :span="9" class="input-list-title"><strong></strong>
+								<template #reference></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7" class="input-list-title2">增长率%</el-col>
+						<el-col :span="7" class="input-list-title2">利率%</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10" style="padding-top: 20px;">
+						<el-col :span="9" class="input-list-title">短期存款
+							<el-popover
+										placement="top"
+										title="短期存款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+								<el-form-item prop="shortDepositAdd">
+									<el-input v-model="form.shortDepositAdd" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.shortDepositRise_msg" placement="right" effect="light">
+								<el-form-item prop="shortDepositRise">
+									<el-input v-model="form.shortDepositRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">短期储蓄存款
+							<el-popover
+										placement="top"
+										title="短期储蓄存款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+							<el-form-item prop="shortSavingsDepositAdd">
+								<el-input v-model="form.shortSavingsDepositAdd" placeholder="请输入" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.shortSavingsDepositRise_msg" placement="right" effect="light">
+								<el-form-item prop="shortSavingsDepositRise">
+									<el-input v-model="form.shortSavingsDepositRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">同业存放款项
+							<el-popover
+										placement="top"
+										title="同业存放款项"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+								<el-form-item prop="interbankdepositnnnAdd">
+									<el-input v-model="form.interbankdepositnnnAdd" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.interbankdepositnnnRise_msg" placement="right" effect="light">
+								<el-form-item prop="interbankdepositnnnRise">
+									<el-input v-model="form.interbankdepositnnnRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">长期存款
+							<el-popover
+										placement="top"
+										title="长期存款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+								<el-form-item prop="longDePositAdd">
+									<el-input v-model="form.longDePositAdd" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.ongDePositRise_msg" placement="right" effect="light">
+								<el-form-item prop="longDePositRise">
+									<el-input v-model="form.longDePositRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">长期储蓄存款
+							<el-popover
+										placement="top"
+										title="长期储蓄存款"
+										:width="300"
+										trigger="click"
+										content="参考范围：100～300。"
+										>
+								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+							</el-popover>
+						</el-col>
+						<el-col :span="7">
+							<el-form-item prop="longDepositAdd1">
+								<el-input v-model="form.longDepositAdd1" placeholder="请输入" size="small"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="7">
+							<el-tooltip :content="limitMsg.longDepositRise_msg" placement="right" effect="light">
+								<el-form-item prop="longSavingsDepositRise">
+									<el-input v-model="form.longSavingsDepositRise" placeholder="请输入" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+					</el-row>
+				</el-form>
+			</el-col>
+			<!--右侧-->
+			<el-col :span="12" class="sjck-bg">
+				<div class="xxlr-title">数据参考
+					<div class="xxlr-title-right">
+						<el-select v-model="currentStageDesc" placeholder="当前进度" @change="switchStage" size="small">
+							<el-option
+									   v-for="item in optionsjindu"
+									   :key="item.value"
+									   :label="item.label"
+									   :value="item.value">
+							</el-option>
+						</el-select>
+					</div>
+				</div>
+				<el-tabs v-model="activeName" @tab-click="handleClick">
+					<!--资产负债表-->
+					<el-tab-pane label="资产负债表" name="first">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+								<tr align="center" valign="middle">
+									<th>资产</th>
+									<th>{{previousStage1}}阶段</th>
+									<th>{{previousStage2}}阶段</th>
+									<th>负债及股东权益</th>
+									<th>{{previousStage1}}阶段</th>
+									<th>{{previousStage2}}阶段</th>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"><strong>流动资产</strong></td>
+									<td colspan="3"><strong>流动负债</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td>现金</td>
+									<td align="right">{{asset1.cash}}</td>
+									<td align="right">{{asset2.cash}}</td>
+									<td>短期存款</td>
+									<td align="right">{{asset1.shortDeposit}}</td>
+									<td align="right">{{asset2.shortDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>存放中央银行款项</td>
+									<td align="right">{{asset1.dueCentralBank}}</td>
+									<td align="right">{{asset2.dueCentralBank}}</td>
+									<td>短期储蓄存款</td>
+									<td align="right">{{asset1.shortSavingsDeposit}}</td>
+									<td align="right">{{asset2.shortSavingsDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>存放同业款项</td>
+									<td align="right">{{asset1.depositInterbank}}</td>
+									<td align="right">{{asset2.depositInterbank}}</td>
+									<td>向中央银行借款</td>
+									<td align="right">{{asset1.borrowingsCentralBank}}</td>
+									<td align="right">{{asset2.borrowingsCentralBank}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>拆放同业</td>
+									<td align="right">{{asset1.loanTrade}}</td>
+									<td align="right">{{asset2.loanTrade}}</td>
+									<td>同业存放款项</td>
+									<td align="right">{{asset1.interbankDeposit}}</td>
+									<td align="right">{{asset2.interbankDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>短期贷款</td>
+									<td align="right">{{asset1.shortLoan}}</td>
+									<td align="right">{{asset2.shortLoan}}</td>
+									<td>同业拆入</td>
+									<td align="right">{{asset1.interBank}}</td>
+									<td align="right">{{asset2.interBank}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>应收利息</td>
+									<td align="right">{{asset1.interestReceivable}}</td>
+									<td align="right">{{asset2.interestReceivable}}</td>
+									<td>存入短期保证金</td>
+									<td align="right">{{asset1.depositShortMargin}}</td>
+									<td align="right">{{asset2.depositShortMargin}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>其他应收款</td>
+									<td align="right">-</td>
+									<td align="right">-</td>
+									<td>应付利息</td>
+									<td align="right">{{asset1.paymentInterest}}</td>
+									<td align="right">{{asset2.paymentInterest}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>贴现</td>
+									<td align="right">{{asset1.discount}}</td>
+									<td align="right">{{asset2.discount}}</td>
+									<td><strong>流动负债合计</strong></td>
+									<td align="right"><strong>{{asset1.totalCurrentLiability}}</strong></td>
+									<td align="right"><strong>{{asset2.totalCurrentLiability}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td>短期投资</td>
+									<td align="right">{{asset1.shortInvestment}}</td>
+									<td align="right">{{asset2.shortInvestment}}</td>
+									<td colspan="3"></td>
+								</tr>
+								<tr valign="middle">
+									<td>其他流动资产</td>
+									<td align="right">-</td>
+									<td align="right">-</td>
+									<td colspan="3"><strong>长期负债</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>流动资产合计</strong></td>
+									<td align="right"><strong>{{asset1.propertySum}}</strong></td>
+									<td align="right"><strong>{{asset2.propertySum}}</strong></td>
+									<td>长期存款</td>
+									<td align="right">{{asset1.longDeposit}}</td>
+									<td align="right">{{asset2.longDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"></td>
+									<td>长期储蓄存款</td>
+									<td align="right">{{asset1.longSavingsDeposit}}</td>
+									<td align="right">{{asset2.longSavingsDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"><strong>长期资产</strong></td>
+									<td>存入长期保证金</td>
+									<td align="right">{{asset1.depositLongMargin}}</td>
+									<td align="right">{{asset2.depositLongMargin}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>中长期贷款</td>
+									<td align="right">{{asset1.mlongLoan}}</td>
+									<td align="right">{{asset2.mlongLoan}}</td>
+									<td>应付长期债券</td>
+									<td align="right">{{asset1.paymentLongBond}}</td>
+									<td align="right">{{asset2.paymentLongBond}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>&nbsp;&nbsp;减：贷款损失准备</td>
+									<td align="right">{{asset1.lossReserves}}</td>
+									<td align="right">{{asset2.lossReserves}}</td>
+									<td>应付次级债券</td>
+									<td align="right">{{asset1.paymentSubBond}}</td>
+									<td align="right">{{asset2.paymentSubBond}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>长期债权投资</td>
+									<td align="right">{{asset1.longDebtInvestment}}</td>
+									<td align="right">{{asset2.longDebtInvestment}}</td>
+									<td><strong>长期负债合计</strong></td>
+									<td align="right"><strong>{{asset1.totalLongLiabilities}}</strong></td>
+									<td align="right"><strong>{{asset2.totalLongLiabilities}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td>长期股权投资</td>
+									<td align="right">{{asset1.longEquityInvestment}}</td>
+									<td align="right">{{asset2.longEquityInvestment}}</td>
+									<td colspan="3"></td>
+								</tr>
+								<tr valign="middle">
+									<td>固定资产</td>
+									<td align="right">{{asset1.fixedAssets}}</td>
+									<td align="right">{{asset2.fixedAssets}}</td>
+									<td><strong>负债合计</strong></td>
+									<td align="right"><strong>{{asset1.totalLiabilities}}</strong></td>
+									<td align="right"><strong>{{asset2.totalLiabilities}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td>在建工程</td>
+									<td align="right">-</td>
+									<td align="right">-</td>
+									<td colspan="3"></td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>长期资产合计</strong></td>
+									<td align="right"><strong>{{asset1.longTotalAsset}}</strong></td>
+									<td align="right"><strong>{{asset2.longTotalAsset}}</strong></td>
+									<td colspan="3"><strong>股东权益</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"></td>
+									<td>股本</td>
+									<td align="right">{{asset1.capital}}</td>
+									<td align="right">{{asset2.capital}}</td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"><strong>无形资产及其他资产</strong></td>
+									<td>资本公积</td>
+									<td align="right">{{asset1.capitalReserve}}</td>
+									<td align="right">{{asset2.capitalReserve}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>无形资产</td>
+									<td align="right">{{asset1.intangibleAssets}}</td>
+									<td align="right">{{asset2.intangibleAssets}}</td>
+									<td>盈余公积</td>
+									<td align="right">{{asset1.surplusReserve}}</td>
+									<td align="right">{{asset2.surplusReserve}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>其他资产</td>
+									<td align="right">{{asset1.otherAssets}}</td>
+									<td align="right">{{asset2.otherAssets}}</td>
+									<td>一般风险准备</td>
+									<td align="right">-</td>
+									<td align="right">-</td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>无形资产及其他资产合计</strong></td>
+									<td align="right"><strong>{{asset1.intangibleAotherAssets}}</strong></td>
+									<td align="right"><strong>{{asset2.intangibleAotherAssets}}</strong></td>
+									<td>未分配利润</td>
+									<td align="right">{{asset1.undistributedProfit}}</td>
+									<td align="right">{{asset2.undistributedProfit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"></td>
+									<td><strong>股东权益合计</strong></td>
+									<td align="right"><strong>{{asset1.totalShareholdersEquity}}</strong></td>
+									<td align="right"><strong>{{asset2.totalShareholdersEquity}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3">&nbsp;</td>
+									<td colspan="3"></td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>资产总计</strong></td>
+									<td align="right"><strong>{{asset1.totalAssets}}</strong></td>
+									<td align="right"><strong>{{asset2.totalAssets}}</strong></td>
+									<td><strong>负债和股东权益总计</strong></td>
+									<td align="right"><strong>{{asset1.totalLiabilitiesEquityIndebted}}</strong></td>
+									<td align="right"><strong>{{asset2.totalLiabilitiesEquityIndebted}}</strong></td>
+								</tr>
+<!--								<tr valign="middle">
+									<td colspan="6">&nbsp;</td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="6"><strong>补充资料</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="6">本阶段委托资产托管业务余额 28088 百万元；担保业务余额 2313 百万元。</td>
+								</tr>-->
+							</tbody>
+						</table>
+					</el-tab-pane>
+					<!--资产负债表-->
+					<!--利润表-->
+					<el-tab-pane label="利润表" name="second">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+								<tr align="center" valign="middle">
+									<th>项目</th>
+									<th>{{this.previousStage1}}阶段</th>
+									<th>{{this.previousStage2}}阶段</th>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"><strong>营业收入</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td>利息收入</td>
+									<td align="right">{{profit1.interestIncome}}</td>
+									<td align="right">{{profit2.interestIncome}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>金融机构往来收入</td>
+									<td align="right">{{profit1.financialOrganizationIncome}}</td>
+									<td align="right">{{profit2.financialOrganizationIncome}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>手续费收入</td>
+									<td align="right">{{profit1.serviceChargeIncome}}</td>
+									<td align="right">{{profit2.serviceChargeIncome}}</td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>营业收入合计</strong></td>
+									<td align="right"><strong>{{profit1.totalRevenues}}</strong></td>
+									<td align="right"><strong>{{profit2.totalRevenues}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"><strong>营业支出</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td>利息支出</td>
+									<td align="right">{{profit1.interestExpense}}</td>
+									<td align="right">{{profit2.interestExpense}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>金融机构往来支出</td>
+									<td align="right">{{profit1.financialOrganizationExpense}}</td>
+									<td align="right">{{profit2.financialOrganizationExpense}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>手续费支出</td>
+									<td align="right">{{profit1.serviceChargeExpense}}</td>
+									<td align="right">{{profit2.serviceChargeExpense}}</td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>营业支出合计</strong></td>
+									<td align="right"><strong>{{profit1.expenseRevenues}}</strong></td>
+									<td align="right"><strong>{{profit2.expenseRevenues}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3"><strong>营业费用</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td>人员开支</td>
+									<td align="right">{{profit1.peopleCosts}}</td>
+									<td align="right">{{profit2.peopleCosts}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>附加人员成本</td>
+									<td align="right">{{profit1.additionPeopleCosts}}</td>
+									<td align="right">{{profit2.additionPeopleCosts}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>其他人员开支</td>
+									<td align="right">{{profit1.otherPeopleCosts}}</td>
+									<td align="right">{{profit2.otherPeopleCosts}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>固定资产折旧</td>
+									<td align="right">{{profit1.fixedAssetsDepreciation}}</td>
+									<td align="right">{{profit2.fixedAssetsDepreciation}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>其它营业费用</td>
+									<td align="right">{{profit1.otherBusinessCosts}}</td>
+									<td align="right">{{profit2.otherBusinessCosts}}</td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>营业费用合计</strong></td>
+									<td align="right"><strong>{{profit1.totalOperatingExpenses}}</strong></td>
+									<td align="right"><strong>{{profit2.totalOperatingExpenses}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>投资收益</strong></td>
+									<td align="right"><strong>{{profit1.incomeInvestment}}</strong></td>
+									<td align="right"><strong>{{profit2.incomeInvestment}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>营业利润</strong></td>
+									<td align="right"><strong>{{profit1.operatingProfit}}</strong></td>
+									<td align="right"><strong>{{profit2.operatingProfit}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>扣除资产减值前利润总额</strong></td>
+									<td align="right"><strong>{{profit1.deductAssetImpairmentBeforeTotalProfit}}</strong></td>
+									<td align="right"><strong>{{profit2.deductAssetImpairmentBeforeTotalProfit}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>扣除资产减值后利润总额</strong></td>
+									<td align="right"><strong>{{profit1.deductAssetImpairmentAfterTotalProfit}}</strong></td>
+									<td align="right"><strong>{{profit2.deductAssetImpairmentAfterTotalProfit}}</strong></td>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr valign="middle">
+									<td><strong>净利润</strong></td>
+									<td align="right"><strong>{{profit1.retainedProfits}}</strong></td>
+									<td align="right"><strong>{{profit2.retainedProfits}}</strong></td>
+								</tr>
+							</tbody>
+						</table>
+					</el-tab-pane>
+					<!--利润表-->
+					<!--流动性报表-->
+					<el-tab-pane label="流动性报表" name="third">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+								<tr align="center" valign="middle">
+									<th>项目</th>
+									<th>说明</th>
+									<th>金额</th>
+								</tr>
+								<tr valign="middle">
+									<td colspan="3">负债</td>
+								</tr>
+								<tr valign="middle">
+									<td>同业存放款项</td>
+									<td>小于3个月的同业存放款项</td>
+									<td align="right">{{liquiditycash.interbankDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>同业拆入</td>
+									<td>小于3个月的同业拆入款项</td>
+									<td align="right">{{liquiditycash.interBank}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>短期存款</td>
+									<td>短期存款余额</td>
+									<td align="right">{{liquiditycash.shortDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>长期存款</td>
+									<td>长期存款的50%</td>
+									<td align="right">{{liquiditycash.longDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>短期储蓄存款</td>
+									<td>小于3个月的短期储蓄存款</td>
+									<td align="right">{{liquiditycash.shortSavingsDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>长期储蓄存款</td>
+									<td>长期储蓄存款的20%</td>
+									<td align="right">{{liquiditycash.longSavingsDeposit}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>短期债务总计</td>
+									<td>小于3个月的短期债务总额</td>
+									<td align="right">{{liquiditycash.totalShortDebt}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>现金流动性要求</td>
+									<td>短期债务总计的2.5%</td>
+									<td align="right">{{liquiditycash.cashLiquidityRequirements}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>清偿力</td>
+									<td></td>
+									<td align="right">{{liquiditycash.solvency}}</td>
+								</tr>
+								<tr valign="middle">
+									<td>现金清偿力</td>
+									<td>清偿力——现金流动性要求</td>
+									<td align="right">{{liquiditycash.cashSolvency}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</el-tab-pane>
+					<!--流动性报表-->
+				</el-tabs>
+			</el-col>
+			<!--右侧-->
+		</el-row>
+	</div>
+	<div v-show="submitAlert">
+		<el-alert
+				title="请检查您的决策数据是否为空或有效"
+				type="error"
+				center
+				close-text="知道了">
+		</el-alert>
+	</div>
+	<div class="xxlr-tj" v-if="form.status!=1">
+<!--		<a type="primary" th:href="@{/service/yjs}" th:target="_blank">查看</a>-->
+		<el-button type="primary" v-if="form.currentStageId!=2" plain @click="preOperation('form')">预计算</el-button>
+<!--		<a type="primary" th:href="@{/service/yjs(currentProjectId=${form.currentProjectId},currentTeamId=${form.currentTeamId},currentStageId=${form.currentStageId})}"  th:target="_blank" plain @click="saveForm('form')">预计算</a>-->
+<!--		<a type="primary" th:href="@{/service/yjs}"  th:target="_blank" plain @click="saveForm('form')">预计算</a>-->
+		<el-button type="primary" plain @click="saveForm('form')">保存</el-button>
+		<el-button type="primary" @click="submitFormBefore('form')">提交</el-button>
+	</div>
+</div>
+<!--main-->
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+</body>
+<script type="module" th:src="@{/service/deposit-loan.js}"></script>
+<style>
+	.el-form-item {
+		 margin-bottom: 0px;
+	}
+	.input-list .el-input__inner {
+		/* background-color: #F8F9FB; */
+		padding: 0rem 0.8rem;
+		text-align: left;
+	}
+</style>
+</html>

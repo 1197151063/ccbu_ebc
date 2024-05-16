@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepPeerReportPurchaseDao">
+
+    <resultMap id="RepPeerReportPurchaseVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeerReportPurchaseVO"></resultMap>
+
+    <select id="queryRecord" resultMap="RepPeerReportPurchaseVO">
+        select
+          id,
+          project_id,
+          team_id,
+          stage_id,
+          user_id,
+          project,
+          team_name,
+          stage,
+          user_name,
+          update_time,
+          create_time
+        from rep_peer_report_purchase
+        where project_id = #{currentProjectId} and team_id = #{currentTeamId} and stage_id = #{currentStageId}
+    </select>
+
+</mapper>

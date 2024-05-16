@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.teacher.dao.TDecisionSummaryDao">
+
+    <resultMap id="TDecisionSummaryVO" type="net.lab1024.smartadmin.module.business.teacher.domain.vo.TDecisionSummaryVO"></resultMap>
+    <resultMap id="TDecisionSummaryExcelVO" type="net.lab1024.smartadmin.module.business.teacher.domain.vo.TDecisionSummaryExcelVO"></resultMap>
+
+    <select id="queryByPage" resultMap="TDecisionSummaryVO">
+        select
+          id,
+          project,
+          stage,
+          business,
+          team,
+          name,
+          create_time,
+          update_time,
+          status
+        from t_decision_summary
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.project != null and queryDTO.project != ''">
+                <bind name="queryDTO.projectKey" value=" '%' + queryDTO.project +'%' "></bind>
+                AND project like #{queryDTO.projectKey}
+            </if>
+            <if test="queryDTO.stage != null and queryDTO.stage != ''">
+                <bind name="queryDTO.stageKey" value=" '%' + queryDTO.stage +'%' "></bind>
+                AND stage like #{queryDTO.stageKey}
+            </if>
+            <if test="queryDTO.business != null and queryDTO.business != ''">
+                <bind name="queryDTO.businessKey" value=" '%' + queryDTO.business +'%' "></bind>
+                AND business like #{queryDTO.businessKey}
+            </if>
+            <if test="queryDTO.team != null and queryDTO.team != ''">
+                <bind name="queryDTO.teamKey" value=" '%' + queryDTO.team +'%' "></bind>
+                AND team like #{queryDTO.teamKey}
+            </if>
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="TDecisionSummaryExcelVO">
+        select
+           id,
+           project,
+           stage,
+           business,
+           team,
+           name,
+           create_time,
+           update_time,
+           status
+        from t_decision_summary
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.project != null and queryDTO.project != ''">
+                AND INSTR(project,#{queryDTO.project})
+            </if>
+            <if test="queryDTO.stage != null and queryDTO.stage != ''">
+                AND INSTR(stage,#{queryDTO.stage})
+            </if>
+            <if test="queryDTO.business != null and queryDTO.business != ''">
+                AND INSTR(business,#{queryDTO.business})
+            </if>
+            <if test="queryDTO.team != null and queryDTO.team != ''">
+                AND INSTR(team,#{queryDTO.team})
+            </if>
+            <if test="queryDTO.createTime != null and queryDTO.createTime != ''">
+                AND INSTR(create_time,#{queryDTO.createTime})
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="TDecisionSummaryExcelVO">
+        select
+         id,
+         project,
+         stage,
+         business,
+         team,
+         name,
+         create_time,
+         update_time,
+         status
+        from t_decision_summary
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryData"
+            resultType="net.lab1024.smartadmin.module.business.teacher.domain.entity.TDecisionSummaryEntity">
+        select
+        id,
+        project,
+        stage,
+        business,
+        team,
+        name,
+        create_time,
+        update_time,
+        status
+        from t_decision_summary
+        where project = #{queryDTO.project}
+            AND team = #{queryDTO.team}
+            AND stage = #{queryDTO.stage}
+            AND business = #{queryDTO.business}
+    </select>
+    <select id="queryDataIndex" resultType="net.lab1024.smartadmin.module.business.teacher.domain.vo.TDecisionSummaryVO">
+        select
+            id,
+            project,
+            stage,
+            business,
+            team,
+            name,
+            create_time,
+            update_time,
+            status
+        from t_decision_summary
+         where project = (select pro_name from sys_project where pro_id = #{proId}) order by create_time  limit 6
+    </select>
+
+    <delete id="deleteById">
+        delete from t_decision_summary where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from t_decision_summary where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="updateStatus">
+        update t_decision_summary set status = #{status} where id = #{id}
+    </update>
+
+</mapper>

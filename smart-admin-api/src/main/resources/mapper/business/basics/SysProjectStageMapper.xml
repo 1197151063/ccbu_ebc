@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.basics.dao.SysProjectStageDao">
+
+    <resultMap id="SysProjectStageVO" type="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectStageVO"></resultMap>
+    <resultMap id="SysProjectStageExcelVO" type="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectStageExcelVO"></resultMap>
+
+    <insert id="insertProjectStage">
+        INSERT INTO sys_project_stage (
+        pro_id,
+        stage_id,
+        status
+        )
+        VALUES
+            (#{proId},#{stageId},#{status})
+    </insert>
+
+    <update id="beginStage">
+        update sys_project_stage
+        set status = #{status}
+        <where>
+            pro_id = #{currentProjectId} and  stage_id =  #{currentStageId}
+        </where>
+    </update>
+    <select id="querySysProjectEndStage" resultMap="SysProjectStageVO">
+        select
+        sps.id,
+        sps.pro_id,
+        sps.stage_id,
+        sps.status,
+        ss.stage_name
+        from sys_project_stage sps left join sys_stage ss on sps.stage_id = ss.stage_id
+        <where>
+            <if test="sysProjectStageVO.id != null">
+                AND sps.id = #{sysProjectStageVO.id}
+            </if>
+
+            <if test="sysProjectStageVO.proId != null ">
+                AND sps.pro_id = #{sysProjectStageVO.proId}
+            </if>
+            <if test="sysProjectStageVO.status != null ">
+                AND sps.status = #{sysProjectStageVO.status}
+            </if>
+
+            <if test="sysProjectStageVO.stageId != null ">
+                AND sps.stage_id = #{sysProjectStageVO.stageId}
+            </if>
+        </where>
+        and ss.stage_id != 0 and ss.stage_id != 1
+        order by sps.stage_id
+    </select>
+    <select id="querySysProjectStage" resultMap="SysProjectStageVO">
+        select
+          id,
+          pro_id,
+          stage_id,
+          status
+        from sys_project_stage
+        <where>
+            <if test="sysProjectStageVO.id != null">
+                AND id = #{sysProjectStageVO.id}
+            </if>
+
+            <if test="sysProjectStageVO.proId != null ">
+                AND pro_id = #{sysProjectStageVO.proId}
+            </if>
+            <if test="sysProjectStageVO.status != null ">
+                AND status = #{sysProjectStageVO.status}
+            </if>
+
+            <if test="sysProjectStageVO.stageId != null ">
+                AND stage_id = #{sysProjectStageVO.stageId}
+            </if>
+        </where>
+        order by stage_id
+    </select>
+
+    <select id="queryByPage" resultMap="SysProjectStageVO">
+        select
+        id,
+        pro_id,
+        stage_id,
+        status
+        from sys_project_stage
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="SysProjectStageExcelVO">
+        select
+           id,
+           pro_id,
+           stage_id,
+           status
+        from sys_project_stage
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="SysProjectStageExcelVO">
+        select
+         id,
+         pro_id,
+         stage_id,
+         status
+        from sys_project_stage
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from sys_project_stage where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from sys_project_stage where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

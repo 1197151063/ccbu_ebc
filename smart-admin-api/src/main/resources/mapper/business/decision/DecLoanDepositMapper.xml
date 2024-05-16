@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.decision.dao.DecLoanDepositDao">
+
+    <resultMap id="DecLoanDepositVO"
+               type="net.lab1024.smartadmin.module.business.decision.domain.vo.DecLoanDepositVO"></resultMap>
+    <resultMap id="DecLoanDepositExcelVO"
+               type="net.lab1024.smartadmin.module.business.decision.domain.vo.DecLoanDepositExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="DecLoanDepositVO">
+        select
+        id,
+        current_project_id,
+        current_team_id,
+        current_stage_id,
+        total_assets,
+        due_central_bank,
+        interbank_deposit,
+        loan_trade,
+        short_mortgage_loan_add,
+        short_hypothecated_loan_add,
+        short_guarantee_loan_add,
+        short_loan_credit_rise_add,
+        short_mortgage_loan_rise,
+        short_hypothecated_loan_rise,
+        short_guarantee_loan_rise,
+        short_loan_credit_rise,
+        discount_add,
+        discount_rise,
+        mlong_mortgage_loan_add,
+        mlong_hypothecated_loan_add,
+        mlong_guarantee_loan_add,
+        mlong_loan_credit_add,
+        mlong_mortgage_loan_rise,
+        mlong_hypothecated_loan_rise,
+        mlong_guarantee_loan_rise,
+        mlong_loan_credit_rise,
+        inter_bank,
+        issue_long_bonds,
+        issue_secondary_bonds,
+        short_deposit_add,
+        short_savings_deposit_add,
+        interbankdepositnnn_add,
+        long_de_posit_add,
+        long_deposit_add1,
+        short_deposit_rise,
+        short_savings_deposit_rise,
+        interbankdepositnnn_rise,
+        long_de_posit_rise,
+        long_savings_deposit_rise
+        from dec_loan_deposit
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="DecLoanDepositExcelVO">
+        select
+        id,
+        current_project_id,
+        current_team_id,
+        current_stage_id,
+        total_assets,
+        due_central_bank,
+        interbank_deposit,
+        loan_trade,
+        short_mortgage_loan_add,
+        short_hypothecated_loan_add,
+        short_guarantee_loan_add,
+        short_loan_credit_rise_add,
+        short_mortgage_loan_rise,
+        short_hypothecated_loan_rise,
+        short_guarantee_loan_rise,
+        short_loan_credit_rise,
+        discount_add,
+        discount_rise,
+        mlong_mortgage_loan_add,
+        mlong_hypothecated_loan_add,
+        mlong_guarantee_loan_add,
+        mlong_loan_credit_add,
+        mlong_mortgage_loan_rise,
+        mlong_hypothecated_loan_rise,
+        mlong_guarantee_loan_rise,
+        mlong_loan_credit_rise,
+        inter_bank,
+        issue_long_bonds,
+        issue_secondary_bonds,
+        short_deposit_add,
+        short_savings_deposit_add,
+        interbankdepositnnn_add,
+        long_de_posit_add,
+        long_deposit_add1,
+        short_deposit_rise,
+        short_savings_deposit_rise,
+        interbankdepositnnn_rise,
+        long_de_posit_rise,
+        long_savings_deposit_rise
+        from dec_loan_deposit
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="DecLoanDepositExcelVO">
+        select
+        id,
+        current_project_id,
+        current_team_id,
+        current_stage_id,
+        total_assets,
+        due_central_bank,
+        interbank_deposit,
+        loan_trade,
+        short_mortgage_loan_add,
+        short_hypothecated_loan_add,
+        short_guarantee_loan_add,
+        short_loan_credit_rise_add,
+        short_mortgage_loan_rise,
+        short_hypothecated_loan_rise,
+        short_guarantee_loan_rise,
+        short_loan_credit_rise,
+        discount_add,
+        discount_rise,
+        mlong_mortgage_loan_add,
+        mlong_hypothecated_loan_add,
+        mlong_guarantee_loan_add,
+        mlong_loan_credit_add,
+        mlong_mortgage_loan_rise,
+        mlong_hypothecated_loan_rise,
+        mlong_guarantee_loan_rise,
+        mlong_loan_credit_rise,
+        inter_bank,
+        issue_long_bonds,
+        issue_secondary_bonds,
+        short_deposit_add,
+        short_savings_deposit_add,
+        interbankdepositnnn_add,
+        long_de_posit_add,
+        long_deposit_add1,
+        short_deposit_rise,
+        short_savings_deposit_rise,
+        interbankdepositnnn_rise,
+        long_de_posit_rise,
+        long_savings_deposit_rise
+        from dec_loan_deposit
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="query" resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecLoanDepositVO">
+        select
+        id,
+        current_project_id,
+        current_team_id,
+        current_stage_id,
+        total_assets,
+        due_central_bank,
+        interbank_deposit,
+        loan_trade,
+        short_mortgage_loan_add,
+        short_hypothecated_loan_add,
+        short_guarantee_loan_add,
+        short_loan_credit_rise_add,
+        short_mortgage_loan_rise,
+        short_hypothecated_loan_rise,
+        short_guarantee_loan_rise,
+        short_loan_credit_rise,
+        discount_add,
+        discount_rise,
+        mlong_mortgage_loan_add,
+        mlong_hypothecated_loan_add,
+        mlong_guarantee_loan_add,
+        mlong_loan_credit_add,
+        mlong_mortgage_loan_rise,
+        mlong_hypothecated_loan_rise,
+        mlong_guarantee_loan_rise,
+        mlong_loan_credit_rise,
+        inter_bank,
+        issue_long_bonds,
+        issue_secondary_bonds,
+        short_deposit_add,
+        short_savings_deposit_add,
+        interbankdepositnnn_add,
+        long_de_posit_add,
+        long_deposit_add1,
+        short_deposit_rise,
+        short_savings_deposit_rise,
+        interbankdepositnnn_rise,
+        long_de_posit_rise,
+        long_savings_deposit_rise
+        from dec_loan_deposit
+        where current_project_id = #{currentProjectId} and current_team_id = #{currentTeamId} and current_stage_id = #{currentStageId}
+    </select>
+
+    <select id="queryAllTeam"
+            resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecLoanDepositVO">
+                select
+        id,
+        current_project_id,
+        current_team_id,
+        current_stage_id,
+        total_assets,
+        due_central_bank,
+        interbank_deposit,
+        loan_trade,
+        short_mortgage_loan_add,
+        short_hypothecated_loan_add,
+        short_guarantee_loan_add,
+        short_loan_credit_rise_add,
+        short_mortgage_loan_rise,
+        short_hypothecated_loan_rise,
+        short_guarantee_loan_rise,
+        short_loan_credit_rise,
+        discount_add,
+        discount_rise,
+        mlong_mortgage_loan_add,
+        mlong_hypothecated_loan_add,
+        mlong_guarantee_loan_add,
+        mlong_loan_credit_add,
+        mlong_mortgage_loan_rise,
+        mlong_hypothecated_loan_rise,
+        mlong_guarantee_loan_rise,
+        mlong_loan_credit_rise,
+        inter_bank,
+        issue_long_bonds,
+        issue_secondary_bonds,
+        short_deposit_add,
+        short_savings_deposit_add,
+        interbankdepositnnn_add,
+        long_de_posit_add,
+        long_deposit_add1,
+        short_deposit_rise,
+        short_savings_deposit_rise,
+        interbankdepositnnn_rise,
+        long_de_posit_rise,
+        long_savings_deposit_rise
+        from dec_loan_deposit
+        where current_project_id = #{currentProjectId} and current_stage_id = #{currentStageId}
+
+    </select>
+    <select id="queryDataAndStatus"
+            resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecLoanDepositVO">
+            SELECT
+                *
+            FROM
+                dec_loan_deposit
+            WHERE
+            current_project_id = #{currentProjectId}
+            AND current_team_id = #{currentTeamId}
+            AND current_stage_id = #{currentStageId}
+    </select>
+
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecLoanDepositExcelVO">
+        select
+        d.id,
+        d.current_project_id,
+        d.current_team_id,
+        d.current_stage_id,
+        t.name,
+        d.total_assets,
+        d.due_central_bank,
+        d.interbank_deposit,
+        d.loan_trade,
+        d.short_mortgage_loan_add,
+        d.short_hypothecated_loan_add,
+        d.short_guarantee_loan_add,
+        d.short_loan_credit_rise_add,
+        d.short_mortgage_loan_rise,
+        d.short_hypothecated_loan_rise,
+        d.short_guarantee_loan_rise,
+        d.short_loan_credit_rise,
+        d.discount_add,
+        d.discount_rise,
+        d.mlong_mortgage_loan_add,
+        d.mlong_hypothecated_loan_add,
+        d.mlong_guarantee_loan_add,
+        d.mlong_loan_credit_add,
+        d.mlong_mortgage_loan_rise,
+        d.mlong_hypothecated_loan_rise,
+        d.mlong_guarantee_loan_rise,
+        d.mlong_loan_credit_rise,
+        d.inter_bank,
+        d.issue_long_bonds,
+        d.issue_secondary_bonds,
+        d.short_deposit_add,
+        d.short_savings_deposit_add,
+        d.interbankdepositnnn_add,
+        d.long_de_posit_add,
+        d.long_deposit_add1,
+        d.short_deposit_rise,
+        d.short_savings_deposit_rise,
+        d.interbankdepositnnn_rise,
+        d.long_de_posit_rise,
+        d.long_savings_deposit_rise
+        from dec_loan_deposit d left join t_department t on d.current_team_id=t.id
+        where d.current_project_id = #{currentProjectId}
+        and d.current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from dec_loan_deposit where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from dec_loan_deposit where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+    <delete id="deleteData">
+         delete from dec_loan_deposit where current_project_id = #{currentProjectId} and current_team_id = #{currentTeamId} and current_stage_id = #{currentStageId}
+    </delete>
+
+</mapper>

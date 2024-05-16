@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParStockCalculationIndexDao">
+
+    <resultMap id="ParStockCalculationIndexVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParStockCalculationIndexVO"></resultMap>
+    <resultMap id="ParStockCalculationIndexExcelVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParStockCalculationIndexExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParStockCalculationIndexVO">
+        select
+          id,
+          index,
+          weight,
+          min_score,
+          max_score,
+          score
+        from par_stock_calculation_index
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParStockCalculationIndexExcelVO">
+        select
+           id,
+           index,
+           weight,
+           min_score,
+           max_score,
+           score
+        from par_stock_calculation_index
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParStockCalculationIndexExcelVO">
+        select
+         id,
+         index,
+         weight,
+         min_score,
+         max_score,
+         score
+        from par_stock_calculation_index
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="queryCapitalAdequacy" resultType="java.lang.Double">
+        SELECT
+            score
+        FROM
+            par_stock_calculation_index
+        WHERE
+        stock_index = "资本充足率"
+        AND min_score <![CDATA[ < ]]> #{capitalAdequacy}
+        AND max_score <![CDATA[ >= ]]> #{capitalAdequacy};
+    </select>
+    <select id="queryLiquidityRatioScore" resultType="java.lang.Double">
+        SELECT
+            score
+        FROM
+            par_stock_calculation_index
+        WHERE
+        stock_index = "流动性比率"
+        AND min_score <![CDATA[ < ]]> #{liquidityRatio}
+        AND max_score <![CDATA[ >= ]]> #{liquidityRatio};
+    </select>
+    <select id="queryReturnOnNetAssetsScore" resultType="java.lang.Double">
+        SELECT
+            score
+        FROM
+            par_stock_calculation_index
+        WHERE
+        stock_index = "净资产收益率"
+        AND min_score <![CDATA[ < ]]> #{returnOnNetAssets}
+        AND max_score <![CDATA[ >= ]]> #{returnOnNetAssets};
+    </select>
+    <select id="queryDividendProportionScore" resultType="java.lang.Double">
+        SELECT
+            score
+        FROM
+            par_stock_calculation_index
+        WHERE
+        stock_index = "每股股利"
+        AND min_score <![CDATA[ < ]]> #{dividendProportion}
+        AND max_score <![CDATA[ >= ]]> #{dividendProportion};
+    </select>
+
+    <delete id="deleteById">
+        delete from par_stock_calculation_index where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_stock_calculation_index where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

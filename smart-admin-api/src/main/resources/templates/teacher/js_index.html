@@ -1,0 +1,1702 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--header-->
+<!--年度-->
+<!--<div class="season">-->
+<!--	<li class="season-end">第一年度 已完成</li>-->
+<!--	<li class="season-now"><div style="width:67%"><p>第二年度 进行中 当前进度<span>67</span>%</p></div></li>-->
+<!--	<li>第三年度 还未开始</li>-->
+<!--	<li>第四年度 还未开始</li>-->
+<!--</div>-->
+<!--年度-->
+<!--main-->
+<div class="main">
+	<div class="screen">
+		<dl>
+			<dt><font size="4">请选择项目</font></dt>
+			<dd>
+				<el-select v-model="value" size="large" style="width: 150%" filterable placeholder="请选择项目" @change="changeProject">
+					<el-option
+							v-for="item in options"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+					>
+					</el-option>
+				</el-select>
+			</dd>
+		</dl>
+	</div>
+	<!--left-->
+	<div class="index-left">
+		<div class="column">
+			<!--tab-->
+			<el-tabs v-model="teamtabs" @tab-click="handleClick">
+				<template v-for="(value,key) in reportData" :key="key">
+					<el-tab-pane :label="key" :name="key">
+					<!--团队-->
+					<div class="team">
+						<el-form :model="teamData" ref="form" :hide-required-asterisk="false" show-message>
+						<div class="team-logo">
+
+<!--						<img src="../photo/team_logo1.jpg" width="90" height="90" alt=""/>-->
+								<img v-if="teamData.logo" :src="'../upload/' + teamData.logo" class="avatar" width="90" height="90" alt=""/>
+								<img v-else :src="defaultTeamLogo" class="avatar"/>
+
+						</div>
+						<div class="team-name">{{key}}</div>
+						<div class="team-teacher">董事长<img src="../photo/user_photo2.png" alt=""/><a href="#">{{teamData.actualName}}</a></div>
+						</el-form>
+						<ul class="team-qf">
+							<li @click="zxjl=true"><a href="#"><img src="../images/team_xx.png" alt=""/>群发消息</a></li>
+							<li><a href="http://mail.smart-soft.cn/" target="_blank"><img src="../images/team_email.png" alt=""/>群发邮件</a></li>
+						</ul>
+					</div>
+					<!--团队-->	
+					<!--团队成员-->	
+					<div class="team-list">
+						<template v-for="(value,key) in value" :key="key">
+						<section>
+							<div><img src="../photo/user_photo3.png" alt=""/>
+								<span><a href="#">{{value.actualName}}</a>
+
+								</span></div>
+							<ul>
+								<li class="green">在线</li>
+								<li @click="zxjl=true"><img src="../images/team_xx.png" alt=""/></li>
+								<li><img src="../images/team_dh.png" alt=""/></li>
+								<li><a href="http://mail.smart-soft.cn/" target="_blank">
+									<img src="../images/team_email.png" alt=""/></a></li>
+							</ul>
+
+						</section>
+						</template>
+					</div>
+					<!--团队成员-->	
+				    </el-tab-pane>
+				</template>
+			</el-tabs>
+			<!--tab-->
+			<el-divider></el-divider>
+			<!--决策日志-->
+			<div class="column-title">决策日志</div>
+			<div class="index-list">
+				<dl>
+					<dt><span>决策人</span>决策数据</dt>
+					<dd>决策时间</dd>
+				</dl>
+				<template v-for="(value,key) in tableData" :key="key">
+					<dl>
+						<dt><span>{{value.name}}</span>{{value.project}}-{{value.team}}-{{value.stage}}-{{value.business}}</dt>
+						<dd>{{value.createTime}}</dd>
+					</dl>
+				</template>
+			</div>
+			<!--决策日志-->
+			<el-divider></el-divider>
+			<!--市场环境-->
+			<div class="column-title">
+				市场环境
+				<div class="inedx-left-add"><a href="js_xzcj_sy?releaseType=1"><img src="../images/tishi.png" alt=""/>新增环境提醒</a></div>
+			</div>
+			<div class="index-list">
+				<template v-for="(value,key) in shichangData" :key="key">
+					<dl>
+						<dt><a href="#">{{value.title}}</a></dt>
+						<dd>{{value.createTime}}</dd>
+					</dl>
+				</template>
+			</div>
+			<!--市场环境-->
+			<el-divider></el-divider>
+			<!--突发事件-->
+			<div class="column-title">
+				突发事件
+				<div class="inedx-left-add"><a href="js_xzcj_sy?releaseType=2"><img src="../images/tishi.png" alt=""/>新增突发事件</a></div>
+			</div>
+			<div class="index-list">
+				<template v-for="(value,key) in tufaData" :key="key">
+					<dl>
+						<dt><a href="#">{{value.title}}</a></dt>
+						<dd>{{value.createTime}}</dd>
+					</dl>
+				</template>
+			</div>
+			<!--突发事件-->
+			<el-divider></el-divider>
+			<!--副本事件-->
+			<div class="column-title">
+				副本事件
+				<div class="inedx-left-add"><a href="js_xzcj_sy?releaseType=3"><img src="../images/tishi.png" alt=""/>新增副本事件</a></div>
+			</div>
+			<div class="index-list">
+				<template v-for="(value,key) in fubenData" :key="key">
+					<dl>
+						<dt><a href="#">{{value.title}}</a></dt>
+						<dd>{{value.createTime}}</dd>
+					</dl>
+				</template>
+			</div>
+			<!--副本事件-->
+			<el-divider></el-divider>
+			<!--风险预警-->
+			<div class="column-title">
+				风险预警
+				<div class="inedx-left-add"><a href="js_xzcj_sy?releaseType=4"><img src="../images/tishi.png" alt=""/>新增风险预警</a></div>
+			</div>
+			<div class="index-list">
+				<template v-for="(value,key) in fengxianData" :key="key">
+					<dl>
+						<dt><a href="#">{{value.title}}</a></dt>
+						<dd>{{value.createTime}}</dd>
+					</dl>
+				</template>
+			</div>
+			<!--风险预警-->
+			<el-divider></el-divider>
+			<!--系统消息-->
+			<div class="column-title">
+				系统消息
+<!--				<div class="inedx-left-add"><a href="../js_xzxx_sy"><img src="../images/tishi.png" alt=""/>新增系统消息</a></div>-->
+			</div>
+			<div class="index-list">
+				<template v-for="(value,key) in messageData" :key="key">
+					<dl>
+						<dt><a href="#">{{value.messageName}}</a></dt>
+						<dd>{{value.createTime}}</dd>
+					</dl>
+				</template>
+			</div>
+			<!--系统消息-->
+		</div>
+	</div>
+	<!--left-->
+	<!--right-->
+	<div class="index-right">
+		<!--各银行市场占比-->
+		<div class="column">
+			<div class="column-title">市场占比
+				<ul class="column-title-right">
+					<li>
+						<el-select @change="typeChanged" ref="serviceType" v-model="value1" placeholder="业务类型" size="small">
+							<el-option
+									v-for="item in optionsyewu"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</li>
+					<li>
+						<el-select @change="scfeStageChange" v-model="currentStageDesc" ref="scfeSelect" placeholder="当前进度" size="small">
+							<el-option
+									v-for="item in optionsjindu"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</li>
+				</ul>
+			</div>
+			<div class="sczb" id="sczb"></div>
+		</div>
+		<!--各银行市场占比-->
+		<!--同业报告-->
+		<div class="column">
+			<!--同业报告-->
+			<div class="column-title">同业报告
+				<ul class="column-title-right">
+					<li>
+						<el-select @change="tybgStageChange" v-model="currentStageDesc2" placeholder="当前进度" size="small">
+							<el-option
+									v-for="item in optionsjindu"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+							</el-option>
+						</el-select>
+					</li>
+				</ul>
+			</div>
+			<div class="tybg">
+				<!--tab-->
+				<el-tabs v-model="tybgtabs" @tab-click="handleClick">
+					<!--银行-->
+					<template v-for="(value,key) in tybgData" :key="key">
+						<el-tab-pane :label="key" :name="key">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0" class="tybg-table">
+								<tbody>
+								<tr>
+									<td class="hui">资产负债表总额（百万元）</td>
+									<td align="right">{{value.totalAssets}}</td>
+								</tr>
+								<tr>
+									<td class="hui">净利润（百万元）</td>
+									<td align="right">{{value.retainedProfits}}</td>
+								</tr>
+								<tr>
+									<td class="hui">短期贷款份额（%）</td>
+									<td align="right">{{value.shortLoanShare}}</td>
+								</tr>
+								<tr>
+									<td class="hui">中长期贷款份额（%）</td>
+									<td align="right">{{value.middleLoanShare}}</td>
+								</tr>
+								<tr>
+									<td class="hui">短期存款份额（%）</td>
+									<td align="right">{{value.shortDepositShare}}</td>
+								</tr>
+								<tr>
+									<td class="hui">长期存款份额（%）</td>
+									<td align="right">{{value.longDepositShare}}</td>
+								</tr>
+								<tr>
+									<td class="hui">股票价格（元/股）</td>
+									<td align="right">{{value.stockPrice}}</td>
+								</tr>
+								</tbody>
+							</table>
+						</el-tab-pane>
+					</template>
+				</el-tabs>
+				<!--tab-->
+			</div>
+			<!--同业报告-->
+		</div>
+		<!--同业报告-->
+		<!--资产总额-->
+		<div class="column">
+			<div class="column-title">资产总额<span>单位：亿元</span>
+				<ul class="column-title-right">
+					<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhu_a.png}" alt=""/></a></li>
+					<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+				</ul>
+			</div>
+			<div class="zcze" id="zcze"></div>
+		</div>
+		<!--资产总额-->
+		<!--利润总额-->
+		<div class="column">
+			<div class="column-title">利润总额<span>单位：亿元</span>
+				<ul class="column-title-right">
+					<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhu_a.png}" alt=""/></a></li>
+					<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+				</ul>
+			</div>
+			<div class="lrze" id="lrze"></div>
+		</div>
+		<!--利润总额-->
+		<!--资产增长率-->
+		<div class="column">
+			<div class="column-title">资产增长率
+				<ul class="column-title-right">
+					<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhexian_a.png}" alt=""/></a></li>
+					<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+				</ul>
+			</div>
+			<div class="zczzl" id="zczzl"></div>
+		</div>
+		<!--资产增长率-->
+		<!--学习资料常用工具-->
+		<div class="column">
+			<!--tab-->
+			<el-tabs v-model="zsktabs" @tab-click="handleClick">
+				<!--学习资料-->
+					<el-tab-pane label="学习资料" name="first">
+						<dl class="download">
+							<dd><img src="../images/format_docx.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">变革时代的银行行长，追求卓越的领导力 课程培训</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_image.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">管理者的自我发展战略</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_pdf.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">职业竞争力的塑造与提升 银行市场竞争策略</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_pptx.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">职业经理人的七项建设</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_rar.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">如何建立以客户为导向的服务体系 优质团队建设</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_xlsx.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">银行市场竞争策略</a></dt>
+						</dl>
+					</el-tab-pane>
+					<!--学习资料-->
+					<!--常用工具-->
+					<el-tab-pane label="常用工具" name="second">
+						<dl class="download">
+							<dd><img src="../images/format_pptx.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">职业经理人的七项建设</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_rar.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">如何建立以客户为导向的服务体系 优质团队建设</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_xlsx.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">银行市场竞争策略</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_docx.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">变革时代的银行行长，追求卓越的领导力 课程培训</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_image.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">管理者的自我发展战略</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img src="../images/format_pdf.png" alt=""/></dd>
+							<dt><a href="../xy_content.html">职业竞争力的塑造与提升 银行市场竞争策略</a></dt>
+						</dl>
+					</el-tab-pane>
+					<!--常用工具-->
+			</el-tabs>
+			<!--tab-->
+		</div>
+		<!--学习资料常用工具-->
+	</div>
+	<!--right-->
+	<div class="clear"></div>
+</div>	
+<!--main-->
+<!--footer-->
+<!--欢迎界面-->
+<div th:include="include/footer"></div>
+<!--footer-->
+	
+<!--浮动按钮-->
+<div class="zxjl" @click="zxjl=true"><a href="#"><img src="../images/zxjl.png" alt=""/></a></div>
+<!--浮动按钮-->
+
+<!--在线交流-->
+<el-dialog title="在线交流" v-model="zxjl" width="700px" top="30vh">
+	<div class="tc-video"><img src="../photo/zxjl_img.png" alt=""/></div>
+</el-dialog>	
+<!--在线交流-->
+</body>
+<script type="module" th:src="@{/service/teacher-index.js}"></script>
+<!--<script>-->
+<!--	var Main = {-->
+<!--		data () {-->
+<!--			return {-->
+<!--				//头像-->
+<!--				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",-->
+<!--				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",-->
+<!--				sizeList: ["large", "medium", "small"],-->
+<!--				//表格-->
+<!--				tableData: [{-->
+<!--					yhmc: '中国龙队银行',-->
+<!--					gj: '65.21',-->
+<!--					qs: '+5.2%'-->
+<!--				}, {-->
+<!--					yhmc: '虎队银行',-->
+<!--					gj: '39.01',-->
+<!--					qs: '-0.9%'-->
+<!--				}, {-->
+<!--					yhmc: '全球鹰队银行',-->
+<!--					gj: '23.85',-->
+<!--					qs: '+2.3%'-->
+<!--				}, {-->
+<!--					yhmc: '豹队银行',-->
+<!--					gj: '65.43',-->
+<!--					qs: '+6.5%'-->
+<!--				}, {-->
+<!--					yhmc: '建设银行分行',-->
+<!--					gj: '53.53',-->
+<!--					qs: '0%'-->
+<!--				}, {-->
+<!--					yhmc: '建设银行华南分行',-->
+<!--					gj: '74.33',-->
+<!--					qs: '+3.3%'-->
+<!--				}],-->
+<!--				reportData:{},-->
+<!--				//导航-->
+<!--				activeIndex: '1',-->
+<!--				//tabs-->
+<!--				teamtabs: '',-->
+<!--				tybgtabs: 'first',-->
+<!--				zsktabs: 'first',-->
+<!--				//进度选择器-->
+<!--				optionsjindu: [],-->
+<!--				//业务选择器-->
+<!--				optionsyewu: [-->
+<!--					{-->
+<!--						value: '短期储蓄存款',-->
+<!--						label: '短期储蓄存款'-->
+<!--					},{-->
+<!--						value: '长期储蓄存款',-->
+<!--						label: '长期储蓄存款'-->
+<!--					},{-->
+<!--						value: '长期存款',-->
+<!--						label: '长期存款'-->
+<!--					}, {-->
+<!--						value: '短期存款',-->
+<!--						label: '短期存款'-->
+<!--					}, {-->
+<!--						value: '贴现',-->
+<!--						label: '贴现'-->
+<!--					}, {-->
+<!--						value: '短期贷款',-->
+<!--						label: '短期贷款'-->
+<!--					}, {-->
+<!--						value: '短期贷款-抵押贷款',-->
+<!--						label: '短期贷款-抵押贷款'-->
+<!--					}, {-->
+<!--						value: '短期贷款-质押贷款',-->
+<!--						label: '短期贷款-质押贷款'-->
+<!--					}, {-->
+<!--						value: '短期贷款-保证贷款',-->
+<!--						label: '短期贷款-保证贷款'-->
+<!--					}, {-->
+<!--						value: '短期贷款-信用贷款',-->
+<!--						label: '短期贷款-信用贷款'-->
+<!--					}, {-->
+<!--						value: '中长期贷款',-->
+<!--						label: '中长期贷款'-->
+<!--					}, {-->
+<!--						value: '长期贷款-抵押贷款',-->
+<!--						label: '长期贷款-抵押贷款'-->
+<!--					}, {-->
+<!--						value: '长期贷款-质押贷款',-->
+<!--						label: '长期贷款-质押贷款'-->
+<!--					}, {-->
+<!--						value: '长期贷款-保证贷款',-->
+<!--						label: '长期贷款-保证贷款'-->
+<!--					}, {-->
+<!--						value: '长期贷款-信用贷款',-->
+<!--						label: '长期贷款-信用贷款'-->
+<!--					}],-->
+<!--				//选择器-->
+<!--				options: [{-->
+<!--					value: '选项1',-->
+<!--					label: '选项1'-->
+<!--				}, {-->
+<!--					value: '选项2',-->
+<!--					label: '选项2'-->
+<!--				}, {-->
+<!--					value: '选项3',-->
+<!--					label: '选项3'-->
+<!--				}, {-->
+<!--					value: '选项4',-->
+<!--					label: '选项4'-->
+<!--				}, {-->
+<!--					value: '选项5',-->
+<!--					label: '选项5'-->
+<!--				}],-->
+<!--				value: '',-->
+<!--				value1: '选项11',-->
+<!--				value2: '选项23',-->
+<!--				currentStageDesc:'',-->
+<!--				//弹出经济形势-->
+<!--				jjxs: false,-->
+<!--				//在线交流-->
+<!--				zxjl: false-->
+<!--			}-->
+<!--		},-->
+<!--		mounted:function (){-->
+<!--			this.currentStageId = this.$refs['currentStageId'].attrs.value-->
+<!--			let proId = this.$refs['projectId'].attrs.value-->
+<!--			let teamId = this.$refs['teamId'].attrs.value-->
+<!--			//查询一个项目的信息-->
+<!--			// this.projectTableData(proid);-->
+<!--			//查询所有项目-->
+<!--			this.selectAllProjecs()-->
+<!--			//市场份额图表-->
+<!--			import student_chart from "../util/student_chart.js";-->
+<!--			student_chart.queryMarketShareData(this,proId,this.currentStageId,this.value1)-->
+<!--		},-->
+<!--		methods: {-->
+<!--			selectAllProjecs(){-->
+<!--				let that = this-->
+<!--				axios({-->
+<!--					method:'get',-->
+<!--					url:'queryAllProject',//相对路径即可，不用加/service-->
+<!--					responseType:'json',-->
+<!--				}).then(function(resp){-->
+<!--					let data = resp.data.data-->
+<!--					that.options = [];-->
+<!--					data.forEach(function(item,index){-->
+<!--						let temp = {value:'',label:''}-->
+<!--						temp.value = item.proId-->
+<!--						temp.label = item.proName-->
+<!--						that.options.push(temp)-->
+<!--					})-->
+<!--					that.value = data[0].proName-->
+<!--					that.defaultId = data[0].proId-->
+<!--					that.changeProject(that.defaultId)-->
+<!--					// console.log(that.options)-->
+<!--					// console.log(that.value)-->
+<!--					// console.log(that.defaultId)-->
+
+<!--				})-->
+<!--			},-->
+<!--			//切换项目-->
+<!--			changeProject(val){-->
+<!--				// console.log(val)-->
+<!--				this.projectTableData(val)-->
+<!--			},-->
+<!--			projectTableData(proId){-->
+<!--				let that = this-->
+<!--				let params= new URLSearchParams()-->
+<!--				params.append('currentProjectId', proId)-->
+<!--				axios({-->
+<!--					method:'get',-->
+<!--					url:'queryTeam',//相对路径即可，不用加/service-->
+<!--					params:params,-->
+<!--				}).then(function(resp){-->
+<!--					if(resp.status==200){-->
+<!--						that.reportData = resp.data.data-->
+<!--						 // console.log(that.reportData)-->
+<!--						// that.teamtabs =that.reportData.getKey()-->
+<!--						let form=that.reportData-->
+<!--						let val=null;//用来记录第一个键值对的值-->
+<!--						for(let key in form){-->
+<!--							val=key;-->
+<!--							break;-->
+<!--						}-->
+<!--						that.teamtabs=val-->
+<!--					}-->
+<!--				})-->
+<!--			},-->
+<!--			//市场份额阶段切换-->
+<!--			scfeStageChange(val){-->
+<!--				let proId = this.$refs['projectId'].attrs.value-->
+<!--				let type = this.$refs['serviceType'].selected.value-->
+<!--				student_chart.queryMarketShareData(this,proId,val,type);-->
+<!--			},-->
+<!--			//市场份额业务类型切换-->
+<!--			typeChanged(val) {-->
+<!--				this.currentStageId = this.$refs['currentStageId'].attrs.value-->
+<!--				let proId = this.$refs['projectId'].attrs.value-->
+<!--				let statgeId = this.$refs['scfeSelect'].selected.value-->
+<!--				var numReg = /^[0-9]*$/-->
+<!--				var numRe = new RegExp(numReg)-->
+<!--				//如果不是数字的话，说明是页面加载时初始化的数据，则statgeId取当前的阶段id-->
+<!--				if (!numRe.test(statgeId)) {-->
+<!--					statgeId = this.currentStageId-->
+<!--				}-->
+<!--				student_chart.queryMarketShareData(this,proId,statgeId,val);-->
+<!--			},-->
+<!--			//tab-->
+<!--			formatter(row, column) {-->
+<!--				return row.address;-->
+<!--			},-->
+<!--			handleClick(tab, event) {-->
+<!--				console.log(tab, event);-->
+<!--			},-->
+<!--			typeChanged(value) {-->
+<!--				var chartDom = document.getElementById('sczb');-->
+<!--				var myChart = echarts.init(chartDom);-->
+<!--				console.log(value)-->
+<!--				if(value=='选项11'){-->
+<!--					myChart.setOption(optionxj,true);-->
+<!--				}else if(value=='选项12'){-->
+<!--					myChart.setOption(optioncfty,true);-->
+<!--				}else if(value=='选项13'){-->
+<!--					myChart.setOption(optioncfty2,true);-->
+<!--				}else if(value=='选项14'){-->
+<!--					myChart.setOption(optiondqdk,true);-->
+<!--				}else if(value=='选项15'){-->
+<!--					myChart.setOption(optiontx,true);-->
+<!--				}else if(value=='选项16'){-->
+<!--					myChart.setOption(optionzcqdk,true);-->
+<!--				}else if(value=='选项17'){-->
+<!--					myChart.setOption(optionzqtz,true);-->
+<!--				}else if(value=='选项18'){-->
+<!--					myChart.setOption(optiongdzc,true);-->
+<!--				}-->
+<!--			}-->
+<!--		}-->
+<!--	}-->
+<!--	;const app = Vue.createApp(Main);-->
+<!--	app.use(ElementPlus);-->
+<!--	app.mount("#index");-->
+<!--	-->
+<!--	-->
+<!--//图表-->
+
+<!--//市场占比 现金 饼状图-->
+<!--	var chartDom = document.getElementById('sczb');-->
+<!--	var myChart = echarts.init(chartDom);-->
+<!--	var optionxj;-->
+<!--	optionxj = {-->
+<!--		tooltip : {-->
+<!--			trigger: 'item'-->
+<!--		},-->
+<!--		//标签-->
+<!--		label:{-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'item',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			borderColor:'rgba(0,0,0,0.1)',-->
+<!--			borderWidth:0,-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//颜色-->
+<!--		color:['rgba(253,115,103,0.8)','rgba(248,190,74,0.8)','rgba(90,216,166,0.8)','rgba(81,156,232,0.8)'],-->
+<!--		series : [-->
+<!--			{-->
+<!--				name: '现金',-->
+<!--				type: 'pie',-->
+<!--				radius : '60%',-->
+<!--				center: ['50%', '50%'],-->
+<!--				data:[-->
+<!--					{value:17.21, name:'中国龙队银行'},-->
+<!--					{value:26.92, name:'虎队银行'},-->
+<!--					{value:37.03, name:'全球鹰队银行'},-->
+<!--					{value:29.17, name:'豹队银行'}-->
+<!--				],-->
+<!--				itemStyle: {-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	optionxj && myChart.setOption(optionxj);-->
+<!--	-->
+<!--	-->
+<!--//市场占比 存放同业 柱状图-->
+<!--	var optioncfty = {-->
+<!--		//坐标系网格-->
+<!--		grid:{-->
+<!--			top:'40px',-->
+<!--			right:'20px',-->
+<!--			bottom:'60px',-->
+<!--			left:'40px'-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'axis',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//x轴-->
+<!--		xAxis: {-->
+<!--			type: 'category',-->
+<!--			data: ['中国龙队银行', '虎队银行', '全球鹰队银行', '豹队银行'],-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				show:true,-->
+<!--				interval:0,-->
+<!--				color:'#555',-->
+<!--				rotate:0-->
+<!--			}-->
+<!--		},-->
+<!--		//y轴-->
+<!--		yAxis: {-->
+<!--			type: 'value',-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#e6e6e6'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				color:'#555'-->
+<!--			},-->
+<!--			splitLine:{-->
+<!--				lineStyle:{-->
+<!--					color:['#e6e6e6','#f2f2f2'],-->
+<!--					type:'dotted'-->
+<!--				}-->
+<!--			}-->
+<!--		},-->
+<!--		//图表	-->
+<!--		series: [{-->
+<!--			data: [-->
+<!--				{-->
+<!--					value: 120,-->
+<!--					label: {-->
+<!--						show: true,-->
+<!--						position: 'inside'-->
+<!--					},-->
+<!--					itemStyle: {-->
+<!--						color:'rgba(253,115,103,0.8)',-->
+<!--						borderColor:'rgba(253,115,103,1)',-->
+<!--						borderType:'solid',-->
+<!--						borderWidth:1-->
+<!--					}-->
+<!--				}, -->
+<!--				{-->
+<!--					value: 200,-->
+<!--					label: {-->
+<!--						show: true,-->
+<!--						position: 'inside'-->
+<!--					},-->
+<!--					itemStyle: {-->
+<!--						color:'rgba(248,190,74,0.8)',-->
+<!--						borderColor:'rgba(248,190,74,1)',-->
+<!--						borderType:'solid',-->
+<!--						borderWidth:1-->
+<!--					}-->
+<!--				}, -->
+<!--				{-->
+<!--					value: 150,-->
+<!--					label: {-->
+<!--						show: true,-->
+<!--						position: 'inside'-->
+<!--					},-->
+<!--					itemStyle: {-->
+<!--						color:'rgba(90,216,166,0.8)',-->
+<!--						borderColor:'rgba(90,216,166,1)',-->
+<!--						borderType:'solid',-->
+<!--						borderWidth:1-->
+<!--					}-->
+<!--				},-->
+<!--				{-->
+<!--					value: 130,-->
+<!--					label: {-->
+<!--						show: true,-->
+<!--						position: 'inside'-->
+<!--					},-->
+<!--					itemStyle: {-->
+<!--						color:'rgba(81,156,232,0.8)',-->
+<!--						borderColor:'rgba(81,156,232,1)',-->
+<!--						borderType:'solid',-->
+<!--						borderWidth:1-->
+<!--					}-->
+<!--				}-->
+<!--			],-->
+<!--			type: 'bar'-->
+<!--		}]-->
+<!--	};-->
+<!--	-->
+<!--	-->
+<!--//市场占比 拆放同业 柱状图-->
+<!--	var optioncfty2 = {-->
+<!--		//坐标系网格-->
+<!--		grid:{-->
+<!--			top:'40px',-->
+<!--			right:'20px',-->
+<!--			bottom:'60px',-->
+<!--			left:'40px'-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'axis',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//x轴-->
+<!--		xAxis: {-->
+<!--			type: 'category',-->
+<!--			data: ['中国龙队银行', '虎队银行', '全球鹰队银行', '豹队银行'],-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				show:true,-->
+<!--				interval:0,-->
+<!--				color:'#555',-->
+<!--				rotate:0-->
+<!--			}-->
+<!--		},-->
+<!--		//y轴-->
+<!--		yAxis: {-->
+<!--			type: 'value',-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#e6e6e6'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				color:'#555'-->
+<!--			},-->
+<!--			splitLine:{-->
+<!--				lineStyle:{-->
+<!--					color:['#e6e6e6','#f2f2f2'],-->
+<!--					type:'dotted'-->
+<!--				}-->
+<!--			}-->
+<!--		},-->
+<!--		//图表	-->
+<!--		series: [{-->
+<!--			data: [-->
+<!--				{-->
+<!--					value: 80,-->
+<!--					label: {-->
+<!--						show: true,-->
+<!--						position: 'inside'-->
+<!--					},-->
+<!--					itemStyle: {-->
+<!--						color:'rgba(253,115,103,0.8)',-->
+<!--						borderColor:'rgba(253,115,103,1)',-->
+<!--						borderType:'solid',-->
+<!--						borderWidth:1-->
+<!--					}-->
+<!--				}, -->
+<!--				{-->
+<!--					value: 90,-->
+<!--					label: {-->
+<!--						show: true,-->
+<!--						position: 'inside'-->
+<!--					},-->
+<!--					itemStyle: {-->
+<!--						color:'rgba(248,190,74,0.8)',-->
+<!--						borderColor:'rgba(248,190,74,1)',-->
+<!--						borderType:'solid',-->
+<!--						borderWidth:1-->
+<!--					}-->
+<!--				}, -->
+<!--				{-->
+<!--					value: 110,-->
+<!--					label: {-->
+<!--						show: true,-->
+<!--						position: 'inside'-->
+<!--					},-->
+<!--					itemStyle: {-->
+<!--						color:'rgba(90,216,166,0.8)',-->
+<!--						borderColor:'rgba(90,216,166,1)',-->
+<!--						borderType:'solid',-->
+<!--						borderWidth:1-->
+<!--					}-->
+<!--				},-->
+<!--				{-->
+<!--					value: 85,-->
+<!--					label: {-->
+<!--						show: true,-->
+<!--						position: 'inside'-->
+<!--					},-->
+<!--					itemStyle: {-->
+<!--						color:'rgba(81,156,232,0.8)',-->
+<!--						borderColor:'rgba(81,156,232,1)',-->
+<!--						borderType:'solid',-->
+<!--						borderWidth:1-->
+<!--					}-->
+<!--				}-->
+<!--			],-->
+<!--			type: 'bar'-->
+<!--		}]-->
+<!--	};-->
+<!--	-->
+
+<!--	-->
+<!--//市场占比 短期贷款 堆叠条形图-->
+<!--	var optiondqdk = {-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'axis'-->
+<!--		},-->
+<!--		//坐标系网格-->
+<!--		grid: {-->
+<!--			top: '40px',-->
+<!--			left: '0px',-->
+<!--			right: '20px',-->
+<!--			bottom: '40px',-->
+<!--			containLabel: true-->
+<!--		},-->
+<!--		xAxis: {-->
+<!--			type: 'value',-->
+<!--			max: 'dataMax',-->
+<!--		},-->
+<!--		yAxis: {-->
+<!--			type: 'category',-->
+<!--			data: ['短期贷款'],-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				show:true,-->
+<!--				interval:0,-->
+<!--				color:'#555',-->
+<!--				rotate:0-->
+<!--			}-->
+<!--		},-->
+<!--		//颜色-->
+<!--		color:['rgba(253,115,103,0.8)','rgba(248,190,74,0.8)','rgba(90,216,166,0.8)','rgba(81,156,232,0.8)'],-->
+<!--		series: [-->
+<!--			{-->
+<!--				name: '中国龙队银行',-->
+<!--				type: 'bar',-->
+<!--				stack: 'total',-->
+<!--				label: {-->
+<!--					show: true-->
+<!--				},-->
+<!--				emphasis: {-->
+<!--					focus: 'series'-->
+<!--				},-->
+<!--				data: [320]-->
+<!--			},-->
+<!--			{-->
+<!--				name: '虎队银行',-->
+<!--				type: 'bar',-->
+<!--				stack: 'total',-->
+<!--				label: {-->
+<!--					show: true-->
+<!--				},-->
+<!--				emphasis: {-->
+<!--					focus: 'series'-->
+<!--				},-->
+<!--				data: [120]-->
+<!--			},-->
+<!--			{-->
+<!--				name: '全球鹰队银行',-->
+<!--				type: 'bar',-->
+<!--				stack: 'total',-->
+<!--				label: {-->
+<!--					show: true-->
+<!--				},-->
+<!--				emphasis: {-->
+<!--					focus: 'series'-->
+<!--				},-->
+<!--				data: [220]-->
+<!--			},-->
+<!--			{-->
+<!--				name: '豹队银行',-->
+<!--				type: 'bar',-->
+<!--				stack: 'total',-->
+<!--				label: {-->
+<!--					show: true-->
+<!--				},-->
+<!--				emphasis: {-->
+<!--					focus: 'series'-->
+<!--				},-->
+<!--				data: [150]-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	-->
+<!--	-->
+<!--//市场占比 贴现 饼状图-->
+<!--	var optiontx = {-->
+<!--		tooltip : {-->
+<!--			trigger: 'item'-->
+<!--		},-->
+<!--		//标签-->
+<!--		label:{-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'item',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			borderColor:'rgba(0,0,0,0.1)',-->
+<!--			borderWidth:0,-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//颜色-->
+<!--		color:['rgba(253,115,103,0.8)','rgba(248,190,74,0.8)','rgba(90,216,166,0.8)','rgba(81,156,232,0.8)'],-->
+<!--		series : [-->
+<!--			{-->
+<!--				name: '现金',-->
+<!--				type: 'pie',-->
+<!--				radius : '60%',-->
+<!--				center: ['50%', '50%'],-->
+<!--				data:[-->
+<!--					{value:21, name:'中国龙队银行'},-->
+<!--					{value:26, name:'虎队银行'},-->
+<!--					{value:37, name:'全球鹰队银行'},-->
+<!--					{value:29, name:'豹队银行'}-->
+<!--				],-->
+<!--				itemStyle: {-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	-->
+<!--	-->
+<!--//市场占比 中长期贷款 饼状图-->
+<!--	var optionzcqdk = {-->
+<!--		tooltip : {-->
+<!--			trigger: 'item'-->
+<!--		},-->
+<!--		//标签-->
+<!--		label:{-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'item',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			borderColor:'rgba(0,0,0,0.1)',-->
+<!--			borderWidth:0,-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//颜色-->
+<!--		color:['rgba(253,115,103,0.8)','rgba(248,190,74,0.8)','rgba(90,216,166,0.8)','rgba(81,156,232,0.8)'],-->
+<!--		series : [-->
+<!--			{-->
+<!--				name: '现金',-->
+<!--				type: 'pie',-->
+<!--				radius : '60%',-->
+<!--				center: ['50%', '50%'],-->
+<!--				data:[-->
+<!--					{value:21, name:'中国龙队银行'},-->
+<!--					{value:32, name:'虎队银行'},-->
+<!--					{value:13, name:'全球鹰队银行'},-->
+<!--					{value:17, name:'豹队银行'}-->
+<!--				],-->
+<!--				itemStyle: {-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	-->
+<!--	-->
+<!--	-->
+<!--//市场占比 证券投资 饼状图-->
+<!--	var optionzqtz = {-->
+<!--		tooltip : {-->
+<!--			trigger: 'item'-->
+<!--		},-->
+<!--		//标签-->
+<!--		label:{-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'item',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			borderColor:'rgba(0,0,0,0.1)',-->
+<!--			borderWidth:0,-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//颜色-->
+<!--		color:['rgba(253,115,103,0.8)','rgba(248,190,74,0.8)','rgba(90,216,166,0.8)','rgba(81,156,232,0.8)'],-->
+<!--		series : [-->
+<!--			{-->
+<!--				name: '现金',-->
+<!--				type: 'pie',-->
+<!--				radius : '60%',-->
+<!--				center: ['50%', '50%'],-->
+<!--				data:[-->
+<!--					{value:27.21, name:'中国龙队银行'},-->
+<!--					{value:26.92, name:'虎队银行'},-->
+<!--					{value:27.03, name:'全球鹰队银行'},-->
+<!--					{value:29.17, name:'豹队银行'}-->
+<!--				],-->
+<!--				itemStyle: {-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	-->
+<!--	-->
+<!--//市场占比 固定资产 饼状图-->
+<!--	var optiongdzc = {-->
+<!--		tooltip : {-->
+<!--			trigger: 'item'-->
+<!--		},-->
+<!--		//标签-->
+<!--		label:{-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'item',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			borderColor:'rgba(0,0,0,0.1)',-->
+<!--			borderWidth:0,-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//颜色-->
+<!--		color:['rgba(253,115,103,0.8)','rgba(248,190,74,0.8)','rgba(90,216,166,0.8)','rgba(81,156,232,0.8)'],-->
+<!--		series : [-->
+<!--			{-->
+<!--				name: '现金',-->
+<!--				type: 'pie',-->
+<!--				radius : '60%',-->
+<!--				center: ['50%', '50%'],-->
+<!--				data:[-->
+<!--					{value:19.21, name:'中国龙队银行'},-->
+<!--					{value:16.92, name:'虎队银行'},-->
+<!--					{value:17.03, name:'全球鹰队银行'},-->
+<!--					{value:19.17, name:'豹队银行'}-->
+<!--				],-->
+<!--				itemStyle: {-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	-->
+<!--	-->
+<!--	-->
+<!--	-->
+<!--	-->
+<!--//资产总额   柱状图-->
+<!--	-->
+<!--	chartDom = document.getElementById('zcze');-->
+<!--	myChart = echarts.init(chartDom);-->
+<!--	option = {-->
+<!--		//图例-->
+<!--		legend: {-->
+<!--			orient: 'horizontal',-->
+<!--			x: 'center',-->
+<!--			y: 'bottom',-->
+<!--			align: 'left',-->
+<!--			padding:[-->
+<!--				0,-->
+<!--				0,-->
+<!--				25,-->
+<!--				0,-->
+<!--			],-->
+<!--			itemWidth:12,-->
+<!--			itemHeight:12-->
+<!--		},-->
+<!--		tooltip: {},-->
+<!--		//坐标系网格-->
+<!--		grid:{-->
+<!--			top:'40px',-->
+<!--			right:'50px',-->
+<!--			bottom:'80px',-->
+<!--			left:'50px'-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'axis',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//数值-->
+<!--		dataset: {-->
+<!--			source: [-->
+<!--				['product', '中国龙队银行', '虎队银行', '全球鹰队银行', '豹队银行',],-->
+<!--				['第一年度', 82, 84, 81, 69],-->
+<!--				['第二年度', 167, 139, 160, 157],-->
+<!--				['第三年度', , , , ],-->
+<!--				['第四年度', , , , ]-->
+<!--			]-->
+<!--		},-->
+<!--		//x轴-->
+<!--		xAxis: {-->
+<!--			type: 'category',-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				show:true,-->
+<!--				interval:0,-->
+<!--				color:'#555',-->
+<!--				rotate:0-->
+<!--			}-->
+<!--		},-->
+<!--		//y轴-->
+<!--		yAxis: {-->
+<!--			type: 'value',-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#e6e6e6'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				color:'#555'-->
+<!--			},-->
+<!--			splitLine:{-->
+<!--				lineStyle:{-->
+<!--					color:['#e6e6e6','#f2f2f2'],-->
+<!--					type:'dotted'-->
+<!--				}-->
+<!--			}-->
+<!--		},-->
+<!--		//图表-->
+<!--		series: [-->
+<!--			{-->
+<!--				type: 'bar',-->
+<!--				itemStyle:{-->
+<!--					color:'rgba(253,115,103,0.8)',-->
+<!--					borderColor:'rgba(253,115,103,1)',-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			},-->
+<!--			{-->
+<!--				type: 'bar',-->
+<!--				barGap:'5%',-->
+<!--				itemStyle:{-->
+<!--					color:'rgba(248,190,74,0.8)',-->
+<!--					borderColor:'rgba(248,190,74,1)',-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			},-->
+<!--			{-->
+<!--				type: 'bar',-->
+<!--				barGap:'5%',-->
+<!--				itemStyle:{-->
+<!--					color:'rgba(90,216,166,0.8)',-->
+<!--					borderColor:'rgba(90,216,166,1)',-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			},-->
+<!--			{-->
+<!--				type: 'bar',-->
+<!--				barGap:'5%',-->
+<!--				itemStyle:{-->
+<!--					color:'rgba(81,156,232,0.8)',-->
+<!--					borderColor:'rgba(81,156,232,1)',-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	option && myChart.setOption(option);-->
+<!--	-->
+<!--	-->
+<!--//资产增长率  拆线图-->
+<!--	-->
+<!--	chartDom = document.getElementById('zczzl');-->
+<!--	myChart = echarts.init(chartDom);-->
+<!--	option = {-->
+<!--		//图例-->
+<!--		legend: {-->
+<!--			orient: 'horizontal',-->
+<!--			x: 'center',-->
+<!--			y: 'bottom',-->
+<!--			align: 'left',-->
+<!--			padding:[-->
+<!--				0,-->
+<!--				0,-->
+<!--				30,-->
+<!--				0,-->
+<!--			],-->
+<!--			itemWidth:12,-->
+<!--			itemHeight:12-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'axis',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//坐标系网格-->
+<!--		grid:{-->
+<!--			top:'40px',-->
+<!--			right:'30px',-->
+<!--			bottom:'100px',-->
+<!--			left:'60px'-->
+<!--		},-->
+<!--		//颜色-->
+<!--		color:['rgba(253,115,103,1)','rgba(248,190,74,1)','rgba(90,216,166,1)','rgba(81,156,232,1)'],-->
+<!--		//x轴-->
+<!--		xAxis: {-->
+<!--			type: 'category',-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			boundaryGap:true,-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:true,-->
+<!--				alignWithLabel:true,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				show:true,-->
+<!--				interval:0,-->
+<!--				color:'#555',-->
+<!--				rotate:0-->
+<!--			},-->
+<!--			data: ['2014','2015','2016','2017']-->
+<!--		},-->
+<!--		//y轴-->
+<!--		yAxis: {-->
+<!--			type: 'value',-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#e6e6e6'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				color:'#555'-->
+<!--			},-->
+<!--			splitLine:{-->
+<!--				lineStyle:{-->
+<!--					color:['#e6e6e6','#f2f2f2'],-->
+<!--					type:'dotted'-->
+<!--				}-->
+<!--			}-->
+<!--		},-->
+<!--		//图表-->
+<!--		series: [-->
+<!--			{-->
+<!--				name:'中国龙队银行',-->
+<!--				type:'line',-->
+<!--				data:[11.3, 27.8, , ],-->
+<!--				symbol:'circle',-->
+<!--				symbolSize:2-->
+<!--			},-->
+<!--			{-->
+<!--				name:'虎队银行',-->
+<!--				type:'line',-->
+<!--				data:[27.2, 17.6, , ],-->
+<!--				symbol:'circle',-->
+<!--				symbolSize:2-->
+<!--			},-->
+<!--			{-->
+<!--				name:'全球鹰队银行',-->
+<!--				type:'line',-->
+<!--				data:[14.8, 15.1, , ],-->
+<!--				symbol:'circle',-->
+<!--				symbolSize:2-->
+<!--			},-->
+<!--			{-->
+<!--				name:'豹队银行',-->
+<!--				type:'line',-->
+<!--				data:[28.6, 28.8, , ],-->
+<!--				symbol:'circle',-->
+<!--				symbolSize:2-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	option && myChart.setOption(option);-->
+<!--	-->
+<!--	-->
+<!--//利润总额  柱状图-->
+<!--	-->
+<!--	chartDom = document.getElementById('lrze');-->
+<!--	myChart = echarts.init(chartDom);-->
+<!--	option = {-->
+<!--		//图例-->
+<!--		legend: {-->
+<!--			orient: 'horizontal',-->
+<!--			x: 'center',-->
+<!--			y: 'bottom',-->
+<!--			align: 'left',-->
+<!--			padding:[-->
+<!--				0,-->
+<!--				0,-->
+<!--				25,-->
+<!--				0,-->
+<!--			],-->
+<!--			itemWidth:12,-->
+<!--			itemHeight:12-->
+<!--		},-->
+<!--		tooltip: {},-->
+<!--		//坐标系网格-->
+<!--		grid:{-->
+<!--			top:'40px',-->
+<!--			right:'50px',-->
+<!--			bottom:'80px',-->
+<!--			left:'50px'-->
+<!--		},-->
+<!--		//提示框-->
+<!--		tooltip: {-->
+<!--			trigger: 'axis',-->
+<!--			backgroundColor:'rgba(255,255,255,0.9)',-->
+<!--			padding:[-->
+<!--				15,-->
+<!--				20,-->
+<!--				15,-->
+<!--				20,-->
+<!--			],-->
+<!--			textStyle:{-->
+<!--				color:'#333',-->
+<!--				fontSize:13-->
+<!--			},-->
+<!--			extraCssText: 'box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);'-->
+<!--		},-->
+<!--		//数值-->
+<!--		dataset: {-->
+<!--			source: [-->
+<!--				['product', '中国龙队银行', '虎队银行', '全球鹰队银行', '豹队银行',],-->
+<!--				['第一年度', 8.2, 8.4, 8.1, 6.9],-->
+<!--				['第二年度', 16.7, 23.9, 26.0, 15.7],-->
+<!--				['第三年度', , , , ],-->
+<!--				['第四年度', , , , ]-->
+<!--			]-->
+<!--		},-->
+<!--		//x轴-->
+<!--		xAxis: {-->
+<!--			type: 'category',-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				show:true,-->
+<!--				interval:0,-->
+<!--				color:'#555',-->
+<!--				rotate:0-->
+<!--			}-->
+<!--		},-->
+<!--		//y轴-->
+<!--		yAxis: {-->
+<!--			type: 'value',-->
+<!--			//轴线-->
+<!--			axisLine:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#ccc'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度-->
+<!--			axisTick:{-->
+<!--				show:false,-->
+<!--				lineStyle:{-->
+<!--					color:'#e6e6e6'-->
+<!--				}-->
+<!--			},-->
+<!--			//刻度标签-->
+<!--			axisLabel:{-->
+<!--				color:'#555'-->
+<!--			},-->
+<!--			splitLine:{-->
+<!--				lineStyle:{-->
+<!--					color:['#e6e6e6','#f2f2f2'],-->
+<!--					type:'dotted'-->
+<!--				}-->
+<!--			}-->
+<!--		},-->
+<!--		//图表-->
+<!--		series: [-->
+<!--			{-->
+<!--				type: 'bar',-->
+<!--				itemStyle:{-->
+<!--					color:'rgba(253,115,103,0.8)',-->
+<!--					borderColor:'rgba(253,115,103,1)',-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			},-->
+<!--			{-->
+<!--				type: 'bar',-->
+<!--				barGap:'5%',-->
+<!--				itemStyle:{-->
+<!--					color:'rgba(248,190,74,0.8)',-->
+<!--					borderColor:'rgba(248,190,74,1)',-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			},-->
+<!--			{-->
+<!--				type: 'bar',-->
+<!--				barGap:'5%',-->
+<!--				itemStyle:{-->
+<!--					color:'rgba(90,216,166,0.8)',-->
+<!--					borderColor:'rgba(90,216,166,1)',-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			},-->
+<!--			{-->
+<!--				type: 'bar',-->
+<!--				barGap:'5%',-->
+<!--				itemStyle:{-->
+<!--					color:'rgba(81,156,232,0.8)',-->
+<!--					borderColor:'rgba(81,156,232,1)',-->
+<!--					borderType:'solid',-->
+<!--					borderWidth:1-->
+<!--				}-->
+<!--			}-->
+<!--		]-->
+<!--	};-->
+<!--	option && myChart.setOption(option);-->
+<!--	//select 切换事件-->
+<!--	-->
+<!--</script>-->
+
+	
+</html>

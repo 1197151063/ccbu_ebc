@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParPropertyLiabilityRateDao">
+
+    <resultMap id="ParPropertyLiabilityRateVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParPropertyLiabilityRateVO"></resultMap>
+    <resultMap id="ParPropertyLiabilityRateExcelVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParPropertyLiabilityRateExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParPropertyLiabilityRateVO">
+        select
+          id,
+          current_stage_id,
+          interest_rate_type,
+          interest_rate_min,
+          interest_rate_average,
+          interest_rate_max
+        from par_property_liability_rate
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParPropertyLiabilityRateExcelVO">
+        select
+           id,
+           current_stage_id,
+           interest_rate_type,
+           interest_rate_min,
+           interest_rate_average,
+           interest_rate_max
+        from par_property_liability_rate
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParPropertyLiabilityRateExcelVO">
+        select
+         id,
+         current_stage_id,
+         interest_rate_type,
+         interest_rate_min,
+         interest_rate_average,
+         interest_rate_max
+        from par_property_liability_rate
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryAfter"
+            resultType="net.lab1024.smartadmin.module.business.param.domain.vo.ParPropertyLiabilityRateVO">
+        select
+         id,
+         current_stage_id,
+         interest_rate_type,
+         interest_rate_min,
+         interest_rate_average,
+         interest_rate_max
+        from par_property_liability_rate
+        where current_stage_id = #{afterCurrentStageId}
+    </select>
+    <select id="selectRate"
+            resultType="net.lab1024.smartadmin.module.business.param.domain.vo.ParPropertyLiabilityRateVO">
+        select
+                id,
+                current_stage_id,
+                interest_rate_type,
+                interest_rate_min,
+                interest_rate_average,
+                interest_rate_max
+                from par_property_liability_rate
+                where current_stage_id = #{stageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from par_property_liability_rate where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_property_liability_rate where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

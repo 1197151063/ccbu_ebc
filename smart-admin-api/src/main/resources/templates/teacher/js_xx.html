@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--main-->
+<div class="main">
+	<div class="main-bg">
+		<el-tabs v-model="activeName" @tab-click="handleClick">
+			<!--全部消息-->
+			<el-tab-pane label="全部消息" name="first">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-select v-model="value" placeholder="本期学员" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>状态</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>发布人</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>发布时间</dt>
+						<dd>
+							<el-date-picker
+											v-model="value2"
+											type="daterange"
+											unlink-panels
+											range-separator="至"
+											start-placeholder="开始日期"
+											end-placeholder="结束日期"
+											:shortcuts="shortcuts"
+											size="small">
+							</el-date-picker>
+						</dd>
+					</dl>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}">
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="new"
+										 label="标题"
+										 width="650">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="发布日期"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="发布人"
+										 align="center"
+										 sortable
+										 width="170">
+						</el-table-column>
+						<el-table-column
+										 prop="newszt"
+										 label="状态"
+										 align="center"
+										 sortable>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--全部消息-->
+			<!--消息通知-->
+			<el-tab-pane label="系统消息" name="second">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-select v-model="value" placeholder="本期学员" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>状态</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>发布人</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>发布时间</dt>
+						<dd>
+							<el-date-picker
+											v-model="value2"
+											type="daterange"
+											unlink-panels
+											range-separator="至"
+											start-placeholder="开始日期"
+											end-placeholder="结束日期"
+											:shortcuts="shortcuts"
+											size="small">
+							</el-date-picker>
+						</dd>
+					</dl>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}">
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="new"
+										 label="标题"
+										 width="650">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="发布日期"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="发布人"
+										 align="center"
+										 sortable
+										 width="170">
+						</el-table-column>
+						<el-table-column
+										 prop="newszt"
+										 label="状态"
+										 align="center"
+										 sortable>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--消息通知-->
+			<!--竞赛信息-->
+			<el-tab-pane label="竞赛消息" name="third">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-select v-model="value" placeholder="本期学员" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>状态</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>发布人</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>发布时间</dt>
+						<dd>
+							<el-date-picker
+											v-model="value2"
+											type="daterange"
+											unlink-panels
+											range-separator="至"
+											start-placeholder="开始日期"
+											end-placeholder="结束日期"
+											:shortcuts="shortcuts"
+											size="small">
+							</el-date-picker>
+						</dd>
+					</dl>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}">
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="new"
+										 label="标题"
+										 width="650">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="发布日期"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="发布人"
+										 align="center"
+										 sortable
+										 width="170">
+						</el-table-column>
+						<el-table-column
+										 prop="newszt"
+										 label="状态"
+										 align="center"
+										 sortable>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--竞赛信息-->
+		</el-tabs>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+<script>
+	var Main = {
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//表格
+				tableData: [{
+					team: '中国龙队银行',
+					gj: '65.21',
+					qs: '+5.2%',
+					new: '国内经济增长持续趋缓，且近期弱势特征明显',
+					date: '2月27日',
+					name: '张林伟',
+					zjr: '导师 张林伟',
+					cz: '总结',
+					jczt: '导师未总结',
+					jccz: '总结',
+					newszt: '已读'
+				}, {
+					team: '虎队银行',
+					gj: '39.01',
+					qs: '-0.9%',
+					new: '金融政策及国内金融市场状况',
+					date: '2月19日',
+					name: '毕琳嘉',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师未总结',
+					jccz: '总结',
+					newszt: '已读'
+				}, {
+					team: '全球鹰队银行',
+					gj: '23.85',
+					qs: '+2.3%',
+					new: '国内利率下降，货币市场利率反映更为强烈',
+					date: '2月8日',
+					name: '何宏瑞',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师已总结',
+					jccz: '总结',
+					newszt: '已读'
+				}, {
+					team: '豹队银行',
+					gj: '65.43',
+					qs: '+6.5%',
+					new: '收益曲线在两年中将首次出现平稳局面',
+					date: '2月3日',
+					name: '薛荷',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师已总结',
+					jccz: '编辑总结',
+					newszt: '已读'
+				}, {
+					team: '建设银行分行',
+					gj: '53.53',
+					qs: '0%',
+					new: '全球经济和国际金融市场',
+					date: '1月26日',
+					name: '黄莎涛',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师已总结',
+					jccz: '编辑总结',
+					newszt: '已读'
+				}, {
+					team: '建设银行华南分行',
+					gj: '74.33',
+					qs: '+3.3%',
+					new: '国内经济增长持续趋缓，且近期弱势特征明显',
+					date: '1月17日',
+					name: '赵婵芝',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师已总结',
+					jccz: '编辑总结',
+					newszt: '已读'
+				}],
+				//tabs
+				activeName: 'first',
+				//选择器
+				options: [{
+					value: '选项1',
+					label: '选项1'
+				}, {
+					value: '选项2',
+					label: '选项2'
+				}, {
+					value: '选项3',
+					label: '选项3'
+				}, {
+					value: '选项4',
+					label: '选项4'
+				}, {
+					value: '选项5',
+					label: '选项5'
+				}],
+				value: '',
+				//分页
+				currentPage1: 5,
+				currentPage2: 5,
+				currentPage3: 5,
+				currentPage4: 4,
+				//日期快捷选项
+				shortcuts: [{
+					text: '最近一周',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+						return [start, end]
+					})(),
+				}, {
+					text: '最近一个月',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+						return [start, end]
+					})(),
+				}, {
+					text: '最近三个月',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+						return [start, end]
+					})(),
+				}],
+				value1: '',
+				value2: '',
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		methods: {
+			//tab
+			formatter(row, column) {
+				return row.address;
+			},
+			handleClick(tab, event) {
+				console.log(tab, event);
+			},
+			//分页
+			handleSizeChange(val) {
+				console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				console.log(`当前页: ${val}`);
+			}
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

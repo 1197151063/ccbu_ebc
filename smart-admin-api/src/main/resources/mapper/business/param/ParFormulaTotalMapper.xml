@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParFormulaTotalDao">
+
+    <resultMap id="ParFormulaTotalVO"
+               type="net.lab1024.smartadmin.module.business.param.domain.vo.ParFormulaTotalVO"></resultMap>
+    <resultMap id="ParFormulaTotalExcelVO"
+               type="net.lab1024.smartadmin.module.business.param.domain.vo.ParFormulaTotalExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParFormulaTotalVO">
+        select
+        id,
+        business,
+        project,
+        formula
+        from par_formula_total
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParFormulaTotalExcelVO">
+        select
+        id,
+        business,
+        project,
+        formula
+        from par_formula_total
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParFormulaTotalExcelVO">
+        select
+        id,
+        business,
+        project,
+        formula
+        from par_formula_total
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="queryAll" resultType="net.lab1024.smartadmin.module.business.param.domain.vo.ParFormulaTotalVO">
+        select
+        id,
+        business,
+        project,
+        formula
+        from par_formula_total
+        <where>
+            <if test="allFormulaEntity.id != null">
+                AND id = #{allFormulaEntity.id}
+            </if>
+            <if test="allFormulaEntity.business != null ">
+                AND business &gt;= #{allFormulaEntity.business}
+            </if>
+            <if test="allFormulaEntity.project != null ">
+                AND project &lt;= #{allFormulaEntity.project}
+            </if>
+            <if test="allFormulaEntity.formula != null ">
+                AND formula &gt;= #{allFormulaEntity.formula}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteById">
+        delete from par_formula_total where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_formula_total where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepComprehensiveRankingScoreDao">
+
+    <resultMap id="RepComprehensiveRankingScoreVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepComprehensiveRankingScoreVO"></resultMap>
+    <resultMap id="RepComprehensiveRankingScoreExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepComprehensiveRankingScoreExcelVO"></resultMap>
+    <sql id="query_all_rep_comprehensive_ranking">
+      id,
+      current_project_id,
+      current_team_id,
+      current_stage_id,
+      capital_adequacy_ratio,
+      asset_scale,
+      non_performing_loan_ratio,
+      npl_provision_coverage,
+      liquidity_ratio,
+      deposit_loan_ratio,
+      net_profit_loss,
+      return_on_assets,
+      return_on_net_assets,
+      economic_value_added,
+      cost_income_ratio,
+      bridge_loan,
+      plan_quality,
+      share_out_bonus,
+      total_score
+    </sql>
+
+    <select id="queryByPage" resultMap="RepComprehensiveRankingScoreVO">
+        select
+            <include refid="query_all_rep_comprehensive_ranking"/>
+        from rep_comprehensive_ranking_score
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepComprehensiveRankingScoreExcelVO">
+        select
+        <include refid="query_all_rep_comprehensive_ranking"/>
+        from rep_comprehensive_ranking_score
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepComprehensiveRankingScoreExcelVO">
+        select
+            <include refid="query_all_rep_comprehensive_ranking"/>
+        from rep_comprehensive_ranking_score
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_comprehensive_ranking_score where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_comprehensive_ranking_score where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="queryTeamRankingByStageId" resultMap="RepComprehensiveRankingScoreVO">
+        select
+            r.id,
+            r.current_project_id,
+            r.current_team_id,
+            r.current_stage_id,
+            r.capital_adequacy_ratio,
+            r.asset_scale,
+            r.non_performing_loan_ratio,
+            r.npl_provision_coverage,
+            r.liquidity_ratio,
+            r.deposit_loan_ratio,
+            r.net_profit_loss,
+            r.return_on_assets,
+            r.return_on_net_assets,
+            r.economic_value_added,
+            r.cost_income_ratio,
+            r.bridge_loan,
+            r.plan_quality,
+            r.share_out_bonus,
+            r.total_score,
+            d.name,
+            d.short_name,
+            d.logo
+        from (select id,name,short_name,logo from t_department where project_id=#{proId}) d
+        left join rep_comprehensive_ranking_score r
+        on r.current_team_id = d.id
+        and r.current_project_id = #{proId}
+        and r.current_stage_id = #{stageId}
+        order by r.total_score desc
+    </select>
+</mapper>

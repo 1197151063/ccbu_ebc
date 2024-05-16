@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParCapitalAdequacyDao">
+
+    <resultMap id="ParCapitalAdequacyVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParCapitalAdequacyVO"></resultMap>
+    <resultMap id="ParCapitalAdequacyExcelVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParCapitalAdequacyExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParCapitalAdequacyVO">
+        select
+          id,
+          cash,
+          due_central_bank,
+          deposit_interbank,
+          loan_trade,
+          short_mortgage_loan,
+          short_hypothecated_loan,
+          short_guarantee_loan,
+          short_credit_loan,
+          discount,
+          mlong_mortgage_loan,
+          mlong_hypothecated_loan,
+          mlong_guarantee_loan,
+          mlong_credit_loan,
+          current_investment_bond,
+          current_investment_stock,
+          long_debt_investment,
+          long_equity_investment,
+          fixed_assets,
+          intangible_assets,
+          other_assets,
+          total,
+          capital_adequacy_requirements,
+          capital_source_core_stock,
+          capital_source_core_capital_reserve,
+          capital_source_core_surplus_reserve,
+          capital_source_core_un_profit,
+          capital_source_loss_reserves,
+          capital_source_subord_bond,
+          capital_source_total,
+          capital_surplus_shortage
+        from par_capital_adequacy
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParCapitalAdequacyExcelVO">
+        select
+           id,
+           cash,
+           due_central_bank,
+           deposit_interbank,
+           loan_trade,
+           short_mortgage_loan,
+           short_hypothecated_loan,
+           short_guarantee_loan,
+           short_credit_loan,
+           discount,
+           mlong_mortgage_loan,
+           mlong_hypothecated_loan,
+           mlong_guarantee_loan,
+           mlong_credit_loan,
+           current_investment_bond,
+           current_investment_stock,
+           long_debt_investment,
+           long_equity_investment,
+           fixed_assets,
+           intangible_assets,
+           other_assets,
+           total,
+           capital_adequacy_requirements,
+           capital_source_core_stock,
+           capital_source_core_capital_reserve,
+           capital_source_core_surplus_reserve,
+           capital_source_core_un_profit,
+           capital_source_loss_reserves,
+           capital_source_subord_bond,
+           capital_source_total,
+           capital_surplus_shortage
+        from par_capital_adequacy
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParCapitalAdequacyExcelVO">
+        select
+         id,
+         cash,
+         due_central_bank,
+         deposit_interbank,
+         loan_trade,
+         short_mortgage_loan,
+         short_hypothecated_loan,
+         short_guarantee_loan,
+         short_credit_loan,
+         discount,
+         mlong_mortgage_loan,
+         mlong_hypothecated_loan,
+         mlong_guarantee_loan,
+         mlong_credit_loan,
+         current_investment_bond,
+         current_investment_stock,
+         long_debt_investment,
+         long_equity_investment,
+         fixed_assets,
+         intangible_assets,
+         other_assets,
+         total,
+         capital_adequacy_requirements,
+         capital_source_core_stock,
+         capital_source_core_capital_reserve,
+         capital_source_core_surplus_reserve,
+         capital_source_core_un_profit,
+         capital_source_loss_reserves,
+         capital_source_subord_bond,
+         capital_source_total,
+         capital_surplus_shortage
+        from par_capital_adequacy
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="query"
+            resultType="net.lab1024.smartadmin.module.business.param.domain.vo.ParCapitalAdequacyVO">
+        select
+         id,
+         cash,
+         due_central_bank,
+         deposit_interbank,
+         loan_trade,
+         short_mortgage_loan,
+         short_hypothecated_loan,
+         short_guarantee_loan,
+         short_credit_loan,
+         discount,
+         mlong_mortgage_loan,
+         mlong_hypothecated_loan,
+         mlong_guarantee_loan,
+         mlong_credit_loan,
+         current_investment_bond,
+         current_investment_stock,
+         long_debt_investment,
+         long_equity_investment,
+         fixed_assets,
+         intangible_assets,
+         other_assets,
+         total,
+         capital_adequacy_requirements,
+         capital_source_core_stock,
+         capital_source_core_capital_reserve,
+         capital_source_core_surplus_reserve,
+         capital_source_core_un_profit,
+         capital_source_loss_reserves,
+         capital_source_subord_bond,
+         capital_source_total,
+         capital_surplus_shortage
+        from par_capital_adequacy
+    </select>
+
+    <delete id="deleteById">
+        delete from par_capital_adequacy where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_capital_adequacy where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

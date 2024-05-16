@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--main-->
+<div class="main">
+	<div class="main-bg">
+		<el-tabs v-model="activeName" @tab-click="handleClick">
+			<!--培训课程资料-->
+			<el-tab-pane label="培训课程资料" name="first">
+				<dl>
+<!--					<dt>1文件名</dt>-->
+					<dd>
+						<el-input placeholder="请输入文件名" v-model="tableData.fileName" size="small"  style="width: 30%">
+							<template #append>
+								<el-button icon="el-icon-search" @click="queryFileData(tableData.fileName,'first')"></el-button>
+							</template>
+						</el-input>
+						<el-upload
+								type="primary"
+								style="float:right"
+								class="upload-demo"
+								action="api/file/localUpload/1"
+								multiple
+								:limit="1"
+								:file-list="fileList"
+								:on-success="(response,file,fileList)=>successUpload(response,file,fileList,index,activeName)"
+						>
+							<el-button size="small" type="success" @click="submitUpload">上传培训课程资料</el-button>
+						</el-upload>
+<!--						<el-button type="primary" style="float:right" size="small" onclick="window.location.href ='js_upload'">上传</el-button>-->
+							<!--                        <el-button type="primary" plain size="small">删除</el-button>-->
+					</dd>
+				</dl>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+                              style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'list', order: 'descending'}">
+<!--						<el-table-column-->
+<!--								width="50px"-->
+<!--										 type="selection">-->
+<!--						</el-table-column>-->
+						<el-table-column
+										 prop="fileName"
+										 label="文件名"
+										 width="740">
+						</el-table-column>
+<!--						<el-table-column-->
+<!--										 prop="createrUser"-->
+<!--										 label="发布人"-->
+<!--										 align="center"-->
+<!--										 sortable-->
+<!--										 width="120">-->
+<!--						</el-table-column>-->
+<!--						<el-table-column-->
+<!--										 prop="createTime"-->
+<!--										 label="发布日期"-->
+<!--										 align="center"-->
+<!--										 sortable-->
+<!--										 width="120">-->
+<!--						</el-table-column>-->
+<!--						<el-table-column-->
+<!--										 prop="newszt"-->
+<!--										 label="状态"-->
+<!--										 align="center"-->
+<!--										 width="120">-->
+<!--						</el-table-column>-->
+<!--						<el-table-column-->
+<!--										 label="操作"-->
+<!--										 align="center"-->
+<!--										 sortable>-->
+<!--						</el-table-column>-->
+
+						<el-table-column
+								label="操作"
+								width="610px"
+								align="center" key="slot">
+							<template #default="scope" style="float:right">
+<!--								<el-button type="primary" plain size="small"  @click="downLoad(scope.row.id)">编辑</el-button>-->
+								<el-button type="primary" plain size="small"  @click="downLoad(scope.row.id)">下载</el-button>
+								<el-button type="danger" plain size="small"  @click="deleteFile(scope.row.id)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+<!--					<el-pagination-->
+<!--								   background-->
+<!--								   @size-change="handleSizeChange"-->
+<!--								   @current-change="handleCurrentChange"-->
+<!--								   :current-page="currentPage1"-->
+<!--								   :page-sizes="[100, 200, 300, 400]"-->
+<!--								   :page-size="100"-->
+<!--								   layout="total, sizes, prev, pager, next, jumper"-->
+<!--								   :total="400">-->
+<!--					</el-pagination>-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--培训课程资料-->
+			<!--专业知识-->
+			<el-tab-pane label="专业知识" name="second">
+				<dl>
+					<dd>
+						<el-input placeholder="请输入关键字" v-model="tableData.fileName" size="small"  style="width: 30%">
+							<template #append>
+								<el-button icon="el-icon-search" @click="queryFileData(tableData.fileName,'second')"></el-button>
+							</template>
+						</el-input>
+						<el-upload
+								type="primary"
+								style="float:right"
+								class="upload-demo"
+								action="api/file/localUpload/1"
+								multiple
+								:limit="1"
+								:file-list="fileList"
+								:on-success="(response,file,fileList)=>successUpload(response,file,fileList,index,activeName)"
+						>
+							<el-button size="small" type="success" @click="submitUpload">上传专业知识</el-button>
+						</el-upload>
+<!--						<el-button type="primary" style="float:right" size="small" onclick="window.location.href ='js_upload'">上传</el-button>-->
+						<!--                        <el-button type="primary" plain size="small">删除</el-button>-->
+					</dd>
+				</dl>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							:data="tableData"
+							style="width: 100%"
+							size="medium"
+							:default-sort = "{prop: 'list', order: 'descending'}">
+						<!--						<el-table-column-->
+						<!--								width="50px"-->
+						<!--										 type="selection">-->
+						<!--						</el-table-column>-->
+						<el-table-column
+								prop="fileName"
+								label="文件名"
+								width="740">
+						</el-table-column>
+						<!--						<el-table-column-->
+						<!--										 prop="createrUser"-->
+						<!--										 label="发布人"-->
+						<!--										 align="center"-->
+						<!--										 sortable-->
+						<!--										 width="120">-->
+						<!--						</el-table-column>-->
+						<!--						<el-table-column-->
+						<!--										 prop="createTime"-->
+						<!--										 label="发布日期"-->
+						<!--										 align="center"-->
+						<!--										 sortable-->
+						<!--										 width="120">-->
+						<!--						</el-table-column>-->
+						<!--						<el-table-column-->
+						<!--										 prop="newszt"-->
+						<!--										 label="状态"-->
+						<!--										 align="center"-->
+						<!--										 width="120">-->
+						<!--						</el-table-column>-->
+						<!--						<el-table-column-->
+						<!--										 label="操作"-->
+						<!--										 align="center"-->
+						<!--										 sortable>-->
+						<!--						</el-table-column>-->
+
+						<el-table-column
+								label="操作"
+								width="610px"
+								align="center" key="slot">
+							<template #default="scope" style="float:right">
+<!--								<el-button type="primary" plain size="small"  @click="downLoad(scope.row.id)">编辑</el-button>-->
+								<el-button type="primary" plain size="small"  @click="downLoad(scope.row.id)">下载</el-button>
+								<el-button type="danger" plain size="small"  @click="deleteFile(scope.row.id)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<!--					<el-pagination-->
+					<!--								   background-->
+					<!--								   @size-change="handleSizeChange"-->
+					<!--								   @current-change="handleCurrentChange"-->
+					<!--								   :current-page="currentPage1"-->
+					<!--								   :page-sizes="[100, 200, 300, 400]"-->
+					<!--								   :page-size="100"-->
+					<!--								   layout="total, sizes, prev, pager, next, jumper"-->
+					<!--								   :total="400">-->
+					<!--					</el-pagination>-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--专业知识-->
+			<!--决策信息解释-->
+			<el-tab-pane label="决策信息解释" name="third">
+				<dl>
+					<dd>
+						<el-input placeholder="请输入关键字" v-model="tableData.fileName" size="small"  style="width: 30%">
+							<template #append>
+								<el-button icon="el-icon-search" @click="queryFileData(tableData.fileName,'third')"></el-button>
+							</template>
+						</el-input>
+						<el-upload
+								type="primary"
+								style="float:right"
+								class="upload-demo"
+								action="api/file/localUpload/1"
+								multiple
+								:limit="1"
+								:file-list="fileList"
+								:on-success="(response,file,fileList)=>successUpload(response,file,fileList,index,activeName)"
+						>
+							<el-button size="small" type="success" @click="submitUpload">上传决策信息解释</el-button>
+						</el-upload>
+<!--						<el-button type="primary" style="float:right" size="small" onclick="window.location.href ='js_upload'">上传</el-button>-->
+						<!--                        <el-button type="primary" plain size="small">删除</el-button>-->
+					</dd>
+				</dl>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							:data="tableData"
+							style="width: 100%"
+							size="medium"
+							:default-sort = "{prop: 'list', order: 'descending'}">
+						<!--						<el-table-column-->
+						<!--								width="50px"-->
+						<!--										 type="selection">-->
+						<!--						</el-table-column>-->
+						<el-table-column
+								prop="fileName"
+								label="文件名"
+								width="740">
+						</el-table-column>
+						<!--						<el-table-column-->
+						<!--										 prop="createrUser"-->
+						<!--										 label="发布人"-->
+						<!--										 align="center"-->
+						<!--										 sortable-->
+						<!--										 width="120">-->
+						<!--						</el-table-column>-->
+						<!--						<el-table-column-->
+						<!--										 prop="createTime"-->
+						<!--										 label="发布日期"-->
+						<!--										 align="center"-->
+						<!--										 sortable-->
+						<!--										 width="120">-->
+						<!--						</el-table-column>-->
+						<!--						<el-table-column-->
+						<!--										 prop="newszt"-->
+						<!--										 label="状态"-->
+						<!--										 align="center"-->
+						<!--										 width="120">-->
+						<!--						</el-table-column>-->
+						<!--						<el-table-column-->
+						<!--										 label="操作"-->
+						<!--										 align="center"-->
+						<!--										 sortable>-->
+						<!--						</el-table-column>-->
+
+						<el-table-column
+								label="操作"
+								width="610px"
+								align="center" key="slot">
+							<template #default="scope" style="float:right">
+<!--								<el-button type="primary" plain size="small"  @click="downLoad(scope.row.id)">编辑</el-button>-->
+								<el-button type="primary" plain size="small"  @click="downLoad(scope.row.id)">下载</el-button>
+								<el-button type="danger" plain size="small"  @click="deleteFile(scope.row.id)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<!--					<el-pagination-->
+					<!--								   background-->
+					<!--								   @size-change="handleSizeChange"-->
+					<!--								   @current-change="handleCurrentChange"-->
+					<!--								   :current-page="currentPage1"-->
+					<!--								   :page-sizes="[100, 200, 300, 400]"-->
+					<!--								   :page-size="100"-->
+					<!--								   layout="total, sizes, prev, pager, next, jumper"-->
+					<!--								   :total="400">-->
+					<!--					</el-pagination>-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--决策信息解释-->
+		</el-tabs>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+<script>
+	var Main = {
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//表格
+				tableData: [
+				],
+				tab:{},
+				// pageNum: 1,  //当前页
+				pageSize: 5, //每页记录数
+				total: 20, //总记录数
+				form: {
+					pageNum: '1',
+					pageSize: '5',
+					total:'20'
+				},
+				//导航
+				activeIndex: '6',
+				//tabs
+				activeName: 'first',
+				//选择器
+				options: [{
+					value: '选项1',
+					label: '选项1'
+				}, {
+					value: '选项2',
+					label: '选项2'
+				}, {
+					value: '选项3',
+					label: '选项3'
+				}, {
+					value: '选项4',
+					label: '选项4'
+				}, {
+					value: '选项5',
+					label: '选项5'
+				}],
+				value: '',
+				//分页
+				currentPage1: 5,
+				currentPage2: 5,
+				currentPage3: 5,
+				currentPage4: 4,
+				//日期快捷选项
+				shortcuts: [{
+					text: '最近一周',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+						return [start, end]
+					})(),
+				}, {
+					text: '最近一个月',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+						return [start, end]
+					})(),
+				}, {
+					text: '最近三个月',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+						return [start, end]
+					})(),
+				}],
+				value1: '',
+				value2: '',
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		methods: {
+			//文件上传成功时的钩子
+			successUpload(response, file, fileList,index,activeName) {
+				// console.log(response)
+				// console.log(file)
+				// console.log(fileList)
+				// console.log(index)
+				console.log(activeName)
+				let fileUploadType =[]
+				if("first"==activeName||null==activeName){
+					  fileUploadType = 1
+				}
+				if("second"==activeName){
+					 fileUploadType = 2
+				}
+				if("third"==activeName){
+					 fileUploadType = 3
+				}
+				let params = new URLSearchParams()
+				params.append('id', response.data.id)
+				params.append('fileUploadType', fileUploadType)
+				axios({
+					method: 'get',
+					url: 'api/file/updateType',//相对路径即可，不用加/service
+					params: params,
+				}).then(function (resp) {
+					if (resp.status == 200) {
+						let message = '上传成功'
+						let type = "success"
+						this.$message({
+							showClose: true,
+							message: message,
+							type: type
+						});
+					}
+				})
+				location.reload();
+
+				//要做的处理
+			},
+			//tab
+			formatter(row, column) {
+				return row.address;
+			},
+			handleClick(tab, event) {
+				this.queryFileData(null,tab.paneName)
+				// console.log(tab.paneName)
+				// console.log(tab+"aaaaaaaaaaaaaaa", event);
+			},
+			//分页
+			handleSizeChange(val) {
+				console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				console.log(`当前页: ${val}`);
+			},
+			// 页码改变
+			changePage(pageNum) {
+				
+				this.form.pageNum = pageNum;
+				this.queryFileData(null,this.activeName);
+			},
+			//查询上传的文件
+			queryFileData(fileName,paneName){
+				// console.log(this.activeName)
+				let that = this
+				let form = this.form
+				if("first"==paneName||null==paneName){
+					form.fileUploadType = 1
+				}
+				if("second"==paneName){
+					form.fileUploadType = 2
+				}
+				if("third"==paneName){
+					form.fileUploadType = 3
+				}
+				form.fileName = fileName
+				// console.log(form)
+				axios({
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					method:'post',
+					url:'api/file/queryTeacher',//相对路径即可，不用加/service
+					data:form,
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.status==200){
+						let data = resp.data
+						// this.total = data.total
+						//  console.log("data=",data)
+						that.form = data.data
+						that.tableData = data.data.list
+						// console.log("form=",that.form)
+						// console.log("fileData=",that.fileData)
+					}
+				})
+			},
+			//删除文件
+			deleteFile(id){
+				let that = this
+				that.$confirm('确定要删除吗?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+
+					let params = new URLSearchParams()
+					params.append('id', id)
+					axios({
+						method: 'get',
+						url: 'api/file/delete',//相对路径即可，不用加/service
+						params: params,
+						responseType: 'json',
+					}).then(function (resp) {
+						if (resp.status == 200) {
+							let message = '删除成功'
+							let type = "success"
+							that.$message({
+								showClose: true,
+								message: message,
+								type: type
+							});
+							that.queryFileData();
+						}
+					})
+				}).catch(() => {
+				});
+			},
+			//下载文件
+			downLoad(id){
+				let that = this
+				let params = new URLSearchParams()
+				params.append('id', id)
+				axios({
+					method: 'get',
+					url: 'api/file/downLoad',//相对路径即可，不用加/service
+					params: params,
+					responseType: "blob",
+					headers: {
+						'Content-Type': 'multipart/x-www-form-urlencoded'
+					}
+				}).then(function (res) {
+					console.log(res);
+
+					const filename = res.headers["content-disposition"];
+					const blob = new Blob([res.data]);
+					var downloadElement = document.createElement("a");
+					var href = window.URL.createObjectURL(blob);
+					downloadElement.href = href;
+					downloadElement.download = decodeURIComponent(filename.split("filename=")[1]);
+					document.body.appendChild(downloadElement);
+					downloadElement.click();
+					document.body.removeChild(downloadElement);
+					window.URL.revokeObjectURL(href);
+
+					if (res.status == 200) {
+						let message = '下载成功'
+						let type = "success"
+						that.$message({
+							showClose: true,
+							message: message,
+							type: type
+						});
+						that.queryFileData();
+					}
+				})
+			},
+		},
+        mounted:function(){
+            //动态获取当前正在进行阶段
+            // this.currentStageId = this.$refs['currentStageId'].attrs.value
+            // let proId = this.$refs['projectId'].attrs.value
+            // let teamId = this.$refs['teamId'].attrs.value
+            this.queryFileData()
+        },
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+
+
+</script>
+
+
+</html>

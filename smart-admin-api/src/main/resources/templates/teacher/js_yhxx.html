@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--main-->
+<div class="main">
+	<div class="main-bg">
+		<div class="xxlr-title">用户信息</div>
+		<div class="team-content">
+			<ul>
+				<li><img src="../photo/user_photo1.png" alt=""/></li>
+				<li><el-button plain size="small">修改头像</el-button></li>
+			</ul>
+			<dl>
+				<dt>姓名：</dt>
+				<dd>张林伟</dd>
+			</dl>
+			<dl>
+				<dt>用户名：</dt>
+				<dd>zhanglinwei</dd>
+			</dl>
+			<dl>
+				<dt>手机：</dt>
+				<dd>17600900070</dd>
+			</dl>
+			<dl>
+				<dt>邮箱：</dt>
+				<dd>zhanglinwei@emaiml.com</dd>
+			</dl>
+			<dl>
+				<dt>所在团队：</dt>
+				<dd>中国龙队银行</dd>
+			</dl>
+			<dl>
+				<dt></dt>
+				<dd><el-button plain size="small">修改用户信息</el-button></dd>
+			</dl>
+		</div>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+<script>
+	var Main = {
+		data () {
+			
+
+			
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		methods: {
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

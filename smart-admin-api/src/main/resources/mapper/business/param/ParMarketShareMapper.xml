@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParMarketShareDao">
+
+    <resultMap id="ParMarketShareVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParMarketShareVO"></resultMap>
+    <resultMap id="ParMarketShareExcelVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParMarketShareExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParMarketShareVO">
+        select
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          business,
+          market_share
+        from par_market_share
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParMarketShareExcelVO">
+        select
+           id,
+           current_project_id,
+           current_team_id,
+           current_stage_id,
+           business,
+           market_share
+        from par_market_share
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParMarketShareExcelVO">
+        select
+         id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         business,
+         market_share
+        from par_market_share
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.param.domain.vo.ParMarketShareExcelVO">
+         select
+         p.id,
+         p.current_project_id,
+         p.current_team_id,
+         p.current_stage_id,
+         t.name,
+         p.business,
+         p.market_share
+        from par_market_share p left join t_department t on p.current_team_id=t.id
+        where p.current_project_id = #{currentProjectId}
+        and p.current_stage_id = #{currentStageId};
+    </select>
+
+    <delete id="deleteById">
+        delete from par_market_share where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_market_share where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

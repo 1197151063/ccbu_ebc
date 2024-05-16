@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<div th:include="include/header"></div>
+<!--nav-->
+<!--main-->
+<div class="main">
+	<div class="breadcrumb">
+		<el-breadcrumb separator="-">
+			<el-breadcrumb-item :to="{ path: '/' }"><a href="xy_index.html">首页</a></el-breadcrumb-item>
+			<el-breadcrumb-item><img  th:src="@{/images/form_title.png}" alt=""/>市场营销信息录入</el-breadcrumb-item>
+		</el-breadcrumb>
+	</div>
+	<div class="scyx-main">
+		<div class="xxlr-title">[[${session['app_user_login']!=null?session['app_user_login'].departmentName:'建设银行'}]]</div>
+		<div style="height: 20px"></div>
+		<el-row class="ts-list">
+			<el-col :span="4" class="ts-list-title">贷款业务</el-col>
+			<el-col :span="2"><35岁</el-col>
+			<el-col :span="1"></el-col>
+			<el-col :span="2">35～55岁</el-col>
+			<el-col :span="1"></el-col>
+			<el-col :span="2">>55岁</el-col>
+			<el-col :span="1"></el-col>
+			<el-col :span="2">小型企业</el-col>
+			<el-col :span="1"></el-col>
+			<el-col :span="2">中型企业</el-col>
+			<el-col :span="1"></el-col>
+			<el-col :span="2">大型企业</el-col>
+			<el-col :span="1"></el-col>
+			<el-col :span="2">公共机构</el-col>
+		</el-row>
+		<el-form :model="form" ref="form" :hide-required-asterisk="false" show-message :rules="rules">
+			<el-row class="scyx-list">
+				<el-col :span="4" class="scyx-list-title">市场拓展
+					<el-popover
+								placement="top"
+								title="市场拓展"
+								:width="300"
+								trigger="click"
+								content="市场营销"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</el-col>
+				<el-col :span="2"><el-slider v-model="form.loansBusineDevelopLess" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansBusineDevelopBetween" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansBusineDevelopGreater" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansBusineDevelopSmall" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansBusineDevelopMedium" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansBusineDevelopMajor" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansBusineDevelopPublic" max="4" :marks="marks"></el-slider></el-col>
+			</el-row>
+			<el-row class="scyx-list">
+				<el-col :span="4" class="scyx-list-title">客户维护
+					<el-popover
+								placement="top"
+								title="客户维护"
+								:width="300"
+								trigger="click"
+								content="市场营销"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</el-col>
+				<el-col :span="2"><el-slider v-model="form.loansCustomerMainLess" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansCustomerMainBetween" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansCustomerMainGreater" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansCustomerMainSmall" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansCustomerMainMedium" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansCustomerMainMajor" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.loansCustomerMainPublic" max="4" :marks="marks"></el-slider></el-col>
+			</el-row>
+			<div style="height: 20px"></div>
+			<el-row class="ts-list">
+				<el-col :span="4" class="ts-list-title">存款业务</el-col>
+				<el-col :span="2"><35岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">35～55岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">>55岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">小型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">中型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">大型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">公共机构</el-col>
+			</el-row>
+			<el-row class="scyx-list">
+				<el-col :span="4" class="scyx-list-title">市场拓展
+					<el-popover
+								placement="top"
+								title="市场拓展"
+								:width="300"
+								trigger="click"
+								content="市场营销"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</el-col>
+				<el-col :span="2"><el-slider v-model="form.depositBusineDevelopLess" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositBusineDevelopBetween" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositBusineDevelopGreater" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositBusineDevelopSmall" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositBusineDevelopMedium" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositBusineDevelopMajor" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositBusineDevelopPublic" max="4" :marks="marks"></el-slider></el-col>
+			</el-row>
+			<el-row class="scyx-list">
+				<el-col :span="4" class="scyx-list-title">客户维护
+					<el-popover
+								placement="top"
+								title="客户维护"
+								:width="300"
+								trigger="click"
+								content="市场营销"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</el-col>
+				<el-col :span="2"><el-slider v-model="form.depositCustomerMainLess" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositCustomerMainBetween" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositCustomerMainGreater" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositCustomerMainSmall" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositCustomerMainMedium" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositCustomerMainMajor" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.depositCustomerMainPublic" max="4" :marks="marks"></el-slider></el-col>
+			</el-row>
+			<div style="height: 20px"></div>
+			<el-row class="ts-list">
+				<el-col :span="4" class="ts-list-title">中间业务</el-col>
+				<el-col :span="2"><35岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">35～55岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">>55岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">小型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">中型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">大型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">公共机构</el-col>
+			</el-row>
+			<el-row class="scyx-list">
+				<el-col :span="4" class="scyx-list-title">市场拓展
+					<el-popover
+								placement="top"
+								title="市场拓展"
+								:width="300"
+								trigger="click"
+								content="市场营销"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</el-col>
+				<el-col :span="2"><el-slider v-model="form.middleBusineDevelopLess" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleBusineDevelopBetween" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleBusineDevelopGreater" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleBusineDevelopSmall" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleBusineDevelopMedium" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleBusineDevelopMajor" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleBusineDevelopPublic" max="4" :marks="marks"></el-slider></el-col>
+			</el-row>
+			<el-row class="scyx-list">
+				<el-col :span="4" class="scyx-list-title">客户维护
+					<el-popover
+								placement="top"
+								title="客户维护"
+								:width="300"
+								trigger="click"
+								content="市场营销"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</el-col>
+				<el-col :span="2"><el-slider v-model="form.middleCustomerMainLess" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleCustomerMainBetween" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleCustomerMainGreater" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleCustomerMainSmall" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleCustomerMainMedium" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleCustomerMainMajor" max="4" :marks="marks"></el-slider></el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2"><el-slider v-model="form.middleCustomerMainPublic" max="4" :marks="marks"></el-slider></el-col>
+			</el-row>
+		<div style="height: 20px"></div>
+		<div class="scyx-main">
+			<div class="xxlr-title">客户营销策略<span>单位：百万元</span></div>
+			<el-row class="ts-list">
+				<el-col :span="4"></el-col>
+				<el-col :span="2"><35岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">35～55岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">>55岁</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">小型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">中型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">大型企业</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">公共机构</el-col>
+			</el-row>
+			<el-row class="scyx-list">
+				<el-col :span="4" class="scyx-list-title">客户营销费用
+					<el-popover
+								placement="top"
+								title="客户营销"
+								:width="300"
+								trigger="click"
+								content="市场营销"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</el-col>
+				<el-col :span="2">
+					<el-form-item prop="customerMarketingLessAge">
+						<el-input v-model="form.customerMarketingLessAge" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">
+					<el-form-item prop="customerMarketingBetweenAge">
+						<el-input v-model="form.customerMarketingBetweenAge" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">
+					<el-form-item prop="customerMarketingGreaterAge">
+						<el-input v-model="form.customerMarketingGreaterAge" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">
+					<el-form-item prop="customerMarketingSmallEnterprise">
+						<el-input v-model="form.customerMarketingSmallEnterprise" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">
+					<el-form-item prop="customerMarketingMediumEnterprise">
+						<el-input v-model="form.customerMarketingMediumEnterprise" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">
+					<el-form-item prop="customerMarketingMajorEnterprise">
+						<el-input v-model="form.customerMarketingMajorEnterprise" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="1"></el-col>
+				<el-col :span="2">
+					<el-form-item prop="customerMarketingPublicInstitution">
+						<el-input v-model="form.customerMarketingPublicInstitution" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+			</el-row>
+		</div>
+		<div style="height: 20px"></div>
+			<div class="xxlr-title">业务营销策略<span>单位：百万元</span></div>
+			<el-row class="ts-list">
+				<el-col :span="4"></el-col>
+				<el-col :span="5">贷款业务</el-col>
+				<el-col :span="2"></el-col>
+				<el-col :span="5">存款业务</el-col>
+				<el-col :span="2"></el-col>
+				<el-col :span="5">中间业务</el-col>
+			</el-row>
+			<el-row class="scyx-list">
+				<el-col :span="4" class="scyx-list-title">业务营销费用
+					<el-popover
+								placement="top"
+								title="业务营销"
+								:width="300"
+								trigger="click"
+								content="市场营销"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</el-col>
+				<el-col :span="5">
+					<el-form-item prop="businessMarketingLoanTransaction">
+						<el-input v-model="form.businessMarketingLoanTransaction" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="2"></el-col>
+				<el-col :span="5">
+					<el-form-item prop="businessMarketingDepositBloanTransaction">
+						<el-input v-model="form.businessMarketingDepositBloanTransaction" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :span="2">
+				</el-col>
+				<el-col :span="5">
+					<el-form-item prop="businessMarketingMiddleTransaction">
+						<el-input v-model="form.businessMarketingMiddleTransaction" placeholder="请输入" size="small" ></el-input>
+					</el-form-item>
+				</el-col>
+			</el-row>
+		</el-form>
+	</div>
+	<div v-show="submitAlert">
+		<el-alert
+				title="请检查您的决策数据是否为空或有效"
+				type="error"
+				center
+				close-text="知道了">
+		</el-alert>
+	</div>
+	<div class="xxlr-tj" v-if="form.status!=1">
+		<el-button type="primary" v-if="form.currentStageId!=2" plain @click="preOperation('form')">预计算</el-button>
+		<el-button type="primary" plain @click="saveForm('form')">保存</el-button>
+		<el-button type="primary" @click="submitFormBefore('form')">提交</el-button>
+	</div>
+</div>
+<!--main-->
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+</body>
+<script type="module" th:src="@{/service/market-strategy.js}"></script>
+</html>

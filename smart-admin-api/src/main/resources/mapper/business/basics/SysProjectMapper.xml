@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.basics.dao.SysProjectDao">
+
+    <resultMap id="SysProjectVO"
+               type="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectVO"></resultMap>
+    <resultMap id="SysProjectExcelVO"
+               type="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectExcelVO"></resultMap>
+
+    <insert id="insertProject" useGeneratedKeys="true" keyProperty="proId">
+        INSERT INTO sys_project (
+                  pro_name,
+                  create_time,
+                    update_time,
+                  status,
+                  remarks
+                )
+                VALUES
+                (
+                    #{entity.proName},
+                    #{entity.createTime},
+                    #{entity.updateTime},
+                    #{entity.status},
+                    #{entity.remarks}
+                    )
+    </insert>
+
+
+    <select id="queryByPage" resultMap="SysProjectVO">
+        select
+        pro_id,
+        pro_name,
+        create_time,
+        update_time,
+        remarks
+        from sys_project
+        <where>
+            <if test="queryDTO.proId != null">
+                AND pro_id = #{queryDTO.proId}
+            </if>
+            <if test="queryDTO.createTime != null and queryDTO.createTime != ''">
+                AND INSTR(create_time,#{queryDTO.createTime})
+            </if>
+            <if test="queryDTO.proName != null and queryDTO.proName != ''">
+                AND INSTR(pro_name,#{queryDTO.proName})
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="queryAllExportData" resultMap="SysProjectExcelVO">
+        select
+        pro_id,
+        pro_name,
+        create_time,
+        update_time
+        from sys_project
+        <where>
+            <if test="queryDTO.proId != null">
+                AND pro_id = #{queryDTO.proId}
+            </if>
+            <if test="queryDTO.createTime != null and queryDTO.createTime != ''">
+                AND INSTR(create_time,#{queryDTO.createTime})
+            </if>
+            <if test="queryDTO.proName != null and queryDTO.proName != ''">
+                AND INSTR(pro_name,#{queryDTO.proName})
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="SysProjectExcelVO">
+        select
+        pro_id,
+        pro_name,
+        create_time,
+        update_time
+        from sys_project
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectByStageId" resultType="java.lang.Integer">
+        select  stage_id
+        from sys_project_stage
+        where pro_id = #{proId} and status = #{status}
+    </select>
+
+    <select id="queryBy" resultType="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectVO">
+        select
+        pro_id,
+        pro_name,
+        create_time,
+        update_time
+        from sys_project
+        <where>
+            <if test="queryDTO.proId != null">
+                AND pro_id = #{queryDTO.proId}
+            </if>
+            <if test="queryDTO.createTime != null and queryDTO.createTime != ''">
+                AND INSTR(create_time,#{queryDTO.createTime})
+            </if>
+            <if test="queryDTO.proName != null and queryDTO.proName != ''">
+                AND INSTR(pro_name,#{queryDTO.proName})
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+    <select id="queryData" resultType="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectVO">
+         select
+        pro_id,
+        pro_name,
+        create_time,
+        update_time
+        from sys_project
+        where pro_id = #{projectId}
+    </select>
+
+    <delete id="deleteById">
+        delete from sys_project where pro_id = #{proId}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from sys_project where pro_id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="updateProjectByProId"
+            parameterType="net.lab1024.smartadmin.module.business.basics.domain.dto.SysProjectAddDTO">
+        update sys_project
+        <set>
+            <if test="sysProject.proName != null">pro_name=#{sysProject.proName},</if>
+            <if test="sysProject.status != null">status=#{sysProject.status},</if>
+            <if test="sysProject.createTime != null">create_time=#{sysProject.createTime},</if>
+            <if test="sysProject.updateTime != null">update_time=#{sysProject.updateTime},</if>
+            <if test="sysProject.remarks != null">remarks=#{sysProject.remarks}</if>
+        </set>
+        where pro_id=#{sysProject.proId}
+    </update>
+
+    <update id="updateStatus">
+        update sys_project set status=#{status}
+        where pro_id = #{currentProjectId}
+    </update>
+
+    <select id="queryByAllProject" resultMap="SysProjectVO">
+        select
+        pro_id,
+        pro_name,
+        create_time,
+        update_time,
+        remarks
+        from sys_project
+        order by create_time desc
+    </select>
+</mapper>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepInvestbusOperatDataStockDao">
+
+    <resultMap id="RepInvestbusOperatDataStockVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataStockVO"></resultMap>
+    <resultMap id="RepInvestbusOperatDataStockExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataStockExcelVO"></resultMap>
+    <sql id="query_all_rep_stock">
+        id,
+        current_project_id,
+        current_team_id,
+        current_stage_id,
+        stock_project,
+        stock_index,
+        stock_type,
+        stock_number,
+        stock_cost,
+        stock_dividend,
+        stock_account
+    </sql>
+
+    <select id="queryByPage" resultMap="RepInvestbusOperatDataStockVO">
+        select
+            <include refid="query_all_rep_stock"/>
+        from rep_investbus_operat_data_stock
+        <where>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepInvestbusOperatDataStockExcelVO">
+        select
+           <include refid="query_all_rep_stock"/>
+        from rep_investbus_operat_data_stock
+        <where>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepInvestbusOperatDataStockExcelVO">
+        select
+         <include refid="query_all_rep_stock"/>
+        from rep_investbus_operat_data_stock
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectInvestbusOperatDataStockPar" resultMap="RepInvestbusOperatDataStockVO">
+        select
+         id,
+         current_stage_id,
+         stock_project,
+         stock_index,
+         stock_type,
+         stock_number,
+         stock_cost,
+         stock_dividend,
+         stock_account
+        from par_initial_data_investbus_stock
+        where current_stage_id = #{currentStageId}
+        and stock_type = #{stockType}
+    </select>
+
+    <select id="selectInvestbusOperatDataStockRep" resultMap="RepInvestbusOperatDataStockVO">
+        select
+         <include refid="query_all_rep_stock"/>
+        from rep_investbus_operat_data_stock
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+        and stock_type = #{stockType}
+    </select>
+    <select id="query" resultMap="RepInvestbusOperatDataStockVO">
+        select
+        <include refid="query_all_rep_stock"/>
+        from rep_investbus_operat_data_stock
+        <where>
+            1=1
+            <if test="currentProjectId!=null">
+                and  current_project_id = #{currentProjectId}
+            </if>
+            <if test="currentTeamId!=null">
+                and current_team_id = #{currentTeamId}
+            </if>
+            <if test="currentStageId!=null">
+                and current_stage_id = #{currentStageId}
+            </if>
+            <if test="stockType!=null">
+                and stock_type = #{stockType}
+            </if>
+        </where>
+    </select>
+    <select id="selectInvestbusOperatData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataStockVO">
+        select
+         <include refid="query_all_rep_stock"/>
+        from rep_investbus_operat_data_stock
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+        and stock_project= #{stockProject}
+        and stock_type = #{stockType}
+    </select>
+
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepInvestbusOperatDataStockExcelVO">
+                select
+         r.id,
+         r.current_stage_id,
+         t.name,
+         r.stock_project,
+         r.stock_index,
+         r.stock_type,
+         r.stock_number,
+         r.stock_cost,
+         r.stock_dividend,
+         r.stock_account
+        from rep_investbus_operat_data_stock r left join t_department t on r.current_team_id=t.id
+                where r.current_Project_id = #{currentProjectId}
+        and r.current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_investbus_operat_data_stock where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_investbus_operat_data_stock where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

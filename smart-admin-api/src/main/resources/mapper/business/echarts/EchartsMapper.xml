@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.echarts.EchartsDataDao">
+    <!--市场份额-->
+    <resultMap id="ParMarketShareVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParMarketShareVO"></resultMap>
+    <select id="queryMSByPidAndSid" resultMap="ParMarketShareVO">
+        select
+        p.id,
+        p.current_project_id,
+        p.current_team_id,
+        p.current_stage_id,
+        p.business,
+        p.market_share,
+        d.name
+        from (select id,name from t_department where project_id = #{proId}) d
+        left join par_market_share p
+        on p.current_team_id = d.id
+        <if test="proId != null">
+            AND p.current_project_id = #{proId}
+        </if>
+        <if test="stageId != null">
+            AND p.current_stage_id = #{stageId}
+        </if>
+        <if test="type != null">
+            AND p.business = #{type}
+        </if>
+    </select>
+    <select id="queryMarketShare" resultMap="ParMarketShareVO">
+        select
+        p.id,
+        p.current_project_id,
+        p.current_team_id,
+        p.current_stage_id,
+        p.business,
+        p.market_share
+        from par_market_share p
+        <where>
+            <if test="marketShare.currentProjectId != null">
+                AND p.current_project_id = #{marketShare.currentProjectId}
+            </if>
+            <if test="marketShare.currentTeamId != null">
+                AND p.current_team_id = #{marketShare.currentTeamId}
+            </if>
+            <if test="marketShare.currentStageId != null">
+                AND p.current_stage_id = #{marketShare.currentStageId}
+            </if>
+            <if test="marketShare.business != null">
+                AND p.business = #{marketShare.business}
+            </if>
+        </where>
+        group by p.business
+    </select>
+</mapper>

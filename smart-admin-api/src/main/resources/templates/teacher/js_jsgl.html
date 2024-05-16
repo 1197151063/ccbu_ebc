@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--main-->
+<div class="main">
+	<ul class="column-tabs">
+		<li class="column-tabs-a"><a th:href="@{/service/js_jsgl}">决策数据</a></li>
+		<li><a  th:href="@{/service/js_jsgl2}">竞争数据</a></li>
+	</ul>
+	<div class="main-bg">
+		<!--筛选-->
+				<div class="screen">
+<!--					<dl>-->
+<!--						<dd>-->
+<!--							<el-select v-model="value" placeholder="本期学员" size="small">-->
+<!--								<el-option-->
+<!--										   v-for="item in options"-->
+<!--										   :key="item.value"-->
+<!--										   :label="item.label"-->
+<!--										   :value="item.value">-->
+<!--								</el-option>-->
+<!--							</el-select>-->
+<!--						</dd>-->
+<!--					</dl>-->
+					<dl>
+						<dt>项目</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="tableData.project" size="small"  style="width: 80%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryData(tableData.project,'','','','')"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<dl>
+						<dt>阶段</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="tableData.stage" size="small"  style="width: 80%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryData('',tableData.stage,'','','')"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<dl>
+						<dt>决策团队</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="tableData.team" size="small"  style="width: 80%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryData('','',tableData.team,'','')"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+<!--					<dl>-->
+<!--						<dt>决策人</dt>-->
+<!--						<dd>-->
+<!--							<el-select v-model="value" placeholder="全部" size="small">-->
+<!--								<el-option-->
+<!--										   v-for="item in options"-->
+<!--										   :key="item.value"-->
+<!--										   :label="item.label"-->
+<!--										   :value="item.value">-->
+<!--								</el-option>-->
+<!--							</el-select>-->
+<!--						</dd>-->
+<!--					</dl>-->
+<!--					<dl>-->
+<!--						<dt>发布时间</dt>-->
+<!--						<dd>-->
+<!--							<el-date-picker-->
+<!--									v-model="value2"-->
+<!--									type="daterange"-->
+<!--									unlink-panels-->
+<!--									range-separator="至"-->
+<!--									start-placeholder="开始日期"-->
+<!--									end-placeholder="结束日期"-->
+<!--									:shortcuts="shortcuts"-->
+<!--									size="small">-->
+<!--							</el-date-picker>-->
+<!--						</dd>-->
+<!--					</dl>-->
+<!--					<div class="screen-right"><el-button type="primary" plain size="small">删除</el-button></div>-->
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+<!--						<el-table-column-->
+<!--										 type="selection">-->
+<!--						</el-table-column>-->
+						<el-table-column
+								prop="project"
+								label="项目"
+								width="200">
+						</el-table-column>
+						<el-table-column
+								prop="stage"
+								label="阶段"
+								width="100">
+						</el-table-column>
+						<el-table-column
+										 prop="business"
+										 label="业务"
+										 width="100">
+						</el-table-column>
+						<el-table-column
+										 prop="team"
+										 label="决策团队"
+										 width="200">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="决策人"
+										 align="center"
+										 width="100">
+						</el-table-column>
+						<el-table-column
+										 prop="createTime"
+										 label="发布日期"
+										 align="center"
+										 sortable
+										 width="200">
+						</el-table-column>
+						<el-table-column
+										 prop="status"
+										 label="状态"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 label="操作"
+										 align="center"
+										 sortable>
+							<template #default="scope" style="float:right">
+								<el-button type="primary" plain size="small" :disabled="scope.row.status=='已总结'?true:false" @click="updateStatus(scope.row.id)">总结</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+<!--					<el-pagination-->
+<!--								   background-->
+<!--								   @size-change="handleSizeChange"-->
+<!--								   @current-change="handleCurrentChange"-->
+<!--								   :current-page="currentPage1"-->
+<!--								   :page-sizes="[100, 200, 300, 400]"-->
+<!--								   :page-size="100"-->
+<!--								   layout="total, sizes, prev, pager, next, jumper"-->
+<!--								   :total="400">-->
+<!--					</el-pagination>-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+					<!--分页-->
+				</div>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+<script>
+	var Main = {
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//表格
+				tableData: [],
+				pageSize: 5, //每页记录数
+				total: 20, //总记录数
+				form: {
+					pageNum: '1',
+					pageSize: '5',
+					total:'20',
+					project:'',
+					stage:'',
+					team:'',
+					status:'',
+					createTimeBegin:'',
+					createTimeEnd:''
+				},
+				//导航
+				activeIndex: '4',
+				//tabs
+				activeName: 'first',
+				//选择器
+				options: [{
+					value: '选项1',
+					label: '选项1'
+				}, {
+					value: '选项2',
+					label: '选项2'
+				}, {
+					value: '选项3',
+					label: '选项3'
+				}, {
+					value: '选项4',
+					label: '选项4'
+				}, {
+					value: '选项5',
+					label: '选项5'
+				}],
+				value: '',
+				//分页
+				currentPage1: 5,
+				currentPage2: 5,
+				currentPage3: 5,
+				currentPage4: 4,
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		mounted:function(){
+			this.queryData()
+		},
+		methods: {
+			//查询
+			queryData(project,stage,team,createTimeBegin,createTimeEnd){
+				// console.log(this.activeName)
+				let that = this
+				let form = this.form
+				form.project = project
+				form.stage = stage
+				form.team = team
+				form.createTimeBegin = createTimeBegin
+				form.createTimeEnd = createTimeEnd
+				axios({
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					method:'post',
+					url:'tDecisionSummary/page/query',//相对路径即可，不用加/service
+					data:form,
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.status==200){
+						let data = resp.data
+						that.form = data.data
+						that.tableData = data.data.list
+						// console.log("form=",that.form)
+						for (let i = 0; i < that.tableData.length; i++) {
+							if(that.tableData[i].status==1){
+								that.tableData[i].status='已总结'
+							}else {
+								that.tableData[i].status='未总结'
+							}
+						}
+					}
+				})
+			},
+			//修改状态
+			updateStatus(id){
+			let that = this
+			let params = new URLSearchParams()
+			params.append('id', id)
+			axios({
+				method: 'get',
+				url: 'tDecisionSummary/updateStatus',//相对路径即可，不用加/service
+				params: params,
+				responseType: 'json',
+			}).then(function (resp) {
+				if (resp.status == 200) {
+					let message = '已总结'
+					let type = "success"
+					that.$message({
+						showClose: true,
+						message: message,
+						type: type
+					});
+					that.queryData();
+				}
+			})
+
+			},
+			//tab
+			formatter(row, column) {
+				return row.address;
+			},
+			handleClick(tab, event) {
+				console.log(tab, event);
+			},
+			//分页
+			handleSizeChange(val) {
+				console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				console.log(`当前页: ${val}`);
+			},
+			// 页码改变
+			changePage(pageNum) {
+				this.form.pageNum = pageNum;
+				this.queryData();
+			},
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

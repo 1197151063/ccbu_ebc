@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepPeopleLogisticsDao">
+
+    <resultMap id="RepPeopleLogisticsVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO"></resultMap>
+    <resultMap id="RepPeopleLogisticsExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsExcelVO"></resultMap>
+        <sql id="query_rep_people_logistics">
+            id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          business_type,
+          start_employee_quantity,
+          hare_fire,
+          drain,
+          end_employee_quantity,
+          loss_rate,
+          lost_personnel,
+          effective_time,
+          training_time,
+          market_development,
+          customer_maintenance,
+          available_time,
+          need_time,
+          work_overtime,
+          temporary_worker,
+          training_level,
+          job_satisfaction
+        </sql>
+
+    <select id="queryByPage" resultMap="RepPeopleLogisticsVO">
+        select
+          <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepPeopleLogisticsExcelVO">
+        select
+        <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepPeopleLogisticsExcelVO">
+        select
+        <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+        <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        where current_project_id = #{currentProjectId}
+        and current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+    </select>
+
+    <select id="selectPeopleLogisticsDataPar"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+         id,
+         current_stage_id,
+         business_type,
+         start_employee_quantity,
+         hare_fire,
+         drain,
+         end_employee_quantity,
+         loss_rate,
+         lost_personnel,
+         effective_time,
+         training_time,
+         market_development,
+         customer_maintenance,
+         available_time,
+         need_time,
+         work_overtime,
+         temporary_worker,
+         training_level,
+         job_satisfaction
+        from par_initial_data_people_logistics
+        <if test="currentStageId!=null">
+        where current_stage_id = #{currentStageId}
+        </if>
+    </select>
+
+    <select id="selectPeopleLogisticsDataRep"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+        <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+    </select>
+    <select id="queryBeforeData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+        <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        where current_project_id = #{currentProjectId}
+        and current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+        and business_type = #{businessType}
+    </select>
+
+    <select id="selectPeopleRep"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+        <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+    </select>
+    <select id="selectPeoplePar"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+         id,
+         current_stage_id,
+         business_type,
+         start_employee_quantity,
+         hare_fire,
+         drain,
+         end_employee_quantity,
+         loss_rate,
+         lost_personnel,
+         effective_time,
+         training_time,
+         market_development,
+         customer_maintenance,
+         available_time,
+         need_time,
+         work_overtime,
+         temporary_worker,
+         training_level,
+         job_satisfaction
+        from par_initial_data_people_logistics
+        where current_stage_id = #{currentStageId}
+    </select>
+    <select id="selectPeopleByPar"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+         id,
+         current_stage_id,
+         business_type,
+         start_employee_quantity,
+         hare_fire,
+         drain,
+         end_employee_quantity,
+         loss_rate,
+         lost_personnel,
+         effective_time,
+         training_time,
+         market_development,
+         customer_maintenance,
+         available_time,
+         need_time,
+         work_overtime,
+         temporary_worker,
+         training_level,
+         job_satisfaction
+        from par_initial_data_people_logistics
+        where current_stage_id = #{currentStageId} and business_type = #{businessType}
+    </select>
+    <select id="selectPeopleLogisticsRep"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+        <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId}
+    </select>
+    <select id="query"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsVO">
+        select
+        <include refid="query_rep_people_logistics"/>
+        from rep_people_logistics
+        <where>
+            1=1
+            <if test="currentProjectId!=null">
+                and  current_project_id = #{currentProjectId}
+            </if>
+            <if test="currentTeamId!=null">
+                and current_team_id = #{currentTeamId}
+            </if>
+            <if test="currentStageId!=null">
+                and current_stage_id = #{currentStageId};
+            </if>
+        </where>
+    </select>
+
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepPeopleLogisticsExcelVO">
+                select
+         r.id,
+         r.current_stage_id,
+         t.name,
+         r.business_type,
+         r.start_employee_quantity,
+         r.hare_fire,
+         r.drain,
+         r.end_employee_quantity,
+         r.loss_rate,
+         r.lost_personnel,
+         r.effective_time,
+         r.training_time,
+         r.market_development,
+         r.customer_maintenance,
+         r.available_time,
+         r.need_time,
+         r.work_overtime,
+         r.temporary_worker,
+         r.training_level,
+         r.job_satisfaction
+        from rep_people_logistics r left join t_department t on r.current_team_id=t.id
+                where r.current_Project_id = #{currentProjectId}
+        and r.current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_people_logistics where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_people_logistics where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

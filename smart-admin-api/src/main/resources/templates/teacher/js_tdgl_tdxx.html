@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+
+<div class="form-bg">
+	<div class="form-title">
+		<div class="form-title-left"><img src="../images/form_title.png" alt=""/>团队基本信息</div>
+		<div class="form-title-right">
+			<el-button type="primary" size="small" @click="updateTeamInfo(1)" >提交</el-button>
+			<el-button type="primary" plain size="small" @click="updateTeamInfo(0)" >保存</el-button>
+			<el-button size="small" onclick="window.location.href ='js_tdgl'">返回</el-button></div>
+	</div>
+	<!--团队基本信息-->
+	<div class="team-content">
+		<ul>
+<!--			<li><img src="../photo/team_logo1.jpg" alt=""/></li>-->
+<!--			<li><el-button plain size="small">上传</el-button></li>-->
+			<li><el-upload
+					class="avatar-uploader"
+					action="upload"
+					:show-file-list="false"
+					:on-success="teamUploadSuccess"
+					:before-upload="beforeAvatarUpload">
+				<img v-if="teamInfo.logo" :src="'../upload/' + teamInfo.logo" class="avatar"/>
+				<img v-else :src="defaultTeamLogo" class="avatar"/>
+				<!--                <i v-else class="el-icon-plus"></i>-->
+				<!--                <el-icon v-else class="avatar-uploader-icon"><plus /></el-icon>-->
+			</el-upload>
+			</li>
+		</ul>
+		<el-form :model="teamInfo" ref="form" lable-position="left" label-width="100px" >
+			<el-form-item label="团队名称:" >
+
+<!--				-->
+				<el-input
+						v-model="teamInfo.name"
+						  type="text"
+						  placeholder="请输入内容"
+
+						  show-word-limit
+						  style="width:30rem"
+						  size="small">
+				</el-input>
+			</el-form-item>
+			<el-form-item label="团队口号:">
+<!--				-->
+				<el-input
+						v-model="teamInfo.shortName"
+						  type="text"
+						  placeholder="请输入内容"
+						  show-word-limit
+						  style="width:30rem"
+						  maxlength="30"
+						  size="small">
+				</el-input>
+			</el-form-item>
+		</el-form>
+<!--		<dl>-->
+<!--			<dt>团队导师：</dt>-->
+<!--			<dd>-->
+<!--				<el-select v-model="value" placeholder="张林伟" size="small">-->
+<!--					<el-option-->
+<!--							   v-for="item in options"-->
+<!--							   :key="item.value"-->
+<!--							   :label="item.label"-->
+<!--							   :value="item.value">-->
+<!--					</el-option>-->
+<!--				</el-select>-->
+<!--			</dd>-->
+<!--		</dl>-->
+	</div>
+	<!--团队基本信息-->
+</div>
+<!--main-->
+
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+
+	
+<script>
+	//输入框
+	const { defineComponent, ref } = Vue
+	var Main = {
+		
+		//输入框
+		setup() {
+			return {
+				text: ref(''),
+				textarea: ref('')
+			}
+		},
+		
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				
+				//导航
+				activeIndex: '2',
+				//tabs
+				activeName: 'first',
+				//选择器
+				options: [{
+					value: '选项1',
+					label: '选项1'
+				}, {
+					value: '选项2',
+					label: '选项2'
+				}],
+				value: '',
+				teamMembers:[],//团队成员
+				teamLeader:{name:'',id:''},//团队负责人
+				userPhoto: {id:'', userId:'',userPhoto:''},
+				teamInfo:{id:'',name:'',shortName:'',logo:''},
+				roleList:[],
+				defaultImageUrl: '../images/user_photo.png',
+				defaultTeamLogo:'../photo/team_logo1.jpg',
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		mounted:function(){
+			this.queryTeamInfo()
+		},
+		methods: {
+			//获取当前团队的成员信息
+			queryTeamMember(){
+				let teamName = this.$refs['teamName'].attrs.value
+				// let teamName = this.teamInfo.name
+				let that = this
+				let params= new URLSearchParams()
+				params.append('departmentName', teamName)
+				axios({
+					method:'get',
+					url:'query/listEmployeeByDepartmentName',//相对路径即可，不用加/service
+					params:params,
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.data.data!=null){
+						that.teamMembers = resp.data.data[0].children[0].employees
+						that.teamLeader.name =  resp.data.data[0].children[0].managerName
+						that.teamLeader.id =  resp.data.data[0].children[0].managerId
+					}
+				})
+			},
+			//查询团队基本信息
+			queryTeamInfo(){
+				let that = this
+				let teamId = [[${teamId}]]
+				axios({
+					method:'get',
+					url:'department/query/'+teamId,//相对路径即可，不用加/service
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.data.data!=null){
+						that.teamInfo = resp.data.data
+						that.hyjm = true
+						that.tybgtabs = that.teamInfo.name
+					}
+					// that.tybgtabs = '至诚银行'
+				})
+			},
+			//团队logo上传成功
+			teamUploadSuccess(response, file, fileList){
+				//返回自定义的图片名称
+				let that = this
+				let imageUrl = response.data
+				this.teamInfo.logo = imageUrl;
+				// this.updateTeamInfo()
+			},
+			//更新团队信息
+			updateTeamInfo(){
+				let that = this
+				axios({
+					method:'post',
+					url:'department/update',//相对路径即可，不用加/service
+					data:this.teamInfo,
+					responseType:'json',
+				}).then(function(resp){
+					//返回最新的头像信息
+					that.$message({
+						type:'success',
+						message:'更新成功'
+					})
+				})
+				window.location.href ='js_tdgl'
+			},
+			//图片上传前
+			beforeAvatarUpload(file) {
+				const isJPG = file.type === 'image/jpeg'
+				const isPNG = file.type === 'image/png'
+				const isLt10M = file.size / 1024 / 1024 < 50
+				if (!isJPG && !isPNG) {
+					this.$message.error('图片格式错误')
+				}
+				if (!isLt10M) {
+					this.$message.error('图片大小不能超过10M!')
+				}
+				return (isJPG || isPNG) && isLt10M
+			},
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

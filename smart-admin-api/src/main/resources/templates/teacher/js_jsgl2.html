@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<div class="main">
+	<ul class="column-tabs">
+		<li><a th:href="@{/service/js_jsgl}">决策数据</a></li>
+		<li class="column-tabs-a"><a  th:href="@{/service/js_jsgl2}">竞争数据</a></li>
+	</ul>
+	<div class="main-bg">
+		<div class="screen">
+			<dl>
+				<dt><font size="4">请选择项目</font></dt>
+				<dd>
+					<el-select v-model="value" size="large" style="width: 150%" filterable placeholder="请选择项目" @change="changeProject">
+						<el-option
+								v-for="item in options"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+						>
+						</el-option>
+					</el-select>
+				</dd>
+			</dl>
+		</div>
+		<el-tabs v-model="activeName" @tab-click="handleClick">
+			<!--各年度银行股价-->
+			<el-tab-pane label="各年度银行股价" name="first">
+				<div class="content-charts-title">各年度银行股价<span>单位：元/每股</span>
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhexian_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+					</ul>
+				</div>
+				<div class="content-charts" id="yhgj"></div>
+			</el-tab-pane>
+			<!--各年度银行股价-->
+			<!--市场占比-->
+			<el-tab-pane label="市场占比" name="second">
+				<div class="content-charts-title">市场占比
+					<ul class="column-title-right">
+						<li>
+							<el-select @change="typeChanged" ref="serviceType" v-model="value1" placeholder="业务类型" size="small">
+								<el-option
+										v-for="item in optionsyewu"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</li>
+						<li>
+							<el-select @change="scfeStageChange" v-model="currentStageDesc" ref="scfeSelect" placeholder="当前进度" size="small">
+								<el-option
+										v-for="item in optionsjindu"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</li>
+					</ul>
+				</div>
+				<div class="content-charts" id="sczb"></div>
+			</el-tab-pane>
+			<!--市场占比-->
+			<!--资产总额-->
+			<el-tab-pane label="资产总额" name="third">
+				<div class="content-charts-title">资产总额<span>单位：亿元</span>
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhu_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+					</ul>
+				</div>
+				<div class="content-charts" id="zcze"></div>
+			</el-tab-pane>
+			<!--资产总额-->
+			<!--资产增长率-->
+			<el-tab-pane label="资产增长率" name="fourth">
+				<div class="content-charts-title">资产增长率
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhexian_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+					</ul>
+				</div>
+				<div class="content-charts" id="zczzl"></div>
+			</el-tab-pane>
+			<!--资产增长率-->
+			<!--利润总额-->
+			<el-tab-pane label="利润总额" name="fifth">
+				<div class="content-charts-title">利润总额<span>单位：亿元</span>
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhu_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+					</ul>
+				</div>
+				<div class="content-charts" id="lrze"></div>
+			</el-tab-pane>
+			<!--利润总额-->
+			<!--市场营销-->
+			<el-tab-pane label="市场营销" name="sixth">
+				<div class="content-charts-title">市场营销
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_leida_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+						<li>
+							<el-select v-model="currentStageDesc" @change="scyxStageChange" placeholder="当前进度" size="small">
+								<el-option
+										v-for="item in optionsjindu"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</li>
+					</ul>
+				</div>
+				<div class="content-charts" id="scyx"></div>
+			</el-tab-pane>
+			<!--市场营销-->
+			<!--人员满意度-->
+			<el-tab-pane label="人员满意度" name="seventh">
+				<div class="content-charts-title">人员满意度
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_leida_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+						<li>
+							<el-select v-model="currentStageDesc" @change="mycdStageChange" placeholder="当前进度" size="small">
+								<el-option
+										v-for="item in optionsjindu"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value">
+								</el-option>
+							</el-select>
+						</li>
+					</ul>
+				</div>
+				<div class="content-charts" id="rymyd"></div>
+			</el-tab-pane>
+			<!--人员满意度-->
+		</el-tabs>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+<script type="module" th:src="@{/service/teacher-jsgl2.js}"></script>
+
+</html>

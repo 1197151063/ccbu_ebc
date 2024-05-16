@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<!--隐藏域-->
+<!--<div class="nav" th:if="${session['app_user_login']!=null && session['app_user_login'].userPosition == '教师'}">-->
+<el-input type="hidden" ref="employeeId" th:value="${session['app_user_login']!=null?session['app_user_login'].id:'0'}"></el-input>
+<el-input type="hidden" ref="teamId" th:value="${session['app_user_login']!=null?session['app_user_login'].departmentId:'0'}"></el-input>
+<el-input type="hidden" ref="teamName" th:value="${session['app_user_login']!=null?session['app_user_login'].departmentName:''}"></el-input>
+<el-input type="hidden" ref="projectId" th:value="${session['system_project']!=null?session['system_project'].proId:'0'}"></el-input>
+<el-input type="hidden" ref="currentStageId" th:value="${projectStage!=null?projectStage.stageId:'0'}"></el-input>
+<el-input type="hidden" ref="projectStatus" th:value="${session['system_project']!=null?session['system_project'].status:'0'}"></el-input>
+    <!--</div>-->
+<!--隐藏域-->
+<!--footer-->
+<div class="footer" th:fragment="footer">
+    <p>copyright [[${copyright}]] [[${icpsecurity}]] 京公网安备：[[${plcecurity}]]</p>
+    <p>邮 箱：[[${hotmail}]]     详情咨询：[[${hotphone}]]</p>
+</div>
+<!--footer-->
+<!--经济形势-->
+<el-dialog title="当前经济形势" v-model="economic_model">
+    <div class="jieshuo">
+        <div class="jieshuo-img"><img src="../images/jieshuo.gif" width="200" height="360" alt=""/></div>
+        <div class="jieshuo-txt">
+            <h3>1. 国内经济</h3>
+            <p>{{economicData.domesticEconomy}}</p>
+            <h3>2. 金融政策及国内金融市场状况</h3>
+            <p>{{economicData.financialPolicy}}</p>
+            <h3>3. 全球经济和国际金融市场</h3>
+            <p>{{economicData.globalEconomy}}</p>
+        </div>
+    </div>
+</el-dialog>
+<!--在线交流-->
+<el-dialog title="在线交流" v-model="zxjl" width="700px" top="30vh">
+    <div class="tc-video"><img src="../photo/zxjl_img.png" alt=""/></div>
+</el-dialog>
+<!--用户信息-->
+<el-dialog title="个人信息" v-model="people_model" width="30%" center>
+    <el-row :justify="center">
+        <el-col :span="8" center>
+            <el-upload
+                    class="avatar-uploader"
+                    action="upload"
+                    :show-file-list="false"
+                    :on-success="uploadSuccess"
+                    :before-upload="beforeAvatarUpload">
+                <img v-if="userPhoto.userPhoto" :src="'../upload/' + userPhoto.userPhoto" class="avatar" />
+                <img v-else :src="defaultImageUrl" class="avatar" />
+<!--                <i v-else class="el-icon-plus"></i>-->
+<!--                <el-icon v-else class="avatar-uploader-icon"><plus /></el-icon>-->
+            </el-upload>
+        </el-col>
+        <el-col :span="16">
+            <el-form ref="peopleForm" :show-message="true" lable-position="left" label-width="80px" :model="people">
+                <el-form-item label="姓名:" prop="actualName"
+                      :rules="[
+                            { required: true, message: '姓名不能为空',trigger: 'blur' }
+                        ]">
+                    <el-input v-model="people.actualName"></el-input>
+                </el-form-item>
+                <el-form-item
+                        label="电话:" prop="phone"
+                        :rules="[
+                            { required: true, message: '电话不能为空',trigger: 'blur' },
+                        ]"
+                    >
+                    <el-input v-model="people.phone" ></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱:">
+                    <el-input v-model="people.email" ></el-input>
+                </el-form-item>
+                <el-form-item
+                        label="密码:"
+                        prop="loginPwd"
+                        :rules="[
+                            { min: 6, message: '密码最少6位',trigger: 'blur'}
+                        ]"
+                >
+                    <el-input v-model="people.loginPwd"></el-input>
+                </el-form-item>
+            </el-form>
+        </el-col>
+    </el-row>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="people_model = false">关闭</el-button>
+        <el-button type="primary" @click="saveUserInfo">保存</el-button>
+      </span>
+    </template>
+</el-dialog>
+<!--用户信息-->
+<!--排行榜-->
+<el-dialog title="排行榜" v-model="ranking_model" width="30%" center>
+    <el-row :justify="center">
+        <div class="column" style="width: 100%">
+            <!--银行排名-->
+            <div class="yhpm">
+                <template v-for="(item,index) in rankingData" :key="index">
+                    <div class="yhpm-list">
+                        <div v-if="index == 0" class="yhpm-num1">{{index+1}}</div>
+                        <div v-else-if="index == 1" class="yhpm-num2">{{index+1}}</div>
+                        <div v-else-if="index == 2" class="yhpm-num3">{{index+1}}</div>
+                        <div v-else class="yhpm-num4">{{index+1}}</div>
+                        <div class="yhpm-photo"><img :src="'../upload/' + item.logo" alt=""/></div>
+                        <div class="yhpm-name">{{item.name}}</div>
+                        <div class="yhpm-slogan">{{item.shortName}}</div>
+                    </div>
+                </template>
+            </div>
+            <!--银行排名-->
+        </div>
+    </el-row>
+</el-dialog>
+<!--排行榜-->
+</html>

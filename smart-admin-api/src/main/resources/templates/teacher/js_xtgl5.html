@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html>
+<head th:include="include/import"></head>
+
+<body id="index" class="bg">
+<head th:include="include/header"></head>
+<!--nav-->
+<!--main-->
+<div class="main">
+	<ul class="column-tabs">
+		<li><a href="js_xtgl.html">角色管理</a></li>
+		<li><a href="js_xtgl2.html">权限管理</a></li>
+		<li><a href="js_xtgl3.html">配置管理</a></li>
+		<li><a href="js_xtgl4.html">日志管理</a></li>
+		<li class="column-tabs-a"><a href="js_xtgl5.html">初始数据</a></li>
+	</ul>
+	<div class="main-bg">
+		<div class="sjdr-title"><img src="../images/form_title.png" alt=""/>导入初始数据</div>
+		<div class="sjdr-jd">进度<span>76.5</span>%</div>
+		<div class="sjdr"><el-progress :stroke-width="20" :show-text="false" :percentage="76.5" :color="customColor"></el-progress></div>
+		<div class="sjdr-btn"><el-button type="primary" size="small">保存</el-button><el-button type="primary" plain size="small">取消</el-button></div>
+		<div class="sjdr-txt">
+			<dl>
+				<dt>报表名称：</dt>
+				<dd>通用初始数据</dd>
+			</dl>
+			<dl>
+				<dt>文件格式：</dt>
+				<dd>exl</dd>
+			</dl>
+			<dl>
+				<dt>文件大小：</dt>
+				<dd>32.12kb</dd>
+			</dl>
+			<dl>
+				<dt>操作人：</dt>
+				<dd>张林伟</dd>
+			</dl>
+		</div>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+<head th:include="include/footer"></head>
+<!--footer-->
+<!--经济形势-->
+<el-dialog title="当前经济形势" v-model="dialogTableVisible">
+	<div class="jieshuo">
+		<div class="jieshuo-img"><img th:src="@{/images/jieshuo.gif}" width="200" height="360" alt=""/></div>
+
+	</div>
+</el-dialog>	
+<!--经济形势-->
+</body>
+
+<script>
+	
+	var Main = {
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//导航
+				activeIndex: '7',
+				//进度条颜色
+				customColor: '#4FD6B8',
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		methods: {
+		}	
+	}
+		
+	
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

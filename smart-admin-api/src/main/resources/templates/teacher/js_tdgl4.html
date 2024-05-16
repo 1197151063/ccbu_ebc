@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<div class="main">
+	<ul class="column-tabs">
+		<li><a href="js_tdgl.html">中国龙队银行</a></li>
+		<li><a href="js_tdgl2.html">虎队银行</a></li>
+		<li><a href="js_tdgl3.html">全球鹰队银行</a></li>
+		<li class="column-tabs-a"><a href="js_tdgl4.html">豹队银行</a></li>
+	</ul>
+	<div class="main-bg">
+		<el-tabs v-model="activeName" @tab-click="handleClick">
+			<!--团队基本信息-->
+			<el-tab-pane label="团队基本信息" name="first">
+				<div class="team-content">
+					<ul>
+						<li><img src="../photo/team_logo4.jpg" alt=""/></li>
+						<li><el-button plain size="small" onclick="window.location.href ='js_tdgl_tdxx.html'">修改团队logo</el-button></li>
+					</ul>
+					<dl>
+						<dt>团队名称：</dt>
+						<dd>豹队银行</dd>
+					</dl>
+					<dl>
+						<dt>团队口号：</dt>
+						<dd>主动出击，勇夺先机</dd>
+					</dl>
+					<dl>
+						<dt>董事长：</dt>
+						<dd><img src="../photo/user_photo2.png" alt=""/><a href="#">张林伟</a></dd>
+					</dl>
+					<dl>
+						<dt></dt>
+						<dd><el-button plain size="small" onclick="window.location.href ='js_tdgl_tdxx.html'">修改团队信息</el-button></dd>
+					</dl>
+			  </div>
+			</el-tab-pane>
+			<!--团队基本信息-->
+			<!--团队成员-->
+			<el-tab-pane label="团队成员" name="second">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-input placeholder="学员姓名" v-model="input1" size="small">
+								<template #append>
+									<el-button icon="el-icon-search"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<div class="screen-right"><el-button type="primary" size="small" onclick="window.location.href ='js_tdgl_tdcy.html'">添加</el-button><el-button type="primary" plain size="small">删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="姓名"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="username"
+										 label="用户名"
+										 sortable
+										 width="200">
+						</el-table-column>
+						<el-table-column
+										 prop="email"
+										 label="邮箱"
+										 width="300">
+						</el-table-column>
+						<el-table-column
+										 prop="tel"
+										 label="电话"
+										 align="center"
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="newscz"
+										 label="操作"
+										 align="center"
+										 >
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--团队成员-->
+			<!--角色管理-->
+			<el-tab-pane label="角色管理" name="third">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-select v-model="value" placeholder="本期学员" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+							<el-select v-model="value" placeholder="中国龙队银行" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>姓名</dt>
+						<dd>
+							<el-input
+									  v-model="input"
+									  placeholder="请输入内容"
+									  size="small">
+								<template #append>
+									<el-button icon="el-icon-search"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<dl>
+						<dt>角色</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<div class="screen-right"><el-button type="primary" size="small" onclick="window.location.href ='js_tdgl_js.html'">新增</el-button><el-button type="primary" plain size="small">删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="姓名"
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="username"
+										 label="用户名"
+										 width="300">
+						</el-table-column>
+						<el-table-column
+										 prop="team"
+										 label="团队"
+										 width="350">
+						</el-table-column>
+						<el-table-column
+										 prop="role"
+										 label="角色"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="newscz"
+										 label="操作"
+										 align="center"
+										 sortable>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--角色管理-->
+			<!--团队点评-->
+			<el-tab-pane label="团队点评" name="fourth">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-select v-model="value" placeholder="本期学员" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>点评人</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>点评时间</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<div class="screen-right"><el-button type="primary" plain size="small">删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="new"
+										 label="标题"
+										 width="650">
+						</el-table-column>
+						<el-table-column
+										 prop="zjr"
+										 label="点评人"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="点评日期"
+										 align="center"
+										 sortable
+										 width="120">
+						</el-table-column>
+						<el-table-column
+										 prop="newscz"
+										 label="操作"
+										 align="center"
+										 sortable>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--团队点评-->
+			<!--决策总结-->
+			<el-tab-pane label="决策总结" name="fifth">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-select v-model="value" placeholder="本期学员" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>决策人</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>决策时间</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<div class="screen-right"><el-button type="primary" plain size="small">删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="决策人"
+										 width="100">
+						</el-table-column>
+						<el-table-column
+										 prop="new"
+										 label="标题"
+										 width="450">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="决策日期"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="zjr"
+										 label="总结人"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="总结日期"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="cz"
+										 label="操作"
+										 align="center"
+										 sortable>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--决策总结-->
+		</el-tabs>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+<script>
+	var Main = {
+		data () {
+			
+
+			
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//表格
+				tableData: [{
+					team: '中国龙队银行',
+					gj: '65.21',
+					qs: '+5.2%',
+					new: '国内经济增长持续趋缓，且近期弱势特征明显',
+					date: '2月27日',
+					name: '张林伟',
+					zjr: '导师 张林伟',
+					cz: '总结',
+					jczt: '导师未总结',
+					jccz: '总结',
+					newszt: '已发布',
+					newscz: '编辑 删除',
+					format: 'exl',
+					username: 'zhangliwei',
+					email: 'zhangliwei@email.com',
+					tel:'17600700090',
+					role: '董事长',
+					pictures: './photo/user_photo1.png'
+				}, {
+					team: '虎队银行',
+					gj: '39.01',
+					qs: '-0.9%',
+					new: '金融政策及国内金融市场状况',
+					date: '2月19日',
+					name: '毕琳嘉',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师未总结',
+					jccz: '总结',
+					newszt: '已发布',
+					newscz: '编辑 删除',
+					format: 'rar',
+					username: 'bilinjia',
+					email: 'bilinjia@email.com',
+					tel:'17600700090',
+					role: '财务总监',
+					pictures: './photo/user_photo1.png'
+				}, {
+					team: '全球鹰队银行',
+					gj: '23.85',
+					qs: '+2.3%',
+					new: '国内利率下降，货币市场利率反映更为强烈',
+					date: '2月8日',
+					name: '何宏瑞',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师已总结',
+					jccz: '总结',
+					newszt: '已发布',
+					newscz: '编辑 删除',
+					format: 'pptx',
+					username: 'hehongrui',
+					email: 'hehongrui@email.com',
+					tel:'17600700090',
+					role: '人力总监',
+					pictures: './photo/user_photo1.png'
+				}, {
+					team: '豹队银行',
+					gj: '65.43',
+					qs: '+6.5%',
+					new: '收益曲线在两年中将首次出现平稳局面',
+					date: '2月3日',
+					name: '薛荷',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师已总结',
+					jccz: '编辑总结',
+					newszt: '撤回',
+					newscz: '编辑 删除',
+					format: 'pnf',
+					username: 'xuehe',
+					email: 'xuehe@email.com',
+					tel:'17600700090',
+					role: '市场总监',
+					pictures: './photo/user_photo1.png'
+				}, {
+					team: '建设银行分行',
+					gj: '53.53',
+					qs: '0%',
+					new: '全球经济和国际金融市场',
+					date: '1月26日',
+					name: '黄莎涛',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师已总结',
+					jccz: '编辑总结',
+					newszt: '已发布',
+					newscz: '编辑 删除',
+					format: 'jpg',
+					username: 'huangshatao',
+					email: 'huangshatao@email.com',
+					tel:'17600700090',
+					role: '投资总监',
+					pictures: './photo/user_photo1.png'
+				}, {
+					team: '建设银行华南分行',
+					gj: '74.33',
+					qs: '+3.3%',
+					new: '国内经济增长持续趋缓，且近期弱势特征明显',
+					date: '1月17日',
+					name: '赵婵芝',
+					zjr: '导师 张林伟',
+					cz: '编辑',
+					jczt: '导师已总结',
+					jccz: '编辑总结',
+					newszt: '已发布',
+					newscz: '编辑 删除',
+					format: 'doc',
+					username: 'zhaoshanzhi',
+					email: 'zhaoshanzhi@email.com',
+					tel:'17600700090',
+					role: '后勤总监',
+					pictures: './photo/user_photo1.png'
+				}],
+				//导航
+				activeIndex: '2',
+				//tabs
+				activeName: 'first',
+				//选择器
+				options: [{
+					value: '选项1',
+					label: '选项1'
+				}, {
+					value: '选项2',
+					label: '选项2'
+				}, {
+					value: '选项3',
+					label: '选项3'
+				}, {
+					value: '选项4',
+					label: '选项4'
+				}, {
+					value: '选项5',
+					label: '选项5'
+				}],
+				value: '',
+				//分页
+				currentPage1: 5,
+				currentPage2: 5,
+				currentPage3: 5,
+				currentPage4: 4,
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		methods: {
+			//tab
+			formatter(row, column) {
+				return row.address;
+			},
+			handleClick(tab, event) {
+				console.log(tab, event);
+			},
+			//分页
+			handleSizeChange(val) {
+				console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				console.log(`当前页: ${val}`);
+			}
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

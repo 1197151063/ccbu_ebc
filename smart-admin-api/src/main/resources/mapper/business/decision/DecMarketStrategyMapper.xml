@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.decision.dao.DecMarketStrategyDao">
+
+    <resultMap id="DecMarketStrategyVO" type="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMarketStrategyVO"></resultMap>
+    <resultMap id="DecMarketStrategyExcelVO" type="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMarketStrategyExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="DecMarketStrategyVO">
+        select
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          headcount,
+          loans_busine_develop_less,
+          loans_customer_main_less,
+          deposit_busine_develop_less,
+          deposit_customer_main_less,
+          middle_busine_develop_less,
+          middle_customer_main_less,
+          loans_busine_develop_between,
+          loans_customer_main_between,
+          deposit_busine_develop_between,
+          deposit_customer_main_between,
+          middle_busine_develop_between,
+          middle_customer_main_between,
+          loans_busine_develop_greater,
+          loans_customer_main_greater,
+          deposit_busine_develop_greater,
+          deposit_customer_main_greater,
+          middle_busine_develop_greater,
+          middle_customer_main_greater,
+          loans_busine_develop_small,
+          loans_customer_main_small,
+          deposit_busine_develop_small,
+          deposit_customer_main_small,
+          middle_busine_develop_small,
+          middle_customer_main_small,
+          loans_busine_develop_medium,
+          loans_customer_main_medium,
+          deposit_busine_develop_medium,
+          deposit_customer_main_medium,
+          middle_busine_develop_medium,
+          middle_customer_main_medium,
+          loans_busine_develop_major,
+          loans_customer_main_major,
+          deposit_busine_develop_major,
+          deposit_customer_main_major,
+          middle_busine_develop_major,
+          middle_customer_main_major,
+          loans_busine_develop_public,
+          loans_customer_main_public,
+          deposit_busine_develop_public,
+          deposit_customer_main_public,
+          middle_busine_develop_public,
+          middle_customer_main_public,
+          customer_marketing_total_cost_available,
+          customer_marketing_less_age,
+          customer_marketing_between_age,
+          customer_marketing_greater_age,
+          customer_marketing_small_enterprise,
+          customer_marketing_medium_enterprise,
+          customer_marketing_major_enterprise,
+          customer_marketing_public_institution,
+          business_marketing_total_cost_available,
+          business_marketing_loan_transaction,
+          business_marketing_deposit_bloan_transaction,
+          business_marketing_middle_transaction
+        from dec_market_strategy
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="DecMarketStrategyExcelVO">
+        select
+           id,
+           current_project_id,
+           current_team_id,
+           current_stage_id,
+           headcount,
+           loans_busine_develop_less,
+           loans_customer_main_less,
+           deposit_busine_develop_less,
+           deposit_customer_main_less,
+           middle_busine_develop_less,
+           middle_customer_main_less,
+           loans_busine_develop_between,
+           loans_customer_main_between,
+           deposit_busine_develop_between,
+           deposit_customer_main_between,
+           middle_busine_develop_between,
+           middle_customer_main_between,
+           loans_busine_develop_greater,
+           loans_customer_main_greater,
+           deposit_busine_develop_greater,
+           deposit_customer_main_greater,
+           middle_busine_develop_greater,
+           middle_customer_main_greater,
+           loans_busine_develop_small,
+           loans_customer_main_small,
+           deposit_busine_develop_small,
+           deposit_customer_main_small,
+           middle_busine_develop_small,
+           middle_customer_main_small,
+           loans_busine_develop_medium,
+           loans_customer_main_medium,
+           deposit_busine_develop_medium,
+           deposit_customer_main_medium,
+           middle_busine_develop_medium,
+           middle_customer_main_medium,
+           loans_busine_develop_major,
+           loans_customer_main_major,
+           deposit_busine_develop_major,
+           deposit_customer_main_major,
+           middle_busine_develop_major,
+           middle_customer_main_major,
+           loans_busine_develop_public,
+           loans_customer_main_public,
+           deposit_busine_develop_public,
+           deposit_customer_main_public,
+           middle_busine_develop_public,
+           middle_customer_main_public,
+           customer_marketing_total_cost_available,
+           customer_marketing_less_age,
+           customer_marketing_between_age,
+           customer_marketing_greater_age,
+           customer_marketing_small_enterprise,
+           customer_marketing_medium_enterprise,
+           customer_marketing_major_enterprise,
+           customer_marketing_public_institution,
+           business_marketing_total_cost_available,
+           business_marketing_loan_transaction,
+           business_marketing_deposit_bloan_transaction,
+           business_marketing_middle_transaction
+        from dec_market_strategy
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="DecMarketStrategyExcelVO">
+        select
+         id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         headcount,
+         loans_busine_develop_less,
+         loans_customer_main_less,
+         deposit_busine_develop_less,
+         deposit_customer_main_less,
+         middle_busine_develop_less,
+         middle_customer_main_less,
+         loans_busine_develop_between,
+         loans_customer_main_between,
+         deposit_busine_develop_between,
+         deposit_customer_main_between,
+         middle_busine_develop_between,
+         middle_customer_main_between,
+         loans_busine_develop_greater,
+         loans_customer_main_greater,
+         deposit_busine_develop_greater,
+         deposit_customer_main_greater,
+         middle_busine_develop_greater,
+         middle_customer_main_greater,
+         loans_busine_develop_small,
+         loans_customer_main_small,
+         deposit_busine_develop_small,
+         deposit_customer_main_small,
+         middle_busine_develop_small,
+         middle_customer_main_small,
+         loans_busine_develop_medium,
+         loans_customer_main_medium,
+         deposit_busine_develop_medium,
+         deposit_customer_main_medium,
+         middle_busine_develop_medium,
+         middle_customer_main_medium,
+         loans_busine_develop_major,
+         loans_customer_main_major,
+         deposit_busine_develop_major,
+         deposit_customer_main_major,
+         middle_busine_develop_major,
+         middle_customer_main_major,
+         loans_busine_develop_public,
+         loans_customer_main_public,
+         deposit_busine_develop_public,
+         deposit_customer_main_public,
+         middle_busine_develop_public,
+         middle_customer_main_public,
+         customer_marketing_total_cost_available,
+         customer_marketing_less_age,
+         customer_marketing_between_age,
+         customer_marketing_greater_age,
+         customer_marketing_small_enterprise,
+         customer_marketing_medium_enterprise,
+         customer_marketing_major_enterprise,
+         customer_marketing_public_institution,
+         business_marketing_total_cost_available,
+         business_marketing_loan_transaction,
+         business_marketing_deposit_bloan_transaction,
+         business_marketing_middle_transaction
+        from dec_market_strategy
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="query"
+            resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMarketStrategyVO">
+        select
+         id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         headcount,
+         loans_busine_develop_less,
+         loans_customer_main_less,
+         deposit_busine_develop_less,
+         deposit_customer_main_less,
+         middle_busine_develop_less,
+         middle_customer_main_less,
+         loans_busine_develop_between,
+         loans_customer_main_between,
+         deposit_busine_develop_between,
+         deposit_customer_main_between,
+         middle_busine_develop_between,
+         middle_customer_main_between,
+         loans_busine_develop_greater,
+         loans_customer_main_greater,
+         deposit_busine_develop_greater,
+         deposit_customer_main_greater,
+         middle_busine_develop_greater,
+         middle_customer_main_greater,
+         loans_busine_develop_small,
+         loans_customer_main_small,
+         deposit_busine_develop_small,
+         deposit_customer_main_small,
+         middle_busine_develop_small,
+         middle_customer_main_small,
+         loans_busine_develop_medium,
+         loans_customer_main_medium,
+         deposit_busine_develop_medium,
+         deposit_customer_main_medium,
+         middle_busine_develop_medium,
+         middle_customer_main_medium,
+         loans_busine_develop_major,
+         loans_customer_main_major,
+         deposit_busine_develop_major,
+         deposit_customer_main_major,
+         middle_busine_develop_major,
+         middle_customer_main_major,
+         loans_busine_develop_public,
+         loans_customer_main_public,
+         deposit_busine_develop_public,
+         deposit_customer_main_public,
+         middle_busine_develop_public,
+         middle_customer_main_public,
+         customer_marketing_total_cost_available,
+         customer_marketing_less_age,
+         customer_marketing_between_age,
+         customer_marketing_greater_age,
+         customer_marketing_small_enterprise,
+         customer_marketing_medium_enterprise,
+         customer_marketing_major_enterprise,
+         customer_marketing_public_institution,
+         business_marketing_total_cost_available,
+         business_marketing_loan_transaction,
+         business_marketing_deposit_bloan_transaction,
+         business_marketing_middle_transaction
+        from dec_market_strategy
+        where current_project_id = #{currentProjectId} and current_team_id = #{currentTeamId} and current_stage_id = #{currentStageId}
+    </select>
+
+    <select id="queryMarket"
+            resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMarketStrategyVO">
+        select
+         id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         headcount,
+         loans_busine_develop_less,
+         loans_customer_main_less,
+         deposit_busine_develop_less,
+         deposit_customer_main_less,
+         middle_busine_develop_less,
+         middle_customer_main_less,
+         loans_busine_develop_between,
+         loans_customer_main_between,
+         deposit_busine_develop_between,
+         deposit_customer_main_between,
+         middle_busine_develop_between,
+         middle_customer_main_between,
+         loans_busine_develop_greater,
+         loans_customer_main_greater,
+         deposit_busine_develop_greater,
+         deposit_customer_main_greater,
+         middle_busine_develop_greater,
+         middle_customer_main_greater,
+         loans_busine_develop_small,
+         loans_customer_main_small,
+         deposit_busine_develop_small,
+         deposit_customer_main_small,
+         middle_busine_develop_small,
+         middle_customer_main_small,
+         loans_busine_develop_medium,
+         loans_customer_main_medium,
+         deposit_busine_develop_medium,
+         deposit_customer_main_medium,
+         middle_busine_develop_medium,
+         middle_customer_main_medium,
+         loans_busine_develop_major,
+         loans_customer_main_major,
+         deposit_busine_develop_major,
+         deposit_customer_main_major,
+         middle_busine_develop_major,
+         middle_customer_main_major,
+         loans_busine_develop_public,
+         loans_customer_main_public,
+         deposit_busine_develop_public,
+         deposit_customer_main_public,
+         middle_busine_develop_public,
+         middle_customer_main_public,
+         customer_marketing_total_cost_available,
+         customer_marketing_less_age,
+         customer_marketing_between_age,
+         customer_marketing_greater_age,
+         customer_marketing_small_enterprise,
+         customer_marketing_medium_enterprise,
+         customer_marketing_major_enterprise,
+         customer_marketing_public_institution,
+         business_marketing_total_cost_available,
+         business_marketing_loan_transaction,
+         business_marketing_deposit_bloan_transaction,
+         business_marketing_middle_transaction
+        from dec_market_strategy
+        where current_team_id = #{currentTeamId} and current_stage_id = #{currentStageId}
+    </select>
+
+    <select id="queryDataAndStatus" resultMap="DecMarketStrategyVO">
+        SELECT
+            *
+        FROM
+            dec_market_strategy
+        WHERE
+        current_project_id = #{currentProjectId}
+        AND current_team_id = #{currentTeamId}
+        AND current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from dec_market_strategy where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from dec_market_strategy where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+    <delete id="deleteData">
+         delete from dec_market_strategy where current_project_id = #{currentProjectId} and current_team_id = #{currentTeamId} and current_stage_id = #{currentStageId}
+    </delete>
+
+</mapper>

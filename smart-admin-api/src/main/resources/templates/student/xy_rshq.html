@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<div th:include="include/import"></div>
+<body id="index" class="bg">
+<div th:include="include/header"></div>
+<div class="main">
+    <div class="breadcrumb">
+        <el-breadcrumb separator="-">
+            <el-breadcrumb-item :to="{ path: '/' }"><a th:href="@{/service/home}">首页</a></el-breadcrumb-item>
+            <el-breadcrumb-item><img th:src="@{/images/form_title.png}" alt=""/>人事后勤信息录入</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+    <div class="scyx-main">
+        <div class="xxlr-main">
+            <el-row>
+                <!--				左-->
+                <el-col :span="12" class="xxlr-bg">
+                    <div class="xxlr-title">[[${session['app_user_login']!=null?session['app_user_login'].departmentName:'建设银行'}]]</div>
+                    <el-form :model="form" ref="form" :hide-required-asterisk="false" show-message :rules="rules">
+                        <el-row class="ts-list">
+                            <el-col :span="5"></el-col>
+                            <el-col :span="4">贷款业务</el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">存款业务</el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">投资业务</el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">中间业务</el-col>
+                        </el-row>
+                        <el-row class="input-list">
+                            <el-col :span="5" style="font-size: 0.5rem" class="input-list-title">雇佣/解聘（雇员数量）
+                                <el-popover
+                                        placement="top"
+                                        title="雇佣/解聘（雇员数量）"
+                                        :width="500"
+                                        trigger="click"
+                                        content="在人事方面，银行将决定各阶段需要雇佣或解雇（在输入时，解雇员工以负数“-”表示）的员工人数。员工的雇佣或解雇是需要成本的，具体标准见“0阶段人员成本表”。请充分考虑员工数量与业务量增长的关系，合理的人员配置有助于实现市场份额的增长目标。"
+                                >
+                                    <!--								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>-->
+                                </el-popover>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="hireFireLoans">
+                                    <el-input v-model="form.hireFireLoans" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="hireFireDeposit">
+                                    <el-input v-model="form.hireFireDeposit" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="hireFireInvest">
+                                    <el-input v-model="form.hireFireInvest" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="hireFireMiddle">
+                                    <el-input v-model="form.hireFireMiddle" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row class="input-list">
+                            <el-col :span="5" style="font-size: 0.5rem" class="input-list-title">培训（天/人）
+                                <el-popover
+                                        placement="top"
+                                        title="培训（天/人）"
+                                        :width="500"
+                                        trigger="click"
+                                        content="由银行决定每个雇员的培训天数，以及为了改善销售及服务而举办的各期培训班的天数。在《人事后勤数据表》中将对各银行对雇员的培训水平情况做出评估。加强员工的培训有利于提高其劳动效率和工作质量，同时，这种努力将对改善服务质量、提高 相关业务的市场份额产生有利影响。">
+                                    <!--								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>-->
+                                </el-popover>
+                            </el-col>
+                            <el-col :span="4"><el-form-item prop="trainLoans"><el-input v-model="form.trainLoans" placeholder="请输入" size="small"></el-input></el-form-item></el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4"><el-form-item prop="trainDeposit"><el-input v-model="form.trainDeposit" placeholder="请输入" size="small"></el-input></el-form-item></el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4"><el-form-item prop="trainInvest"><el-input v-model="form.trainInvest" placeholder="请输入" size="small"></el-input></el-form-item></el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4"><el-form-item prop="trainMiddle"><el-input v-model="form.trainMiddle" placeholder="请输入" size="small"></el-input></el-form-item></el-col>
+                        </el-row>
+                        <el-row class="input-list">
+                            <el-col :span="5" style="font-size: 0.5rem" class="input-list-title">市场拓展（%）
+                                <el-popover
+                                        placement="top"
+                                        title="市场拓展（%）"
+                                        :width="500"
+                                        trigger="click"
+                                        content="如果需要，银行可分配总共不超过20%的员工专职于市场拓展与客户维护工作。你可以自主决定20%的比例在市场拓展与客户维护之间的具体分配。适当的分配比例将会对获得市场份额产生有利的影响。">
+                                    <!--								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>-->
+                                </el-popover>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="businessDevelopmentLoans">
+                                    <el-input v-model="form.businessDevelopmentLoans" placeholder="请输入"size="small">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="businessDevelopmentDeposit">
+                                    <el-input v-model="form.businessDevelopmentDeposit" placeholder="请输入" size="small">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="businessDevelopmentInvest">
+                                    <el-input v-model="form.businessDevelopmentInvest" placeholder="请输入" size="small">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="businessDevelopmentMiddle">
+                                    <el-input v-model="form.businessDevelopmentMiddle"placeholder="请输入" size="small">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row class="input-list">
+                            <el-col :span="5" style="font-size: 0.5rem" class="input-list-title">客户维护（%）
+                                <el-popover
+                                        placement="top"
+                                        title="客户维护（%）"
+                                        :width="500"
+                                        trigger="click"
+                                        content="如果需要，银行可分配总共不超过20%的员工专职于市场拓展与客户维护工作。你可以自主决定20%的比例在市场拓展与客户维护之间的具体分配。适当的分配比例将会对获得市场份额产生有利的影响。">
+                                    <!--								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>-->
+                                </el-popover>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="customerCareLoans">
+                                    <el-input v-model="form.customerCareLoans" placeholder="请输入"size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="customerCareDeposit">
+                                    <el-input v-model="form.customerCareDeposit" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="customerCareInvest">
+                                    <el-input v-model="form.customerCareInvest" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1"></el-col>
+                            <el-col :span="4">
+                                <el-form-item prop="customerCareMiddle">
+                                    <el-input v-model="form.customerCareMiddle" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row class="input-list">
+                            <el-col :span="5" style="font-size: 0.5rem" class="input-list-title">
+                                附加人员成本（%）
+                                <el-popover
+                                        placement="top"
+                                        title="附加人员成本（%）"
+                                        :width="500"
+                                        trigger="click"
+                                        content="附加人员成本属于银行的人员成本，包括银行支付给员工的福利费、额外津贴、特别奖金以及退体人员的退休金等。"
+                                >
+                                    <!--								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>-->
+                                </el-popover>
+                            </el-col>
+                            <el-col :span="19">
+<!--                                <el-tooltip :content="limitMsg.additionalPersonnelCost_msg" placement="top" effect="light">-->
+                                    <el-form-item prop="additionalPersonnelCost">
+                                        <el-input v-model="form.additionalPersonnelCost" placeholder="请输入" size="small"></el-input>
+                                    </el-form-item>
+                                </el-tooltip>
+                            </el-col>
+                        </el-row>
+                        <div class="xxlr-title">后勤</div>
+                        <el-row class="input-list">
+                            <el-col :span="5" style="font-size: 0.5rem" class="input-list-title">
+                                自动人投资（百万元）
+                                <el-popover
+                                        placement="top"
+                                        title="自动人投资（百万元）"
+                                        :width="500"
+                                        trigger="click"
+                                        content="自动化投资可以提高工作效率，减少对各部门管理所需要的工作时间（见人事后勤数据表），从而节省人力和减少人员开支。自动化投资列于“固定资产”科目。">
+                                    <!--								<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>-->
+                                </el-popover>
+                            </el-col>
+                            <el-col :span="19">
+                                <el-form-item prop="automationInvestment">
+                                    <el-input v-model="form.automationInvestment" placeholder="请输入"
+                                              size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </el-col>
+                <!--				右侧-->
+                <el-col :span="12" class="sjck-bg">
+                    <div class="xxlr-title">数据参考
+                        <div class="xxlr-title-right">
+                            <el-select v-model="currentStageDesc" placeholder="当前进度" @change="switchStagePeople" size="small">
+                                <el-option
+                                        v-for="item in optionsjindu"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <!--资产负债表-->
+                        <el-tab-pane label="人事后勤数据" name="first">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                <tr align="center" valign="middle">
+                                    <th>项目</th>
+                                    <th>贷款业务</th>
+                                    <th>存款业务</th>
+                                    <th>投资业务</th>
+                                    <th>中间业务</th>
+                                    <th>其 他</th>
+                                </tr>
+                                <tr valign="left">
+                                    <th>
+                                        <dl>
+                                            <dt>期初员工数（人）</dt>
+                                            <dt>本期雇佣/解雇（人）</dt>
+                                            <dt>本阶段流失人数（人）</dt>
+                                            <dt>期末员工数（人）</dt>
+                                        </dl>
+                                    </th>
+                                    <th>
+                                        <dt>{{result0.startEmployeeQuantity}}</dt>
+                                        <dt>{{result0.hareFire}}</dt>
+                                        <dt>{{result0.drain}}</dt>
+                                        <dt>{{result0.endEmployeeQuantity}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result1.startEmployeeQuantity}}</dt>
+                                        <dt>{{result1.hareFire}}</dt>
+                                        <dt>{{result1.drain}}</dt>
+                                        <dt>{{result1.endEmployeeQuantity}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result2.startEmployeeQuantity}}</dt>
+                                        <dt>{{result2.hareFire}}</dt>
+                                        <dt>{{result2.drain}}</dt>
+                                        <dt>{{result2.endEmployeeQuantity}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result3.startEmployeeQuantity}}</dt>
+                                        <dt>{{result3.hareFire}}</dt>
+                                        <dt>{{result3.drain}}</dt>
+                                        <dt>{{result3.endEmployeeQuantity}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result4.startEmployeeQuantity}}</dt>
+                                        <dt>0</dt>
+                                        <dt>0</dt>
+                                        <dt>{{result4.endEmployeeQuantity}}</dt>
+                                    </th>
+                                </tr>
+                                <tr valign="left">
+                                    <th>
+                                        <dl>
+                                            <dt>下阶段人员流失率（%）</dt>
+                                            <dt>下阶段流失人员数（人）</dt>
+                                        </dl>
+                                    </th>
+                                    <th>
+                                        <dt>{{result0.lossRate}}</dt>
+                                        <dt>{{result0.lostPersonnel}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result1.lossRate}}</dt>
+                                        <dt>{{result1.lostPersonnel}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result2.lossRate}}</dt>
+                                        <dt>{{result2.lostPersonnel}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result3.lossRate}}</dt>
+                                        <dt>{{result3.lostPersonnel}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result4.lossRate}}</dt>
+                                        <dt>{{result4.lostPersonnel}}</dt>
+                                    </th>
+                                </tr>
+                                <tr valign="left">
+                                    <th>
+                                        <dl>
+                                            <dt>有效营业时间（千小时）</dt>
+                                        </dl>
+                                    </th>
+                                    <th>
+                                        <dt>{{result0.effectiveTime}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result1.effectiveTime}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result2.effectiveTime}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result3.effectiveTime}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result4.effectiveTime}}</dt>
+                                    </th>
+                                </tr>
+                                <tr valign="left">
+                                    <th>
+                                        <dl>
+                                            <dt>人员调配（千小时）</dt>
+                                            <dt>—培训时间</dt>
+                                            <dt>—市场拓展</dt>
+                                            <dt>—客户维护</dt>
+                                        </dl>
+                                    </th>
+                                    <th>
+                                        <dt></dt>
+                                        <dt>{{result0.trainingTime}}</dt>
+                                        <dt>{{result0.marketDevelopment}}</dt>
+                                        <dt>{{result0.customerMaintenance}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt></dt>
+                                        <dt>{{result1.trainingTime}}</dt>
+                                        <dt>{{result1.marketDevelopment}}</dt>
+                                        <dt>{{result1.customerMaintenance}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt></dt>
+                                        <dt>{{result2.trainingTime}}</dt>
+                                        <dt>{{result2.marketDevelopment}}</dt>
+                                        <dt>{{result2.customerMaintenance}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt></dt>
+                                        <dt>{{result3.trainingTime}}</dt>
+                                        <dt>{{result3.marketDevelopment}}</dt>
+                                        <dt>{{result3.customerMaintenance}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt></dt>
+                                        <dt>{{result4.trainingTime}}</dt>
+                                        <dt>{{result4.marketDevelopment}}</dt>
+                                        <dt>{{result4.customerMaintenance}}</dt>
+                                    </th>
+                                </tr>
+                                <tr valign="left">
+                                    <th>
+                                        <dl>
+                                            <dt>可用营业时间（千小时）</dt>
+                                            <dt>需要营业时间（千小时）</dt>
+                                            <dt>加班（千小时）</dt>
+                                            <dt>临时工（人）</dt>
+                                        </dl>
+                                    </th>
+                                    <th>
+                                        <dt>{{result0.availableTime}}</dt>
+                                        <dt>{{result0.needTime}}</dt>
+                                        <dt>{{result0.workOvertime}}</dt>
+                                        <dt>{{result0.temporaryWorker}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result1.availableTime}}</dt>
+                                        <dt>{{result1.needTime}}</dt>
+                                        <dt>{{result1.workOvertime}}</dt>
+                                        <dt>{{result1.temporaryWorker}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result2.availableTime}}</dt>
+                                        <dt>{{result2.needTime}}</dt>
+                                        <dt>{{result2.workOvertime}}</dt>
+                                        <dt>{{result2.temporaryWorker}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result3.availableTime}}</dt>
+                                        <dt>{{result3.needTime}}</dt>
+                                        <dt>{{result3.workOvertime}}</dt>
+                                        <dt>{{result3.temporaryWorker}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result4.availableTime}}</dt>
+                                        <dt>{{result4.needTime}}</dt>
+                                        <dt>{{result4.workOvertime}}</dt>
+                                        <dt>{{result4.temporaryWorker}}</dt>
+                                    </th>
+                                </tr>
+                                <tr valign="left">
+                                    <th>
+                                        <dl>
+                                            <dt>培训水平</dt>
+                                        </dl>
+                                    </th>
+                                    <th>
+                                        <dt>{{result0.trainingLevel}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result1.trainingLevel}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result2.trainingLevel}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result3.trainingLevel}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result4.trainingLevel}}</dt>
+                                    </th>
+                                </tr>
+                                <tr valign="left">
+                                    <th>
+                                        <dl>
+                                            <dt>工作满意度</dt>
+                                        </dl>
+                                    </th>
+                                    <th>
+                                        <dt>{{result0.jobSatisfaction}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result1.jobSatisfaction}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result2.jobSatisfaction}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result3.jobSatisfaction}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{result4.jobSatisfaction}}</dt>
+                                    </th>
+                                </tr>
+                                <tr valign="middel">
+                                    <th th:colspan="6"></th>
+                                </tr>
+                                <tr valign="middle">
+                                    <th>
+                                        <dl>
+                                            <dt>项目</dt>
+                                        </dl>
+                                    </th>
+                                    <th th:colspan="2">
+                                        <dt>本阶段</dt>
+                                    </th>
+                                    <th th:colspan="2">
+                                        <dt>累计投资</dt>
+                                    </th>
+                                    <th>
+                                        <dt>指数</dt>
+                                    </th>
+                                </tr>
+                                <tr valign="middle">
+                                    <th>
+                                        <dl>
+                                            <dt>自动化投资（百万元）</dt>
+                                        </dl>
+                                    </th>
+                                    <th th:colspan="2">
+                                        <dt>{{automation.presentStage}}</dt>
+                                    </th>
+                                    <th th:colspan="2">
+                                        <dt>{{automation.cumulativeInvestment}}</dt>
+                                    </th>
+                                    <th>
+                                        <dt>{{automation.exponent}}</dt>
+                                    </th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </el-tab-pane>
+                    </el-tabs>
+                </el-col>
+            </el-row>
+        </div>
+    </div>
+    <div v-show="submitAlert">
+        <el-alert
+                title="请检查您的决策数据是否为空或有效"
+                type="error"
+                center
+                close-text="知道了">
+        </el-alert>
+    </div>
+    <div class="xxlr-tj" v-if="form.status!=1">
+        <el-button type="primary" v-if="form.currentStageId!=2" plain @click="preOperation('form')">预计算</el-button>
+        <el-button type="primary" plain @click="saveForm('form')">保存</el-button>
+        <el-button type="primary" @click="submitFormBefore('form')">提交</el-button>
+    </div>
+</div>
+<!--main-->
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+</body>
+<script type="module" th:src="@{/service/deposit-people.js}"></script>
+</html>

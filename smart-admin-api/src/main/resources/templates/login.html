@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">前端title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script th:src="@{/vue/vue.global.js}"></script>
+    <script th:src="@{/element-plus/lib/index.full.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" th:href="@{/element-plus/lib/theme-chalk/index.css}">
+    <link th:href="@{/css/login.css}" rel="stylesheet" type="text/css">
+</head>
+
+<body class="login-bg">
+
+<!--获取参数方法-->
+<!--<input th:value="${order.channelId}" v-model="order.channelId"/>-->
+<!--login-->
+<div id="login" class="login">
+    <!--loginimg-->
+    <div class="login-img"><img th:src="@{/images/login_img.jpg}" alt=""/></div>
+    <!--loginimg-->
+    <!--login-list-->
+    <div class="login-list">
+        <!--系统名称-->
+        <div class="login-logo"><img th:src="@{/images/login_logo.png}" alt=""/></div>
+        <div class="login-title">卓越银行家俱乐部</div>
+        <!--系统名称-->
+        <div class="form-con">
+            <login-form @on-success-valid="handleSubmit"></login-form>
+        </div>
+        <!--表单-->
+        <el-form id="submitForm" th:action="@{/service/userLogin}" method="POST" :model="ruleForm" :rules="rules" ref="ruleForm" hide-required-asterisk status-icon class="demo-ruleForm">
+            <!--用户名-->
+            <el-form-item prop="name" :inline-message="true">
+                <el-input name="name" v-model="ruleForm.name" placeholder="请输入用户名"
+                          @focus="resetValidate" prefix-icon="el-icon-user-solid" :validate-event="false"></el-input>
+            </el-form-item>
+            <!--用户名-->
+            <!--密码-->
+            <el-form-item prop="password" :inline-message="true">
+                <el-input name="password" type="password" v-model="ruleForm.password" placeholder="请输入密码"
+                          @focus="resetValidate" prefix-icon="el-icon-s-claim" :validate-event="false"
+                          @keyup.enter="handleConfirm"></el-input>
+            </el-form-item>
+            <!--密码-->
+            <!--提交-->
+            <el-form-item style="text-align: center">
+                <el-space direction="vertical" :size="size">
+                    <el-button type="primary"  @click="handleConfirm" style="width:26rem;font-size:1.5rem">登 录</el-button>
+<!--                    <el-button type="primary"  id="submitBtn" ref="submitBtn" native-type="submit" style="display: none">登 录</el-button>-->
+<!--                    <el-button type="primary" @click="submitForm('ruleForm')" style="width:26rem;font-size:1.5rem" >登 录</el-button>-->
+                    <!--<el-button @click="resetForm('ruleForm')" size="medium" round>重置</el-button>-->
+                </el-space>
+                <div class="el-form_tip tt">
+                    <div class="item_tip" ref="error_div" style="color: #F56C6C" th:text="${(param.error!=null)?'用户名或密码错误':''}"></div>
+                </div>
+            </el-form-item>
+            <!--提交-->
+        </el-form>
+        <!--表单-->
+    </div>
+    <!--login-list-->
+</div>
+<!--login-->
+<!--footer-->
+<div class="login-footer">Copyright &copy; [[${copyright}]] [[${icpsecurity}]] 京公网安备：[[${plcecurity}]]</div>
+<!--footer-->
+</body>
+
+<script th:inline="javascript">
+    var Main = {
+        data() {
+            return {
+                ruleForm: {
+                    name: '',
+                    password: ''
+                },
+                errorMsg: "",
+                rules: {
+                    name: [
+                        { required: true, message: '请输入用户名' }
+                    ],
+                    password: [
+                        { required: true, message: '请输入密码'}
+                    ]
+                },
+                size: 20
+            };
+        },
+        methods: {
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            resetValidate(){
+                //重新输入时重置校验
+                this.$refs.ruleForm.clearValidate();
+                this.$refs.error_div.innerHTML = '';
+            },
+            handleConfirm () {
+                this.$refs.ruleForm.validate((valid) => {
+                    if (valid) {
+                        // 向后台发送请求
+                        // alert(document.getElementById("submitBtn"));
+                        document.getElementById("submitForm").submit();
+                        // alert(this.$refs.submitBtn);
+                        // this.$refs.submitBtn.$emit('click');
+                    } else {
+                        return false;
+                        //就像用户提示发生错误的消息
+                    }
+                })
+            }
+        }
+    }
+    ;const app = Vue.createApp(Main);
+    app.use(ElementPlus);
+    app.mount("#login")
+</script>
+</html>

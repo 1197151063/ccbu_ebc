@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepLiquidityTotalityDao">
+
+    <resultMap id="RepLiquidityTotalityVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepLiquidityTotalityVO"></resultMap>
+    <resultMap id="RepLiquidityTotalityExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepLiquidityTotalityExcelVO"></resultMap>
+        <sql id="query_rep_liquidity_totality">
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          due_central_bank,
+          deposit_interbank,
+          loan_trade,
+          discount,
+          short_investment,
+          long_debt_investment,
+          long_equity_investment,
+          total_realized_assets,
+          interbank_deposit,
+          inter_bank,
+          short_deposit,
+          long_deposit,
+          short_savings_deposit,
+          long_savings_deposit,
+          deposit_short_long_margin,
+          borrowings_central_bank,
+          total_current_liabilities,
+          overall_liquidity_requirements,
+          solvency,
+          totality_solvency,
+          overall_liquidity_surplus_shortage
+        </sql>
+
+    <select id="queryByPage" resultMap="RepLiquidityTotalityVO">
+        select
+        <include refid="query_rep_liquidity_totality"/>
+        from rep_liquidity_totality
+        <where>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepLiquidityTotalityExcelVO">
+        select
+        <include refid="query_rep_liquidity_totality"/>
+        from rep_liquidity_totality
+        <where>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepLiquidityTotalityExcelVO">
+        select
+        <include refid="query_rep_liquidity_totality"/>
+        from rep_liquidity_totality
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectLiquidityTotalityStageIdPar" resultMap="RepLiquidityTotalityVO">
+        select
+         id,
+         current_stage_id,
+         due_central_bank,
+         deposit_interbank,
+         loan_trade,
+         discount,
+         short_investment,
+         long_debt_investment,
+         long_equity_investment,
+         total_realized_assets,
+         interbank_deposit,
+         inter_bank,
+         short_deposit,
+         long_deposit,
+         short_savings_deposit,
+         long_savings_deposit,
+         deposit_short_long_margin,
+         borrowings_central_bank,
+         total_current_liabilities,
+         overall_liquidity_requirements,
+         solvency,
+         totality_solvency,
+         overall_liquidity_surplus_shortage
+        from par_initial_data_liquidity_totality
+        where current_stage_id = #{currentStageId};
+    </select>
+    <select id="selectTotalityTotalityStageIdRep" resultMap="RepLiquidityTotalityVO">
+        select
+        <include refid="query_rep_liquidity_totality"/>
+        from rep_liquidity_totality
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId};
+    </select>
+    <select id="query"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepLiquidityTotalityVO">
+        select
+        <include refid="query_rep_liquidity_totality"/>
+        from rep_liquidity_totality
+        where current_project_id = #{currentProjectId}
+        and current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId};
+    </select>
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepLiquidityTotalityExcelVO">
+                select
+         r.id,
+         r.current_stage_id,
+         t.name,
+         r.due_central_bank,
+         r.deposit_interbank,
+         r.loan_trade,
+         r.discount,
+         r.short_investment,
+         r.long_debt_investment,
+         r.long_equity_investment,
+         r.total_realized_assets,
+         r.interbank_deposit,
+         r.inter_bank,
+         r.short_deposit,
+         r.long_deposit,
+         r.short_savings_deposit,
+         r.long_savings_deposit,
+         r.deposit_short_long_margin,
+         r.borrowings_central_bank,
+         r.total_current_liabilities,
+         r.overall_liquidity_requirements,
+         r.solvency,
+         r.totality_solvency,
+         r.overall_liquidity_surplus_shortage
+        from rep_liquidity_totality r left join t_department t on r.current_team_id=t.id
+                where r.current_Project_id = #{currentProjectId}
+        and r.current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_liquidity_totality where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_liquidity_totality where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

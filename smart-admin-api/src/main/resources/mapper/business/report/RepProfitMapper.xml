@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepProfitDao">
+
+    <resultMap id="RepProfitVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepProfitVO"></resultMap>
+    <resultMap id="RepProfitExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepProfitExcelVO"></resultMap>
+        <sql id="query_rep_profit">
+            id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         interest_income,
+         financial_organization_income,
+         service_charge_income,
+         total_revenues,
+         interest_expense,
+         financial_organization_expense,
+         service_charge_expense,
+         expense_revenues,
+         people_costs,
+         Addition_people_costs,
+         other_people_costs,
+         fixed_assets_depreciation,
+         other_business_costs,
+         total_operating_expenses,
+         income_investment,
+         operating_profit,
+         subtract_bus_tax_surch,
+         add_nonbus_income,
+         subtract_nonbus_expend,
+         deduct_asset_impairment_before_total_profit,
+         subtract_asset_reserve_expense,
+         deduct_asset_impairment_after_total_profit,
+         subtract_income_tax,
+         retained_profits
+        </sql>
+
+    <select id="queryByPage" resultMap="RepProfitVO">
+        select
+            <include refid="query_rep_profit"/>
+        from rep_profit
+        <where>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepProfitExcelVO">
+        select
+        <include refid="query_rep_profit"/>
+        from rep_profit
+        <where>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepProfitExcelVO">
+        select
+        <include refid="query_rep_profit"/>
+        from rep_profit
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectProfitStageIdPar" resultMap="RepProfitVO">
+         select
+         id,
+         current_stage_id,
+         interest_income,
+         financial_organization_income,
+         service_charge_income,
+         total_revenues,
+         interest_expense,
+         financial_organization_expense,
+         service_charge_expense,
+         expense_revenues,
+         people_costs,
+         Addition_people_costs,
+         other_people_costs,
+         fixed_assets_depreciation,
+         other_business_costs,
+         total_operating_expenses,
+         income_investment,
+         operating_profit,
+         subtract_bus_tax_surch,
+         add_nonbus_income,
+         subtract_nonbus_expend,
+         deduct_asset_impairment_before_total_profit,
+         subtract_asset_reserve_expense,
+         deduct_asset_impairment_after_total_profit,
+         subtract_income_tax,
+         retained_profits
+        from par_initial_data_profit
+       <if test="currentStageId!=null">
+           where
+           current_stage_id = #{currentStageId};
+       </if>
+
+    </select>
+    <select id="selectProfitStageIdRep" resultMap="RepProfitVO">
+         select
+        <include refid="query_rep_profit"/>
+        from rep_profit where
+        1=1
+        <if test="currentTeamId!=null">
+            and current_team_id = #{currentTeamId}
+        </if>
+        <if test="currentStageId!=null">
+            and current_stage_id = #{currentStageId};
+        </if>
+    </select>
+    <select id="query" resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepProfitVO">
+        select
+        <include refid="query_rep_profit"/>
+        from rep_profit
+        where current_Project_id = #{currentProjectId}
+        and current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId};
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_profit where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_profit where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+    <select id="selectProfitByProId" resultMap="RepProfitVO">
+        select
+        <include refid="query_rep_profit"/>
+        from rep_profit where
+        1=1
+        <if test="proId!=null">
+            and current_project_id= #{proId}
+        </if>
+    </select>
+
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepProfitExcelVO">
+        select
+         r.id,
+         r.current_project_id,
+         r.current_team_id,
+         r.current_stage_id,
+         t.name,
+         r.interest_income,
+         r.financial_organization_income,
+         r.service_charge_income,
+         r.total_revenues,
+         r.interest_expense,
+         r.financial_organization_expense,
+         r.service_charge_expense,
+         r.expense_revenues,
+         r.people_costs,
+         r.Addition_people_costs,
+         r.other_people_costs,
+         r.fixed_assets_depreciation,
+         r.other_business_costs,
+         r.total_operating_expenses,
+         r.income_investment,
+         r.operating_profit,
+         r.subtract_bus_tax_surch,
+         r.add_nonbus_income,
+         r.subtract_nonbus_expend,
+         r.deduct_asset_impairment_before_total_profit,
+         r.subtract_asset_reserve_expense,
+         r.deduct_asset_impairment_after_total_profit,
+         r.subtract_income_tax,
+         r.retained_profits
+        from rep_profit r left join t_department t on r.current_team_id=t.id
+        where r.current_Project_id = #{currentProjectId}
+        and r.current_stage_id = #{currentStageId};
+    </select>
+</mapper>

@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--<div th:include="include/header"></div>-->
+<!--main-->
+<div class="main">
+    <div class="xxlr-main">
+        <el-row>
+            <!--右侧-->
+            <el-col :span="24" class="sjck-bg">
+                <div class="xxlr-title">
+                    [[${session['app_user_login']!=null?session['app_user_login'].departmentName:'建设银行'}]]
+                </div>
+                <div class="xxlr-title">预计算数据参考</div>
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <!--资产负债表-->
+                    <el-tab-pane label="资产负债表" name="first">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th>资产</th>
+                                <th>[[${map['asset'].currentStageId-1}]]阶段</th>
+                                <th>负债及股东权益</th>
+                                <th>[[${map['asset'].currentStageId-1}]]阶段</th>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"><strong>流动资产</strong></td>
+                                <td colspan="2"><strong>流动负债</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>现金</td>
+                                <td align="right">[[${map['asset'].cash}]]</td>
+                                <td>短期存款</td>
+                                <td align="right">[[${map['asset'].shortDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>存放中央银行款项</td>
+                                <td align="right">[[${map['asset'].dueCentralBank}]]</td>
+                                <td>短期储蓄存款</td>
+                                <td align="right">[[${map['asset'].shortSavingsDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>存放同业款项</td>
+                                <td align="right">[[${map['asset'].depositInterbank}]]</td>
+                                <td>向中央银行借款</td>
+                                <td align="right">[[${map['asset'].borrowingsCentralBank}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>拆放同业</td>
+                                <td align="right">[[${map['asset'].loanTrade}]]</td>
+                                <td>同业存放款项</td>
+                                <td align="right">[[${map['asset'].interbankDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期贷款</td>
+                                <td align="right">[[${map['asset'].shortLoan}]]</td>
+                                <td>同业拆入</td>
+                                <td align="right">[[${map['asset'].interBank}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>应收利息</td>
+                                <td align="right">[[${map['asset'].interestReceivable}]]</td>
+                                <td>存入短期保证金</td>
+                                <td align="right">[[${map['asset'].depositShortMargin}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其他应收款</td>
+                                <td align="right">-</td>
+                                <td>应付利息</td>
+                                <td align="right">[[${map['asset'].paymentInterest}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>贴现</td>
+                                <td align="right">[[${map['asset'].discount}]]</td>
+                                <td><strong>流动负债合计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].totalCurrentLiability}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期投资</td>
+                                <td align="right">[[${map['asset'].shortInvestment}]]</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其他流动资产</td>
+                                <td align="right">-</td>
+                                <td colspan="2"><strong>长期负债</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>流动资产合计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].propertySum}]]</strong></td>
+                                <td>长期存款</td>
+                                <td align="right">[[${map['asset'].longDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"></td>
+                                <td>长期储蓄存款</td>
+                                <td align="right">[[${map['asset'].longSavingsDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"><strong>长期资产</strong></td>
+                                <td>存入长期保证金</td>
+                                <td align="right">[[${map['asset'].depositLongMargin}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>中长期贷款</td>
+                                <td align="right">[[${map['asset'].mlongLoan}]]</td>
+                                <td>应付长期债券</td>
+                                <td align="right">[[${map['asset'].paymentLongBond}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>&nbsp;&nbsp;减：贷款损失准备</td>
+                                <td align="right">[[${map['asset'].lossReserves}]]</td>
+                                <td>应付次级债券</td>
+                                <td align="right">[[${map['asset'].paymentSubBond}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>长期债权投资</td>
+                                <td align="right">[[${map['asset'].longDebtInvestment}]]</td>
+                                <td><strong>长期负债合计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].totalLongLiabilities}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>长期股权投资</td>
+                                <td align="right">[[${map['asset'].longEquityInvestment}]]</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>固定资产</td>
+                                <td align="right">[[${map['asset'].fixedAssets}]]</td>
+                                <td><strong>负债合计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].totalLiabilities}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>在建工程</td>
+                                <td align="right">-</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>长期资产合计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].longTotalAsset}]]</strong></td>
+                                <td colspan="2"><strong>股东权益</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"></td>
+                                <td>股本</td>
+                                <td align="right">[[${map['asset'].capital}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"><strong>无形资产及其他资产</strong></td>
+                                <td>资本公积</td>
+                                <td align="right">[[${map['asset'].capitalReserve}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>无形资产</td>
+                                <td align="right">[[${map['asset'].intangibleAssets}]]</td>
+                                <td>盈余公积</td>
+                                <td align="right">[[${map['asset'].surplusReserve}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其他资产</td>
+                                <td align="right">[[${map['asset'].otherAssets}]]</td>
+                                <td>一般风险准备</td>
+                                <td align="right">-</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>无形资产及其他资产合计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].intangibleAotherAssets}]]</strong></td>
+                                <td>未分配利润</td>
+                                <td align="right">[[${map['asset'].undistributedProfit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"></td>
+                                <td><strong>股东权益合计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].totalShareholdersEquity}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2">&nbsp;</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>资产总计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].totalAssets}]]</strong></td>
+                                <td><strong>负债和股东权益总计</strong></td>
+                                <td align="right"><strong>[[${map['asset'].totalLiabilitiesEquityIndebted}]]</strong>
+                                </td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="6">&nbsp;</td>
+                            </tr>
+<!--                            <tr valign="middle">-->
+<!--                                <td colspan="6"><strong>补充资料</strong></td>-->
+<!--                            </tr>-->
+<!--                            <tr valign="middle">-->
+<!--                                <td colspan="6">本阶段委托资产托管业务余额 28088 百万元；担保业务余额 2313 百万元。</td>-->
+<!--                            </tr>-->
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--资产负债表-->
+                    <!--利润表-->
+                    <el-tab-pane label="利润表" name="second">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th>项目</th>
+                                <th>[[${map['profit'].currentStageId-1}]]阶段</th>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"><strong>营业收入</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>利息收入</td>
+                                <td align="right">[[${map['profit'].interestIncome}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>金融机构往来收入</td>
+                                <td align="right">[[${map['profit'].financialOrganizationIncome}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>手续费收入</td>
+                                <td align="right">[[${map['profit'].serviceChargeIncome}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>营业收入合计</strong></td>
+                                <td align="right"><strong>[[${map['profit'].totalRevenues}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"><strong>营业支出</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>利息支出</td>
+                                <td align="right">[[${map['profit'].interestExpense}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>金融机构往来支出</td>
+                                <td align="right">[[${map['profit'].financialOrganizationExpense}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>手续费支出</td>
+                                <td align="right">[[${map['profit'].serviceChargeExpense}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>营业支出合计</strong></td>
+                                <td align="right"><strong>[[${map['profit'].expenseRevenues}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3"><strong>营业费用</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>人员开支</td>
+                                <td align="right">[[${map['profit'].peopleCosts}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>附加人员成本</td>
+                                <td align="right">[[${map['profit'].additionPeopleCosts}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其他人员开支</td>
+                                <td align="right">[[${map['profit'].otherPeopleCosts}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>固定资产折旧</td>
+                                <td align="right">[[${map['profit'].fixedAssetsDepreciation}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其它营业费用</td>
+                                <td align="right">[[${map['profit'].otherBusinessCosts}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>营业费用合计</strong></td>
+                                <td align="right"><strong>[[${map['profit'].totalOperatingExpenses}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>投资收益</strong></td>
+                                <td align="right"><strong>[[${map['profit'].incomeInvestment}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>营业利润</strong></td>
+                                <td align="right"><strong>[[${map['profit'].operatingProfit}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>扣除资产减值前利润总额</strong></td>
+                                <td align="right">
+                                    <strong>[[${map['profit'].deductAssetImpairmentBeforeTotalProfit}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>扣除资产减值后利润总额</strong></td>
+                                <td align="right">
+                                    <strong>[[${map['profit'].deductAssetImpairmentAfterTotalProfit}]]</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>净利润</strong></td>
+                                <td align="right"><strong>[[${map['profit'].retainedProfits}]]</strong></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--利润表-->
+                    <!--流动性报表-->
+                    <el-tab-pane label="流动性报表" name="third">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th>项目</th>
+                                <th>说明</th>
+                                <th>金额</th>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">负债</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>同业存放款项</td>
+                                <td>小于3个月的同业存放款项</td>
+                                <td align="right">[[${map['liquiditycash'].interbankDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>同业拆入</td>
+                                <td>小于3个月的同业拆入款项</td>
+                                <td align="right">[[${map['liquiditycash'].interBank}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期存款</td>
+                                <td>短期存款余额</td>
+                                <td align="right">[[${map['liquiditycash'].shortDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>长期存款</td>
+                                <td>长期存款的50%</td>
+                                <td align="right">[[${map['liquiditycash'].longDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期储蓄存款</td>
+                                <td>小于3个月的短期储蓄存款</td>
+                                <td align="right">[[${map['liquiditycash'].shortSavingsDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>长期储蓄存款</td>
+                                <td>长期储蓄存款的20%</td>
+                                <td align="right">[[${map['liquiditycash'].longSavingsDeposit}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期债务总计</td>
+                                <td>小于3个月的短期债务总额</td>
+                                <td align="right">[[${map['liquiditycash'].totalShortDebt}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>现金流动性要求</td>
+                                <td>短期债务总计的2.5%</td>
+                                <td align="right">[[${map['liquiditycash'].cashLiquidityRequirements}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>清偿力</td>
+                                <td></td>
+                                <td align="right">[[${map['liquiditycash'].solvency}]]</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>现金清偿力</td>
+                                <td>清偿力——现金流动性要求</td>
+                                <td align="right">[[${map['liquiditycash'].cashSolvency}]]</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--流动性报表-->
+                    <!--债券投资业务-->
+                    <el-tab-pane label="债券投资业务" name="fourth">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th rowspan="2">债券来自阶段</th>
+                                <th rowspan="2" width="8%">价格（%）</th>
+                                <th colspan="5">短期债券投资（百万元）</th>
+                                <th colspan="5">长期债券投资（百万元）</th>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <th width="8%">实际价值</th>
+                                <th width="8%">名义价值</th>
+                                <th width="8%">利率（%）</th>
+                                <th width="8%">利息</th>
+                                <th width="8%">账面损益</th>
+                                <th width="8%">实际价值</th>
+                                <th width="8%">名义价值</th>
+                                <th width="8%">利率（%）</th>
+                                <th width="8%">利息</th>
+                                <th width="8%">账面损益</th>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P0</td>
+                                <td align="right">[[${map['investmentsShortBondA'].bondPrice}]]</td>
+                                <td align="right">[[${map['investmentsShortBondA'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondA'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondA'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondA'].interest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondA'].accountProfitLoss}]]</td>
+                                <td align="right">[[${map['investmentsLongBondA'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondA'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondA'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondA'].interest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondA'].accountProfitLoss}]]</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P1</td>
+                                <td align="right">[[${map['investmentsShortBondB'].bondPrice}]]</td>
+                                <td align="right">[[${map['investmentsShortBondB'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondB'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondB'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondB'].interest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondB'].accountProfitLoss}]]</td>
+                                <td align="right">[[${map['investmentsLongBondB'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondB'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondB'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondB'].interest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondB'].accountProfitLoss}]]</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P2</td>
+                                <td align="right">[[${map['investmentsShortBondC'].bondPrice}]]</td>
+                                <td align="right">[[${map['investmentsShortBondC'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondC'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondC'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondC'].interest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondC'].accountProfitLoss}]]</td>
+                                <td align="right">[[${map['investmentsLongBondC'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondC'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondC'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondC'].interest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondC'].accountProfitLoss}]]</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P3</td>
+                                <td align="right">[[${map['investmentsShortBondD'].bondPrice}]]</td>
+                                <td align="right">[[${map['investmentsShortBondD'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondD'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondD'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondD'].interest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondD'].accountProfitLoss}]]</td>
+                                <td align="right">[[${map['investmentsLongBondD'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondD'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondD'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondD'].interest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondD'].accountProfitLoss}]]</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P4</td>
+                                <td align="right">[[${map['investmentsShortBondE'].bondPrice}]]</td>
+                                <td align="right">[[${map['investmentsShortBondE'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondE'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondE'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondE'].interest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondE'].accountProfitLoss}]]</td>
+                                <td align="right">[[${map['investmentsLongBondE'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondE'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondE'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondE'].interest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondE'].accountProfitLoss}]]</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P5</td>
+                                <td align="right">[[${map['investmentsShortBondF'].bondPrice}]]</td>
+                                <td align="right">[[${map['investmentsShortBondF'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondF'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondF'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondF'].interest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondF'].accountProfitLoss}]]</td>
+
+                                <td align="right">[[${map['investmentsLongBondF'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondF'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondF'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondF'].interest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondF'].accountProfitLoss}]]</td>
+
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>总计</td>
+                                <td align="right">[[${map['investmentsShortBondTotal'].bondPrice}]]</td>
+                                <td align="right">[[${map['investmentsShortBondTotal'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondTotal'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsShortBondTotal'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondTotal'].interest}]]</td>
+                                <td align="right">[[${map['investmentsShortBondTotal'].accountProfitLoss}]]</td>
+                                <td align="right">[[${map['investmentsLongBondTotal'].realValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondTotal'].nominalValue}]]</td>
+                                <td align="right">[[${map['investmentsLongBondTotal'].rateInterest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondTotal'].interest}]]</td>
+                                <td align="right">[[${map['investmentsLongBondTotal'].accountProfitLoss}]]</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--债券投资业务-->
+                    <!--股票投资业务-->
+                    <el-tab-pane label="股票投资业务" name="fifth">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th rowspan="2">股票投资（百万元）</th>
+                                <th rowspan="2" width="8%">股票指数</th>
+                                <th colspan="4">短期股票投资</th>
+                                <th colspan="4">长期股票投资</th>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <th width="8%">股票股数（手）</th>
+                                <th width="8%">股票价值</th>
+                                <th width="8%">股息</th>
+                                <th width="8%">账面损益</th>
+                                <th width="8%">股票股数（手）</th>
+                                <th width="8%">股票价值</th>
+                                <th width="8%">股息</th>
+                                <th width="8%">账面损益</th>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>期初持有</td>
+                                <td align="right">[[${map['investmentsShortBegin'].stockIndex}]]</td>
+                                <td align="right">[[${map['investmentsShortBegin'].stockNumber}]]</td>
+                                <td align="right">[[${map['investmentsShortBegin'].stockCost}]]</td>
+                                <td align="right">[[${map['investmentsShortBegin'].stockDividend}]]</td>
+                                <td align="right">[[${map['investmentsShortBegin'].stockAccount}]]</td>
+                                <td align="right">[[${map['investmentsLongBegin'].stockNumber}]]</td>
+                                <td align="right">[[${map['investmentsLongBegin'].stockCost}]]</td>
+                                <td align="right">[[${map['investmentsLongBegin'].stockDividend}]]</td>
+                                <td align="right">[[${map['investmentsLongBegin'].stockAccount}]]</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>最新持有</td>
+                                <td align="right">[[${map['investmentsShortNewest'].stockIndex}]]</td>
+                                <td align="right">[[${map['investmentsShortNewest'].stockNumber}]]</td>
+                                <td align="right">[[${map['investmentsShortNewest'].stockCost}]]</td>
+                                <td align="right">[[${map['investmentsShortNewest'].stockDividend}]]</td>
+                                <td align="right">[[${map['investmentsShortNewest'].stockAccount}]]</td>
+                                <td align="right">[[${map['investmentsLongNewest'].stockNumber}]]</td>
+                                <td align="right">[[${map['investmentsLongNewest'].stockCost}]]</td>
+                                <td align="right">[[${map['investmentsLongNewest'].stockDividend}]]</td>
+                                <td align="right">[[${map['investmentsLongNewest'].stockAccount}]]</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>净买入/卖出</td>
+                                <td align="right">[[${map['investmentsShortBuy'].stockIndex}]]</td>
+                                <td align="right">[[${map['investmentsShortBuy'].stockNumber}]]</td>
+                                <td align="right">[[${map['investmentsShortBuy'].stockCost}]]</td>
+                                <td align="right">[[${map['investmentsShortBuy'].stockDividend}]]</td>
+                                <td align="right">[[${map['investmentsShortBuy'].stockAccount}]]</td>
+                                <td align="right">[[${map['investmentsLongBuy'].stockNumber}]]</td>
+                                <td align="right">[[${map['investmentsLongBuy'].stockCost}]]</td>
+                                <td align="right">[[${map['investmentsLongBuy'].stockDividend}]]</td>
+                                <td align="right">[[${map['investmentsLongBuy'].stockAccount}]]</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>期末持有</td>
+                                <td align="right">[[${map['investmentsShortEnd'].stockIndex}]]</td>
+                                <td align="right">[[${map['investmentsShortEnd'].stockNumber}]]</td>
+                                <td align="right">[[${map['investmentsShortEnd'].stockCost}]]</td>
+                                <td align="right">[[${map['investmentsShortEnd'].stockDividend}]]</td>
+                                <td align="right">[[${map['investmentsShortEnd'].stockAccount}]]</td>
+                                <td align="right">[[${map['investmentsLongEnd'].stockNumber}]]</td>
+                                <td align="right">[[${map['investmentsLongEnd'].stockCost}]]</td>
+                                <td align="right">[[${map['investmentsLongEnd'].stockDividend}]]</td>
+                                <td align="right">[[${map['investmentsLongEnd'].stockAccount}]]</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--股票投资业务-->
+                    <!--代理债券发行业务数据表-->
+                    <el-tab-pane label="代理债券发行业务数据表" name="sixth">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr valign="middle">
+                                <td colspan="4">
+                                    [[${map['agencyBondsJia'].bondType}]]，票面利率[[${map['agencyBondsJia'].couponRate}]]%，期限[[${map['agencyBondsJia'].deadline}]]年，评级[[${map['agencyBondsJia'].creditRating}]]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 发行金额（百万元）：[[${map['agencyBondsJia'].issueAmount}]]</dt>
+                                        <dt> 承销发行银行：[[${map['agencyBondsJia'].underwritingBank}]]</dt>
+                                    </dl>
+                                </td>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 承销金额（百万元）：[[${map['agencyBondsJia'].underwritingMount}]]</dt>
+                                        <dt> 认购额度（%）：[[${map['agencyBondsJia'].subscriptionLimit}]]</dt>
+                                        <dt> 承销价格（%）：[[${map['agencyBondsJia'].underwritingPrice}]]</dt>
+                                        <dt> 折扣（%）：[[${map['agencyBondsJia'].discount}]]</dt>
+                                    </dl>
+                                </td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="4">
+                                    [[${map['agencyBondsYi'].bondType}]]，票面利率[[${map['agencyBondsYi'].couponRate}]]%，期限[[${map['agencyBondsYi'].deadline}]]年，评级[[${map['agencyBondsYi'].creditRating}]]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 发行金额（百万元）：[[${map['agencyBondsYi'].issueAmount}]]</dt>
+                                        <dt> 承销发行银行：[[${map['agencyBondsYi'].underwritingBank}]]</dt>
+                                    </dl>
+                                </td>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 承销金额（百万元）：[[${map['agencyBondsYi'].underwritingMount}]]</dt>
+                                        <dt> 认购额度（%）：[[${map['agencyBondsYi'].subscriptionLimit}]]</dt>
+                                        <dt> 承销价格（%）：[[${map['agencyBondsYi'].underwritingPrice}]]</dt>
+                                        <dt> 折扣（%）：[[${map['agencyBondsYi'].discount}]]</dt>
+                                    </dl>
+                                </td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="4">
+                                    [[${map['agencyBondsBing'].bondType}]]，票面利率[[${map['agencyBondsBing'].couponRate}]]%，期限[[${map['agencyBondsBing'].deadline}]]年，评级[[${map['agencyBondsBing'].creditRating}]]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 发行金额（百万元）：[[${map['agencyBondsBing'].issueAmount}]]</dt>
+                                        <dt> 承销发行银行：[[${map['agencyBondsBing'].underwritingBank}]]</dt>
+                                    </dl>
+                                </td>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 承销金额（百万元）：[[${map['agencyBondsBing'].underwritingMount}]]</dt>
+                                        <dt> 认购额度（%）：[[${map['agencyBondsBing'].subscriptionLimit}]]</dt>
+                                        <dt> 承销价格（%）：[[${map['agencyBondsBing'].underwritingPrice}]]</dt>
+                                        <dt> 折扣（%）：[[${map['agencyBondsBing'].discount}]]</dt>
+                                    </dl>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--代理债券发行业务数据表-->
+                    <!--人事后勤数据-->
+                    <el-tab-pane label="人事后勤数据" name="seventh">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th>项目</th>
+                                <th>贷款业务</th>
+                                <th>存款业务</th>
+                                <th>投资业务</th>
+                                <th>中间业务</th>
+                                <th>其 他</th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>期初员工数（人）</dt>
+                                        <dt>本期雇佣/解雇（人）</dt>
+                                        <dt>本阶段流失人数（人）</dt>
+                                        <dt>期末员工数（人）</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelLoanBusiness'].startEmployeeQuantity}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].hareFire}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].drain}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].endEmployeeQuantity}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelDepositBusiness'].startEmployeeQuantity}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].hareFire}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].drain}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].endEmployeeQuantity}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelInvestmentBusiness'].startEmployeeQuantity}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].hareFire}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].drain}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].endEmployeeQuantity}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelMiddleBusiness'].startEmployeeQuantity}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].hareFire}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].drain}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].endEmployeeQuantity}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['PersonnelOther'].startEmployeeQuantity}]]</dt>
+                                    <dt>0</dt>
+                                    <dt>0</dt>
+                                    <dt>[[${map['PersonnelOther'].endEmployeeQuantity}]]</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>下阶段人员流失率（%）</dt>
+                                        <dt>下阶段流失人员数（人）</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelLoanBusiness'].lossRate}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].lostPersonnel}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelDepositBusiness'].lossRate}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].lostPersonnel}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelInvestmentBusiness'].lossRate}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].lostPersonnel}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelMiddleBusiness'].lossRate}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].lostPersonnel}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['PersonnelOther'].lossRate}]]</dt>
+                                    <dt>[[${map['PersonnelOther'].lostPersonnel}]]</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>有效营业时间（千小时）</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelLoanBusiness'].effectiveTime}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelDepositBusiness'].effectiveTime}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelInvestmentBusiness'].effectiveTime}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelMiddleBusiness'].effectiveTime}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['PersonnelOther'].effectiveTime}]]</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>人员调配（千小时）</dt>
+                                        <dt>—培训时间</dt>
+                                        <dt>—市场拓展</dt>
+                                        <dt>—客户维护</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>[[${map['personnelLoanBusiness'].trainingTime}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].marketDevelopment}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].customerMaintenance}]]</dt>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>[[${map['personnelDepositBusiness'].trainingTime}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].marketDevelopment}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].customerMaintenance}]]</dt>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].trainingTime}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].marketDevelopment}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].customerMaintenance}]]</dt>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].trainingTime}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].marketDevelopment}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].customerMaintenance}]]</dt>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>[[${map['PersonnelOther'].trainingTime}]]</dt>
+                                    <dt>[[${map['PersonnelOther'].marketDevelopment}]]</dt>
+                                    <dt>[[${map['PersonnelOther'].customerMaintenance}]]</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>可用营业时间（千小时）</dt>
+                                        <dt>需要营业时间（千小时）</dt>
+                                        <dt>加班（千小时）</dt>
+                                        <dt>临时工（人）</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelLoanBusiness'].availableTime}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].needTime}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].workOvertime}]]</dt>
+                                    <dt>[[${map['personnelLoanBusiness'].temporaryWorker}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelDepositBusiness'].availableTime}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].needTime}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].workOvertime}]]</dt>
+                                    <dt>[[${map['personnelDepositBusiness'].temporaryWorker}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelInvestmentBusiness'].availableTime}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].needTime}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].workOvertime}]]</dt>
+                                    <dt>[[${map['personnelInvestmentBusiness'].temporaryWorker}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelMiddleBusiness'].availableTime}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].needTime}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].workOvertime}]]</dt>
+                                    <dt>[[${map['personnelMiddleBusiness'].temporaryWorker}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['PersonnelOther'].availableTime}]]</dt>
+                                    <dt>[[${map['PersonnelOther'].needTime}]]</dt>
+                                    <dt>[[${map['PersonnelOther'].workOvertime}]]</dt>
+                                    <dt>[[${map['PersonnelOther'].temporaryWorker}]]</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>培训水平</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelLoanBusiness'].trainingLevel}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelDepositBusiness'].trainingLevel}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelInvestmentBusiness'].trainingLevel}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelMiddleBusiness'].trainingLevel}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['PersonnelOther'].trainingLevel}]]</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>工作满意度</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelLoanBusiness'].jobSatisfaction}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelDepositBusiness'].jobSatisfaction}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelInvestmentBusiness'].jobSatisfaction}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelMiddleBusiness'].jobSatisfaction}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['PersonnelOther'].jobSatisfaction}]]</dt>
+                                </th>
+                            </tr>
+                            <tr valign="middel">
+                                <th th:colspan="6"></th>
+                            </tr>
+                            <tr valign="middle">
+                                <th>
+                                    <dl>
+                                        <dt>项目</dt>
+                                    </dl>
+                                </th>
+                                <th th:colspan="2">
+                                    <dt>本阶段</dt>
+                                </th>
+                                <th th:colspan="2">
+                                    <dt>累计投资</dt>
+                                </th>
+                                <th>
+                                    <dt>指数</dt>
+                                </th>
+                            </tr>
+                            <tr valign="middle">
+                                <th>
+                                    <dl>
+                                        <dt>自动化投资（百万元）</dt>
+                                    </dl>
+                                </th>
+                                <th th:colspan="2">
+                                    <dt>[[${map['personnelAutomation'].presentStage}]]</dt>
+                                </th>
+                                <th th:colspan="2">
+                                    <dt>[[${map['personnelAutomation'].cumulativeInvestment}]]</dt>
+                                </th>
+                                <th>
+                                    <dt>[[${map['personnelAutomation'].exponent}]]</dt>
+                                </th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--人事后勤数据-->
+                </el-tabs>
+            </el-col>
+            <!--右侧-->
+        </el-row>
+    </div>
+</div>
+<!--main-->
+<!--footer-->
+<!--<div th:include="include/footer"></div>-->
+<!--footer-->
+</body>
+<script type="module" th:src="@{/service/yjs.js}"></script>
+<!--<script th:inline="javascript">-->
+<!--	var map = [[${map}]];-->
+<!--	var asset1 = map['asset']-->
+<!--	console.log(map);-->
+<!--</script>-->
+<style>
+    .el-form-item {
+        margin-bottom: 0px;
+    }
+
+    .input-list .el-input__inner {
+        /* background-color: #F8F9FB; */
+        padding: 0rem 0.8rem;
+        text-align: left;
+    }
+</style>
+</html>

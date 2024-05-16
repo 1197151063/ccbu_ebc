@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--header-->
+<!--main-->
+<div class="main">
+	<div class="main-bg">
+		<el-tabs v-model="activeName" @tab-click="handleClick">
+			<!--全部消息-->
+			<el-tab-pane label="全部消息" name="first">
+				<!--筛选-->
+				<div class="screen">
+<!--					<dl>-->
+<!--						<dd>-->
+<!--							<el-select v-model="value" placeholder="本期学员" size="small">-->
+<!--								<el-option-->
+<!--										   v-for="item in options"-->
+<!--										   :key="item.value"-->
+<!--										   :label="item.label"-->
+<!--										   :value="item.value">-->
+<!--								</el-option>-->
+<!--							</el-select>-->
+<!--						</dd>-->
+<!--					</dl>-->
+<!--					<dl>-->
+<!--						<dt>状态</dt>-->
+<!--						<dd>-->
+<!--							<el-select v-model="value" placeholder="全部" size="small">-->
+<!--								<el-option-->
+<!--										   v-for="item in options"-->
+<!--										   :key="item.value"-->
+<!--										   :label="item.label"-->
+<!--										   :value="item.value">-->
+<!--								</el-option>-->
+<!--							</el-select>-->
+<!--						</dd>-->
+<!--					</dl>-->
+<!--					<dl>-->
+<!--						<dt>发布人</dt>-->
+<!--						<dd>-->
+<!--							<el-select v-model="value" placeholder="全部" size="small">-->
+<!--								<el-option-->
+<!--										   v-for="item in options"-->
+<!--										   :key="item.value"-->
+<!--										   :label="item.label"-->
+<!--										   :value="item.value">-->
+<!--								</el-option>-->
+<!--							</el-select>-->
+<!--						</dd>-->
+<!--					</dl>-->
+<!--					<dl>-->
+<!--						<dt>发布时间</dt>-->
+<!--						<dd>-->
+<!--							<el-date-picker-->
+<!--											v-model="value2"-->
+<!--											type="daterange"-->
+<!--											unlink-panels-->
+<!--											range-separator="至"-->
+<!--											start-placeholder="开始日期"-->
+<!--											end-placeholder="结束日期"-->
+<!--											:shortcuts="shortcuts"-->
+<!--											size="small">-->
+<!--							</el-date-picker>-->
+<!--						</dd>-->
+<!--					</dl>-->
+
+					<dl>
+						<dt>标题</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="tableData.messageName" size="small"  style="width: 100%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryData(tableData.messageName,'first')"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<div class="screen-right">
+<!--						<el-button type="primary" size="small" onclick="window.location.href ='js_xzxx'">发布消息</el-button>-->
+						<el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button></div>
+					</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  @selection-change="handleSelectionChange"
+							  :default-sort = "{prop: 'list', order: 'descending'}">
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="messageName"
+										 label="标题"
+										 width="450">
+						</el-table-column>
+						<el-table-column
+										 prop="createTime"
+										 label="创建日期"
+										 align="center"
+										 sortable
+										 width="200">
+						</el-table-column>
+						<el-table-column
+										 prop="createrUser"
+										 label="发布人"
+										 align="center"
+										 sortable
+										 width="170">
+						</el-table-column>
+						<el-table-column
+										 prop="status"
+										 label="状态"
+										 align="center"
+										 width="100">
+						</el-table-column>
+						<el-table-column
+										 label="操作"
+										 align="center" key="slot">
+							<template #default="scope" style="float:right">
+<!--								<el-button type="primary" plain size="small" @click="update(scope.row.id)" >编辑</el-button>-->
+								<el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--全部消息-->
+			<!--消息通知-->
+			<el-tab-pane label="消息通知" name="second">
+				<!--筛选-->
+				<div class="screen">
+					<!--					<dl>-->
+					<!--						<dd>-->
+					<!--							<el-select v-model="value" placeholder="本期学员" size="small">-->
+					<!--								<el-option-->
+					<!--										   v-for="item in options"-->
+					<!--										   :key="item.value"-->
+					<!--										   :label="item.label"-->
+					<!--										   :value="item.value">-->
+					<!--								</el-option>-->
+					<!--							</el-select>-->
+					<!--						</dd>-->
+					<!--					</dl>-->
+					<!--					<dl>-->
+					<!--						<dt>状态</dt>-->
+					<!--						<dd>-->
+					<!--							<el-select v-model="value" placeholder="全部" size="small">-->
+					<!--								<el-option-->
+					<!--										   v-for="item in options"-->
+					<!--										   :key="item.value"-->
+					<!--										   :label="item.label"-->
+					<!--										   :value="item.value">-->
+					<!--								</el-option>-->
+					<!--							</el-select>-->
+					<!--						</dd>-->
+					<!--					</dl>-->
+					<!--					<dl>-->
+					<!--						<dt>发布人</dt>-->
+					<!--						<dd>-->
+					<!--							<el-select v-model="value" placeholder="全部" size="small">-->
+					<!--								<el-option-->
+					<!--										   v-for="item in options"-->
+					<!--										   :key="item.value"-->
+					<!--										   :label="item.label"-->
+					<!--										   :value="item.value">-->
+					<!--								</el-option>-->
+					<!--							</el-select>-->
+					<!--						</dd>-->
+					<!--					</dl>-->
+					<!--					<dl>-->
+					<!--						<dt>发布时间</dt>-->
+					<!--						<dd>-->
+					<!--							<el-date-picker-->
+					<!--											v-model="value2"-->
+					<!--											type="daterange"-->
+					<!--											unlink-panels-->
+					<!--											range-separator="至"-->
+					<!--											start-placeholder="开始日期"-->
+					<!--											end-placeholder="结束日期"-->
+					<!--											:shortcuts="shortcuts"-->
+					<!--											size="small">-->
+					<!--							</el-date-picker>-->
+					<!--						</dd>-->
+					<!--					</dl>-->
+
+					<dl>
+						<dt>标题</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="tableData.messageName" size="small"  style="width: 100%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryData(tableData.messageName,'second')"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<div class="screen-right">
+<!--						onclick="window.location.href ='js_xzxx'"-->
+						<el-button type="primary" size="small" @click="release(2)" >发布消息通知</el-button>
+						<el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							:data="tableData"
+							style="width: 100%"
+							size="medium"
+							@selection-change="handleSelectionChange"
+							:default-sort = "{prop: 'list', order: 'descending'}">
+						<el-table-column
+								type="selection">
+						</el-table-column>
+						<el-table-column
+								prop="messageName"
+								label="标题"
+								width="450">
+						</el-table-column>
+						<el-table-column
+								prop="createTime"
+								label="创建日期"
+								align="center"
+								sortable
+								width="200">
+						</el-table-column>
+						<el-table-column
+								prop="createrUser"
+								label="发布人"
+								align="center"
+								sortable
+								width="170">
+						</el-table-column>
+						<el-table-column
+								prop="status"
+								label="状态"
+								align="center"
+								width="100">
+						</el-table-column>
+						<el-table-column
+								label="操作"
+								align="center" key="slot">
+							<template #default="scope" style="float:right">
+								<el-button type="primary" plain size="small" @click="update(scope.row.id,2)" >编辑</el-button>
+								<el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--消息通知-->
+			<!--竞赛信息-->
+			<el-tab-pane label="竞赛信息" name="third">
+				<!--筛选-->
+				<div class="screen">
+					<!--					<dl>-->
+					<!--						<dd>-->
+					<!--							<el-select v-model="value" placeholder="本期学员" size="small">-->
+					<!--								<el-option-->
+					<!--										   v-for="item in options"-->
+					<!--										   :key="item.value"-->
+					<!--										   :label="item.label"-->
+					<!--										   :value="item.value">-->
+					<!--								</el-option>-->
+					<!--							</el-select>-->
+					<!--						</dd>-->
+					<!--					</dl>-->
+					<!--					<dl>-->
+					<!--						<dt>状态</dt>-->
+					<!--						<dd>-->
+					<!--							<el-select v-model="value" placeholder="全部" size="small">-->
+					<!--								<el-option-->
+					<!--										   v-for="item in options"-->
+					<!--										   :key="item.value"-->
+					<!--										   :label="item.label"-->
+					<!--										   :value="item.value">-->
+					<!--								</el-option>-->
+					<!--							</el-select>-->
+					<!--						</dd>-->
+					<!--					</dl>-->
+					<!--					<dl>-->
+					<!--						<dt>发布人</dt>-->
+					<!--						<dd>-->
+					<!--							<el-select v-model="value" placeholder="全部" size="small">-->
+					<!--								<el-option-->
+					<!--										   v-for="item in options"-->
+					<!--										   :key="item.value"-->
+					<!--										   :label="item.label"-->
+					<!--										   :value="item.value">-->
+					<!--								</el-option>-->
+					<!--							</el-select>-->
+					<!--						</dd>-->
+					<!--					</dl>-->
+					<!--					<dl>-->
+					<!--						<dt>发布时间</dt>-->
+					<!--						<dd>-->
+					<!--							<el-date-picker-->
+					<!--											v-model="value2"-->
+					<!--											type="daterange"-->
+					<!--											unlink-panels-->
+					<!--											range-separator="至"-->
+					<!--											start-placeholder="开始日期"-->
+					<!--											end-placeholder="结束日期"-->
+					<!--											:shortcuts="shortcuts"-->
+					<!--											size="small">-->
+					<!--							</el-date-picker>-->
+					<!--						</dd>-->
+					<!--					</dl>-->
+
+					<dl>
+						<dt>标题</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="tableData.messageName" size="small"  style="width: 100%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryData(tableData.messageName,'third')"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<div class="screen-right">
+						<el-button type="primary" size="small" @click="release(3)">发布竞赛信息</el-button>
+						<el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							:data="tableData"
+							style="width: 100%"
+							size="medium"
+							@selection-change="handleSelectionChange"
+							:default-sort = "{prop: 'list', order: 'descending'}">
+						<el-table-column
+								type="selection">
+						</el-table-column>
+						<el-table-column
+								prop="messageName"
+								label="标题"
+								width="450">
+						</el-table-column>
+						<el-table-column
+								prop="createTime"
+								label="创建日期"
+								align="center"
+								sortable
+								width="200">
+						</el-table-column>
+						<el-table-column
+								prop="createrUser"
+								label="发布人"
+								align="center"
+								sortable
+								width="170">
+						</el-table-column>
+						<el-table-column
+								prop="status"
+								label="状态"
+								align="center"
+								width="100">
+						</el-table-column>
+						<el-table-column
+								label="操作"
+								align="center" key="slot">
+							<template #default="scope" style="float:right">
+								<el-button type="primary" plain size="small" @click="update(scope.row.id,3)" >编辑</el-button>
+								<el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--竞赛信息-->
+		</el-tabs>
+	</div>
+</div>
+<!--main-->
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+<!--经济形势-->
+<el-dialog title="当前经济形势" v-model="dialogTableVisible">
+	<div class="jieshuo">
+		<div class="jieshuo-img"><img src="../images/jieshuo.gif" width="200" height="360" alt=""/></div>
+		<div class="jieshuo-txt">
+			<h3>1. 国内经济</h3>
+		  <p>国内经济增长持续趋缓，且近期弱势特征明显，预计通货膨胀率将由4%降至3.5%左右。</p>
+			<h3>2. 金融政策及国内金融市场状况</h3>
+			<p>再过去几个阶段，中央银行实行的高度紧缩的货币政策的影响现在开始显现。国内利率下降，货币市场利率反映更为强烈。收益曲线在两年中将首次出现平稳局面。
+预计储蓄率增长，贷款需求下降。债券利率的趋势也将和市场利率同步。</p>
+			<h3>3. 全球经济和国际金融市场</h3>
+			<p>全球经济趋势以极端的不稳定性为特征。</p>
+		</div>
+	</div>
+</el-dialog>	
+<!--经济形势-->
+</body>
+
+<script>
+	var Main = {
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//表格
+				tableData: [],
+				tab:{},
+				// pageNum: 1,  //当前页
+				pageSize: 5, //每页记录数
+				total: 20, //总记录数
+				form: {
+					pageNum: '1',
+					pageSize: '5',
+					total:'20'
+				},
+				selectedData: [],
+				//导航
+				activeIndex: '5',
+				//tabs
+				activeName: 'first',
+				//选择器
+				options: [{
+					value: '选项1',
+					label: '选项1'
+				}, {
+					value: '选项2',
+					label: '选项2'
+				}, {
+					value: '选项3',
+					label: '选项3'
+				}, {
+					value: '选项4',
+					label: '选项4'
+				}, {
+					value: '选项5',
+					label: '选项5'
+				}],
+				value: '',
+				//分页
+				currentPage1: 5,
+				currentPage2: 5,
+				currentPage3: 5,
+				currentPage4: 4,
+				//日期快捷选项
+				shortcuts: [{
+					text: '最近一周',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+						return [start, end]
+					})(),
+				}, {
+					text: '最近一个月',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+						return [start, end]
+					})(),
+				}, {
+					text: '最近三个月',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+						return [start, end]
+					})(),
+				}],
+				value1: '',
+				value2: '',
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		methods: {
+			//tab
+			formatter(row, column) {
+				return row.address;
+			},
+			handleClick(tab, event) {
+				this.queryData(null,tab.paneName)
+			},
+			//分页
+			handleSizeChange(val) {
+				console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				console.log(`当前页: ${val}`);
+			},
+			// 页码改变
+			changePage(pageNum) {
+
+				this.form.pageNum = pageNum;
+				this.queryData(null,this.activeName);
+			},
+			//查询
+			queryData(messageName,paneName){
+				// console.log(this.activeName)
+				let that = this
+				let form = this.form
+				if("first"==paneName||null==paneName){
+					form.messageType = 1
+				}
+				if("second"==paneName){
+					form.messageType = 2
+				}
+				if("third"==paneName){
+					form.messageType = 3
+				}
+				form.messageName = messageName
+				// console.log(form)
+				axios({
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					method:'post',
+					url:'tMessage/page/query',//相对路径即可，不用加/service
+					data:form,
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.status==200){
+						let data = resp.data
+						// this.total = data.total
+						//  console.log("data=",data)
+						that.form = data.data
+						that.tableData = data.data.list
+						// console.log("form=",that.form)
+						// console.log("fileData=",that.fileData)
+					}
+				})
+			},
+			//删除文件
+			// deleteMessage(id){
+			// 	let that = this
+			// 	that.$confirm('确定要删除吗?', '提示', {
+			// 		confirmButtonText: '确定',
+			// 		cancelButtonText: '取消',
+			// 		type: 'warning'
+			// 	}).then(() => {
+			// 		let params = new URLSearchParams()
+			// 		params.append('id', id)
+			// 		axios({
+			// 			method: 'get',
+			// 			url: 'tMessage/delete',//相对路径即可，不用加/service
+			// 			params: params,
+			// 			responseType: 'json',
+			// 		}).then(function (resp) {
+			// 			if (resp.status == 200) {
+			// 				let message = '删除成功'
+			// 				let type = "success"
+			// 				that.$message({
+			// 					showClose: true,
+			// 					message: message,
+			// 					type: type
+			// 				});
+			// 				that.queryData();
+			// 			}
+			// 		})
+			// 	}).catch(() => {
+			// 	});
+			// },
+			//批量删除文件
+			handleDelete(id) {
+				let that = this;
+				that.$confirm('确定要删除吗?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					let vals = this.selectedData;
+					let ids =new Array();
+					ids.push(id)
+					for (let i = 0; i <vals.length; i++) {
+						ids.push(vals[i].id)
+					}
+					axios({
+						method: 'post',
+						url: 'tMessage/deleteByIds',//相对路径即可，不用加/service
+						data: ids,
+						responseType: 'json',
+					}).then(function (resp) {
+						if (resp.status == 200) {
+							let message = '删除成功'
+							let type = "success"
+							that.$message({
+								showClose: true,
+								message: message,
+								type: type
+							});
+							that.queryData();
+						}
+					})
+				}).catch(() => {
+				});
+			},
+			update(id,messageType) {
+				window.location.href ='js_xgxx?id='+id+"&messageType="+messageType
+			},
+			//发布消息
+			release(messageType){
+				window.location.href ='js_xzxx?messageType='+messageType
+			},
+			deleteRow(index, rows) {
+				rows.splice(index, 1);
+			},
+			handleSelectionChange(data) {
+				this.selectedData = data;
+			},
+		},
+		mounted:function(){
+			this.queryData()
+		},
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

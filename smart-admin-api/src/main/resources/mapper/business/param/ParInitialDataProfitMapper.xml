@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParInitialDataProfitDao">
+
+    <resultMap id="ParInitialDataProfitVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParInitialDataProfitVO"></resultMap>
+    <resultMap id="ParInitialDataProfitExcelVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParInitialDataProfitExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParInitialDataProfitVO">
+        select
+          id,
+          current_stage_id,
+          interest_income,
+          financial_organization_income,
+          service_charge_income,
+          total_revenues,
+          interest_expense,
+          financial_organization_expense,
+          service_charge_expense,
+          expense_revenues,
+          people_costs,
+          addition_people_costs,
+          other_people_costs,
+          fixed_assets_depreciation,
+          other_business_costs,
+          total_operating_expenses,
+          income_investment,
+          operating_profit,
+          subtract_bus_tax_surch,
+          add_nonbus_income,
+          subtract_nonbus_expend,
+          deduct_asset_impairment_before_total_profit,
+          subtract_asset_reserve_expense,
+          deduct_asset_impairment_after_total_profit,
+          subtract_income_tax,
+          retained_profits
+        from par_initial_data_profit
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParInitialDataProfitExcelVO">
+        select
+           id,
+           current_stage_id,
+           interest_income,
+           financial_organization_income,
+           service_charge_income,
+           total_revenues,
+           interest_expense,
+           financial_organization_expense,
+           service_charge_expense,
+           expense_revenues,
+           people_costs,
+           addition_people_costs,
+           other_people_costs,
+           fixed_assets_depreciation,
+           other_business_costs,
+           total_operating_expenses,
+           income_investment,
+           operating_profit,
+           subtract_bus_tax_surch,
+           add_nonbus_income,
+           subtract_nonbus_expend,
+           deduct_asset_impairment_before_total_profit,
+           subtract_asset_reserve_expense,
+           deduct_asset_impairment_after_total_profit,
+           subtract_income_tax,
+           retained_profits
+        from par_initial_data_profit
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParInitialDataProfitExcelVO">
+        select
+         id,
+         current_stage_id,
+         interest_income,
+         financial_organization_income,
+         service_charge_income,
+         total_revenues,
+         interest_expense,
+         financial_organization_expense,
+         service_charge_expense,
+         expense_revenues,
+         people_costs,
+         addition_people_costs,
+         other_people_costs,
+         fixed_assets_depreciation,
+         other_business_costs,
+         total_operating_expenses,
+         income_investment,
+         operating_profit,
+         subtract_bus_tax_surch,
+         add_nonbus_income,
+         subtract_nonbus_expend,
+         deduct_asset_impairment_before_total_profit,
+         subtract_asset_reserve_expense,
+         deduct_asset_impairment_after_total_profit,
+         subtract_income_tax,
+         retained_profits
+        from par_initial_data_profit
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from par_initial_data_profit where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_initial_data_profit where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

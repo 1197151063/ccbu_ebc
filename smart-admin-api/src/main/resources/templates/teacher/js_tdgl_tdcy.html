@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+
+<div class="form-bg">
+	<div class="form-title">
+		<div class="form-title-left"><img src="../images/form_title.png" alt=""/>添加团队成员</div>
+		<div class="form-title-right">
+			<el-button type="primary" size="small" @click="submit(1)" >提交</el-button>
+			<el-button type="primary" plain size="small" @click="submit(0)">保存</el-button>
+			<el-button size="small" onclick="window.location.href ='js_tdgl'">返回</el-button></div>
+	</div>
+	<!--团队基本信息-->
+	<div class="team-content">
+		<el-form :model="form" ref="form" :hide-required-asterisk="false" show-message :rules="">
+		<ul>
+			<li><img src="../photo/user_photo1.png" alt=""/></li>
+			<li><el-button plain size="small">上传</el-button></li>
+		</ul>
+		<dl>
+			<dt>姓名：</dt>
+			<dd>
+				<el-input
+						  type="text"
+						  placeholder="请输入内容"
+						  v-model="form.actualName"
+						  show-word-limit
+						  style="width:30rem"
+						  size="small">
+				</el-input>
+			</dd>
+		</dl>
+		<dl>
+			<dt>用户名：</dt>
+			<dd>
+				<el-input
+						  type="text"
+						  placeholder="请输入内容"
+						  v-model="form.loginName"
+						  show-word-limit
+						  style="width:30rem"
+						  size="small">
+				</el-input>
+			</dd>
+		</dl>
+		<dl>
+			<dt>邮箱：</dt>
+			<dd>
+				<el-input
+						  type="text"
+						  placeholder="请输入内容"
+						  v-model="form.email"
+						  show-word-limit
+						  style="width:30rem"
+						  size="small">
+				</el-input>
+			</dd>
+		</dl>
+		<dl>
+			<dt>电话：</dt>
+			<dd>
+				<el-input
+						  type="text"
+						  placeholder="请输入内容"
+						  v-model="form.phone"
+						  show-word-limit
+						  style="width:30rem"
+						  size="small">
+				</el-input>
+			</dd>
+		</dl>
+		<dl>
+			<dt>团队：</dt>
+			<dd>
+				<el-select v-model="form.departmentId" placeholder="请选择团队" size="small" style="width:30rem">
+					<el-option
+							   v-for="item in options"
+							   :key="item.value"
+							   :label="item.label"
+							   :value="item.value">
+					</el-option>
+				</el-select>
+			</dd>
+		</dl>
+		</el-form>
+	</div>
+	<!--团队基本信息-->
+</div>
+<!--main-->
+
+<!--footer-->
+<!--<div class="footer">-->
+<!--	<p>copyright 2020 博明信德版权所有 ALL Rights 京ICP备1301234号-1</p>-->
+<!--	<p>邮 箱：bmxd@smart-soft.cn      详情咨询：400-6500-210</p>-->
+<!--</div>-->
+<!--footer-->
+<div th:include="include/footer"></div>
+</body>
+<script>
+	//输入框
+	const { defineComponent, ref } = Vue
+	var Main = {
+		
+		//输入框
+		setup() {
+			return {
+				text: ref(''),
+				textarea: ref('')
+			}
+		},
+		
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				
+				//导航
+				activeIndex: '2',
+				//tabs
+				activeName: 'first',
+				form: {
+					id:'',
+					actualName:'',
+					loginName:'',
+					email:'',
+					phone:'',
+					departmentId:'',
+					isDisabled:'0',
+					positionIdList:[15]
+				},
+				//选择器
+				options: [{
+					value: '选项1',
+					label: '选项1'
+				}],
+				value: '',
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		mounted:function(){
+			this.queryData()
+			this.queryTeamData()
+		},
+		methods: {
+			queryData(){
+				let that = this
+				let id=	'[[${empId}]]'
+				let params= new URLSearchParams()
+				if(id!=''){
+					params.append('id',id)
+				}else {
+					params.append('id',null)
+				}
+
+				axios({
+					method:'get',
+					url:'employee/queryData',//相对路径即可，不用加/service
+					params:params,
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.data.data!=null){
+						that.form = resp.data.data
+						console.log(that.form)
+					}
+				})
+			},
+			//查询团队
+			queryTeamData(){
+				let that = this
+				let proId=	'[[${proId}]]'
+				let params= new URLSearchParams()
+				params.append('proId',proId)
+				axios({
+					method:'get',
+					url:'team/query',//相对路径即可，不用加/service
+					params:params,
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.data.data!=null){
+						let data=resp.data.data
+						that.options = []
+						for (let i = 0; i < data.length; i++) {
+							let temp = {value:'',label:''}
+							temp.value = data[i].id
+							temp.label = data[i].name
+							that.options.push(temp)
+						}
+						console.log(resp.data.data)
+					}
+				})
+			},
+			submit(type1){
+				let that =this
+				let form = this.form
+				axios({
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					method: 'post',
+					url: 'student/add',//相对路径即可，不用加/service
+					data: form,
+					responseType: 'json',
+				}).then(function (resp) {
+					if (resp.status == 200) {
+						let message
+						if(type1==0){
+							message = '保存成功'
+						}
+						if(type1==1){
+							message = '提交成功'
+						}
+						let type = "success"
+						that.$message({
+							showClose: true,
+							message: message,
+							type: type
+						});
+						setTimeout( function(){
+							window.location.href ='js_tdgl'
+						}, 5 * 100 );//延迟500毫米
+					}
+				})
+
+			}
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+
+
+</script>
+
+
+</html>

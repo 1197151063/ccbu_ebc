@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--header-->
+<!--main-->
+<!--nav-->
+<!--main-->
+<div class="form-bg">
+	<div class="form-title">
+		<div class="form-title-left"><img src="../images/form_title.png" alt=""/>发布消息</div>
+		<div class="form-title-right">
+			<el-button type="primary" size="small"  @click="submit(1)">提交</el-button>
+			<el-button type="primary" plain size="small" @click="submit(0)">保存</el-button>
+			<el-button size="small" onclick="window.location.href ='home'">返回</el-button></div>
+	</div>
+	<div class="form-main">
+		<el-form :model="form" ref="form" :hide-required-asterisk="false" show-message :rules="">
+		<el-row>
+			<el-col :span="24">
+				<dl>
+					<dt>消息标题</dt>
+					<dd>
+						<el-input
+								  type="text"
+								  placeholder="请输入内容"
+								  v-model="form.messageName"
+								  maxlength="30"
+								  show-word-limit
+								  style="width:70rem"
+								  size="small">
+						</el-input>
+					</dd>
+				</dl>
+			</el-col>
+		</el-row>
+		<el-row>
+			<el-col :span="12">
+				<dl>
+					<dt>发布人</dt>
+					<dt>
+						[[${loginDetailVO.actualName}]]
+					</dt>
+				</dl>
+			</el-col>
+			<el-col :span="12">
+				<dl>
+					<dt>消息类型</dt>
+					<dt>
+						[[${messageTypeName}]]
+					</dt>
+				</dl>
+			</el-col>
+		</el-row>
+		<el-row>
+			<el-col :span="12">
+				<dl>
+					<dt>发布方式</dt>
+					<dd>
+						<el-select v-model="form.releaseMode" placeholder="自动发布" size="small">
+							<el-option
+									   v-for="item in options"
+									   :key="item.value"
+									   :label="item.label"
+									   :value="item.value">
+							</el-option>
+						</el-select>
+					</dd>
+				</dl>
+			</el-col>
+			<el-col :span="12">
+				<dl>
+					<dt>发布时间</dt>
+					<dd>
+						<el-date-picker
+										v-model="value2"
+										type="daterange"
+										unlink-panels
+										range-separator="至"
+										start-placeholder="开始日期"
+										end-placeholder="结束日期"
+										:shortcuts="shortcuts"
+										size="small">
+						</el-date-picker>
+					</dd>
+				</dl>
+			</el-col>
+		</el-row>
+		<el-row>
+			<el-col :span="12">
+				<dl>
+					<dt>发布范围</dt>
+					<dd>
+						<el-select v-model="form.team" placeholder="全部团队" size="small">
+							<el-option
+									   v-for="item in optionsTeam"
+									   :key="item.value"
+									   :label="item.label"
+									   :value="item.value">
+							</el-option>
+						</el-select>
+					</dd>
+				</dl>
+			</el-col>
+		</el-row>
+		<el-row>
+			<el-col :span="24">
+				<dl>
+					<dt>消息内容</dt>
+					<dd>
+						<el-input
+								  type="textarea"
+								  placeholder="请输入内容"
+								  v-model="form.content"
+								  maxlength="200"
+								  show-word-limit
+								  >
+						</el-input>
+					</dd>
+				</dl>
+			</el-col>
+		</el-row>
+		</el-form>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div class="footer">
+
+	<div th:include="include/footer"></div>
+
+</div>
+</body>
+
+
+
+<script>
+	//输入框
+	const { defineComponent, ref } = Vue
+
+
+	var Main = {
+
+		//输入框
+		setup() {
+			return {
+				text: ref(''),
+				textarea: ref('')
+			}
+		},
+		
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//导航
+				activeIndex: '5',
+				form: {
+					id:'',
+					messageName:'',
+					actualName:'',
+					messageType:'',
+					content:'',
+					status:0,
+					team:'',
+					releaseMode:'',
+					releaseTime:'',
+					endTime:'',
+					createrUser:''
+				},
+				type:'',
+				//选择器
+				options: [{
+					value: '自动发布',
+					label: '自动发布'
+				}, {
+					value: '手动发布',
+					label: '手动发布'
+				}],
+				optionsTeam: [{
+					value: '全部团队',
+					label: '全部团队'
+				}, {
+					value: '团队1',
+					label: '团队1'
+				}, {
+					value: '团队2',
+					label: '团队2'
+				}],
+				value: '',
+				//日期快捷选项
+				shortcuts: [{
+					text: '最近一周',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+						return [start, end]
+					})(),
+				}, {
+					text: '最近一个月',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+						return [start, end]
+					})(),
+				}, {
+					text: '最近三个月',
+					value: (() => {
+						const end = new Date()
+						const start = new Date()
+						start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+						return [start, end]
+					})(),
+				}],
+				value1: '',
+				value2: '',
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		mounted:function(){
+			this.queryData()
+		},
+		methods: {
+			//查询已保存或填写的数据
+			queryData(){
+				let that = this
+				let id=	'[[${id}]]'
+				let params= new URLSearchParams()
+				if(id!=''){
+					params.append('id',id)
+				}else {
+					params.append('id',null)
+				}
+
+				axios({
+					method:'get',
+					url:'tMessage/queryData',//相对路径即可，不用加/service
+					params:params,
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.data.data!=null){
+						that.form = resp.data.data
+					}
+				})
+			},
+			submit(type1){
+				let that =this
+				let form = this.form
+				form.id=[[${id}]]
+				form.createrUser=[[${loginDetailVO.id}]]
+				form.messageType=[[${messageType}]]
+				form.releaseTime=that.value2[0]
+				let begin = new Date(form.releaseTime);
+				form.releaseTime=begin.getFullYear() + '-' + (begin.getMonth() + 1)
+						+ '-' + begin.getDate() + ' ' + begin.getHours() + ':' + begin.getMinutes() + ':' + begin.getSeconds();
+				if(form.releaseTime=="NaN-NaN-NaN NaN:NaN:NaN"){
+					form.releaseTime=null
+				}
+				form.endTime=that.value2[1]
+				let end = new Date(form.endTime);
+				form.endTime=end.getFullYear() + '-' + (end.getMonth() + 1)
+						+ '-' + end.getDate() + ' ' + end.getHours() + ':' + end.getMinutes() + ':' + end.getSeconds();
+				if(form.endTime=="NaN-NaN-NaN NaN:NaN:NaN"){
+					form.endTime=null
+				}
+				axios({
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					method: 'post',
+					url: 'tMessage/add',//相对路径即可，不用加/service
+					data: form,
+					responseType: 'json',
+				}).then(function (resp) {
+					if (resp.status == 200) {
+						let message
+						if(type1==0){
+							 message = '保存成功'
+						}
+						if(type1==1){
+							 message = '提交成功'
+						}
+						let type = "success"
+						that.$message({
+							showClose: true,
+							message: message,
+							type: type
+						});
+						setTimeout( function(){
+							window.location.href ='home'
+						}, 5 * 100 );//延迟500毫米
+					}
+				})
+
+			}
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

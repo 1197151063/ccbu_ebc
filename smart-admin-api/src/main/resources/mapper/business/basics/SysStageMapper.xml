@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.basics.dao.SysStageDao">
+
+    <resultMap id="SysStageVO" type="net.lab1024.smartadmin.module.business.basics.domain.vo.SysStageVO"></resultMap>
+    <resultMap id="SysStageExcelVO" type="net.lab1024.smartadmin.module.business.basics.domain.vo.SysStageExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="SysStageVO">
+        select
+          stage_id,
+          stage_name,
+          create_time,
+          delete_time,
+          sort,
+          stage_name_eng
+        from sys_stage
+        <where>
+            <if test="queryDTO.stageId != null">
+                AND stage_id = #{queryDTO.stageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="SysStageExcelVO">
+        select
+           stage_id,
+           stage_name,
+           create_time,
+           delete_time,
+           sort,
+           stage_name_eng
+        from sys_stage
+        <where>
+            <if test="queryDTO.stageId != null">
+                AND stage_id = #{queryDTO.stageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="SysStageExcelVO">
+        select
+         stage_id,
+         stage_name,
+         create_time,
+         delete_time,
+         sort,
+         stage_name_eng
+        from sys_stage
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="queryAllId" resultType="java.lang.Integer">
+        select stage_id from sys_stage
+    </select>
+
+    <select id="queryData" resultType="java.lang.String">
+        select
+         stage_name
+        from sys_stage
+        where stage_id = #{stageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from sys_stage where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from sys_stage where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

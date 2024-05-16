@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.decision.dao.DecMiddleCustodyDao">
+
+    <resultMap id="DecMiddleCustodyVO" type="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMiddleCustodyVO"></resultMap>
+    <resultMap id="DecMiddleCustodyExcelVO" type="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMiddleCustodyExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="DecMiddleCustodyVO">
+        select
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          custody_business_add,
+          guarantee_business_add,
+          custody_business_procedure,
+          guarantee_business_procedure,
+          first_underwrit_price_bond,
+          second_underwrit_price_bond,
+          third_underwrit_price_bond
+        from dec_middle_custody
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="DecMiddleCustodyExcelVO">
+        select
+           id,
+           current_project_id,
+           current_team_id,
+           current_stage_id,
+           custody_business_add,
+           guarantee_business_add,
+           custody_business_procedure,
+           guarantee_business_procedure,
+           first_underwrit_price_bond,
+           second_underwrit_price_bond,
+           third_underwrit_price_bond
+        from dec_middle_custody
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="DecMiddleCustodyExcelVO">
+        select
+         id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         custody_business_add,
+         guarantee_business_add,
+         custody_business_procedure,
+         guarantee_business_procedure,
+         first_underwrit_price_bond,
+         second_underwrit_price_bond,
+         third_underwrit_price_bond
+        from dec_middle_custody
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="query"
+            resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMiddleCustodyVO">
+        select
+         id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         custody_business_add,
+         guarantee_business_add,
+         custody_business_procedure,
+         guarantee_business_procedure,
+         first_underwrit_price_bond,
+         second_underwrit_price_bond,
+         third_underwrit_price_bond
+        from dec_middle_custody
+         where current_project_id = #{currentProjectId} and current_team_id = #{currentTeamId} and current_stage_id = #{currentStageId}
+    </select>
+
+    <select id="queryData"
+            resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMiddleCustodyVO">
+                select
+         id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         custody_business_add,
+         guarantee_business_add,
+         custody_business_procedure,
+         guarantee_business_procedure,
+         first_underwrit_price_bond,
+         second_underwrit_price_bond,
+         third_underwrit_price_bond
+        from dec_middle_custody
+         where current_project_id = #{currentProjectId} and current_stage_id = #{currentStageId}
+    </select>
+
+    <select id="queryDataAndStatus"
+            resultType="net.lab1024.smartadmin.module.business.decision.domain.vo.DecMiddleCustodyVO">
+            SELECT
+                *
+            FROM
+                dec_middle_custody
+            WHERE
+            current_project_id = #{currentProjectId}
+            AND current_team_id = #{currentTeamId}
+            AND current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from dec_middle_custody where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from dec_middle_custody where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteData">
+        delete from dec_middle_custody where current_project_id = #{currentProjectId} and current_team_id = #{currentTeamId} and current_stage_id = #{currentStageId}
+    </delete>
+
+</mapper>

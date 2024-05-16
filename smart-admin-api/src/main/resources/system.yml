@@ -1,0 +1,12 @@
+#系统名称
+system.properties.title=卓越银行家俱乐部
+#系统版权
+system.properties.copyright= 2021 中国建设银行
+#系统ICP备案
+system.properties.icpsecurity=京ICP备13030780号
+#系统公网备案
+system.properties.plcecurity=110102000450
+#运维支持邮箱
+system.properties.hotmail=bmxd@smart-soft.cn
+#运维支持电话
+system.properties.hotphone=400-6500-210

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8">
+<title>卓越银行家俱乐部</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<script th:src="@{/vue/vue.global.js}"></script>
+<script th:src="@{/element-plus/lib/index.full.js}"></script>
+<script type="text/javascript" th:src="@{/echarts/echarts.min.js}"></script>
+<link rel="stylesheet" th:href="@{/element-plus/lib/theme-chalk/index.css}">
+<link th:href="@{/css/zyyhjjlb.css}" rel="stylesheet" type="text/css">
+</head>
+
+<body id="index" class="bg">
+<!--在线交流-->
+<div class="zxjl"><a href="#"><img  th:src="@{/images/zxjl.png}" alt=""/></a></div>
+<!--在线交流-->
+<!--header-->
+<div class="header">
+	<div class="header-logo"><img  th:src="@{/images/login_logo.png}" alt=""/></div>
+	<div class="header-title">卓越银行家俱乐部</div>
+	<ul class="header-nav">
+		<li>用户名</li>
+		<li><el-avatar :size="40" :src="circleUrl"></el-avatar></li>
+		<li>
+			<el-dropdown trigger="click">
+				<span class="el-dropdown-link"><i class="el-icon-s-fold el-icon--right"></i></span>
+				<template #dropdown>
+					<el-dropdown-menu>
+						<el-dropdown-item icon="el-icon-document-copy"><a  th:href="@{xy_yhxx}">用户信息</a></el-dropdown-item>
+						<el-dropdown-item icon="el-icon-document-copy"><a href="teacher/js_index.html">教师端首页</a></el-dropdown-item>
+						<el-dropdown-item icon="el-icon-switch-button"><a th:href="@{logout}">退出</a></el-dropdown-item>
+					</el-dropdown-menu>
+				</template>
+			</el-dropdown>
+		</li>
+		<li><el-divider direction="vertical"></el-divider></li>
+		<li>
+			<el-badge is-dot class="item">
+				<el-link th:href="@{xy_yhxx}" :underline="false"><i class="el-icon-bell"></i></el-link>
+			</el-badge>
+		</li>
+		<li><el-divider direction="vertical"></el-divider></li>
+		<li>意见反馈</li>
+	</ul>
+</div>
+<!--header-->
+<!--nav-->
+<div class="nav">
+	<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+		<el-menu-item index="1"><a th:href="@{xy_index}" >首页</a></el-menu-item>
+		<el-menu-item index="2"><a th:href="@{xy_cdk}" >存贷款</a></el-menu-item>
+		<el-menu-item index="3"><a th:href="@{xy_tzyw}" >投资业务</a></el-menu-item>
+		<el-menu-item index="4"><a th:href="@{xy_zjyw}" >中间业务</a></el-menu-item>
+		<el-menu-item index="5"><a th:href="@{xy_rshq}" >人事后勤</a></el-menu-item>
+		<el-menu-item index="6"><a th:href="@{xy_scyx}" >市场营销</a></el-menu-item>
+		<el-menu-item index="7"><a th:href="@{xy_cwgl}" >财务管理</a></el-menu-item>
+		<el-menu-item index="8"><a th:href="@{xy_zsk}" >知识库</a></el-menu-item>
+		<el-button class="nav-right" type="text" icon="el-icon-s-data" @click="dialogTableVisible=true">查看当前经济形势</el-button>
+	</el-menu>
+</div>
+<!--nav-->
+<!--main-->
+<div class="main">
+	<div class="breadcrumb">
+		<el-breadcrumb separator="-">
+			<el-breadcrumb-item :to="{ path: '/' }"><a href="xy_index.html">首页</a></el-breadcrumb-item>
+			<el-breadcrumb-item :to="{ path: '/' }"><a href="xy_zsk.html">知识库</a></el-breadcrumb-item>
+			<el-breadcrumb-item><img  th:src="@{/images/form_title.png}" alt=""/>详情页</el-breadcrumb-item>
+		</el-breadcrumb>
+	</div>
+	<div class="content-main">
+		<div class="content-title">变革时代的银行行长，追求卓越的领导力 课程培训</div>
+		<ul class="content-list">
+			<li>文件大小：2.39mb</li>
+			<li>2021年6月20日上传</li>
+			<li><el-button type="primary" size="small">下载</el-button></li>
+		</ul>
+		<div class="content-txt">笔者曾国平在全国作过许多场关于管理和领导方面的演讲,特别是作过多场领导力方面的演讲,听众有省部级干部,将军,厅局级干部,处级干部,正副老总,学校和医院的领导者,等等.其实,他从他们身上学到了很多领导学的理论与实际操作的东西,比他看的几十本领导学方面的书还管用,这些是无字之书,往往无字胜有字啊! 于是,笔者把从书本上学到的领导科学理论知识,从许多领导身上读到的无字之书的知识,把我2007年3月在重庆大学出版社出版的《领导与智商情商》一书加以整理,特别是把笔者这许多年来所作的领导力方面的演讲稿整理,综合起来,形成了《追求卓越领导力》。领导艺术是一门永远都有遗憾的艺术;写作书籍也是一种永远都有遗憾的活儿。无论怎样,现在把《追求卓越领导力》奉献给了读者,敬请读者指正。《追求卓越领导力》的写作过程中,吸收了学术界关于领导力方面的成果,吸收了一些学者的成熟理论和观点。</div>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->	
+<div class="footer">
+	<p>copyright 2020 博明信德版权所有 ALL Rights 京ICP备1301234号-1</p>
+	<p>邮 箱：bmxd@smart-soft.cn      详情咨询：400-6500-210</p>
+</div>
+<!--footer-->
+</body>
+
+<script>
+	var Main = {
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//导航
+				activeIndex: '8'
+			}
+		},
+		methods: {
+		}
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+	
+	
+</script>
+
+	
+</html>

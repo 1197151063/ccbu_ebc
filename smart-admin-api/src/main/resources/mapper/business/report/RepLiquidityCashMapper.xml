@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepLiquidityCashDao">
+
+    <resultMap id="RepLiquidityCashVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepLiquidityCashVO"></resultMap>
+    <resultMap id="RepLiquidityCashExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepLiquidityCashExcelVO"></resultMap>
+    <sql id="query_rep_liquidity_cash">
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          interbank_deposit,
+          inter_bank,
+          short_deposit,
+          long_deposit,
+          short_savings_deposit,
+          long_savings_deposit,
+          total_short_debt,
+          cash_liquidity_requirements,
+          solvency,
+          cash_solvency
+    </sql>
+    <select id="queryByPage" resultMap="RepLiquidityCashVO">
+        select
+          <include refid="query_rep_liquidity_cash"/>
+        from rep_liquidity_cash
+        <where>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepLiquidityCashExcelVO">
+        select
+           <include refid="query_rep_liquidity_cash"/>
+        from rep_liquidity_cash
+        <where>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepLiquidityCashExcelVO">
+        select
+        <include refid="query_rep_liquidity_cash"/>
+        from rep_liquidity_cash
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectLiquidityCashStageIdPar" resultMap="RepLiquidityCashVO">
+        select
+         id,
+         current_stage_id,
+         interbank_deposit,
+         inter_bank,
+         short_deposit,
+         long_deposit,
+         short_savings_deposit,
+         long_savings_deposit,
+         total_short_debt,
+         cash_liquidity_requirements,
+         solvency,
+         cash_solvency
+        from par_initial_data_liquidity_cash
+        where current_stage_id = #{currentStageId};
+    </select>
+    <select id="selectLiquidityCashStageIdRep" resultMap="RepLiquidityCashVO">
+        select
+        <include refid="query_rep_liquidity_cash"/>
+        from rep_liquidity_cash
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId};
+    </select>
+    <select id="query" resultMap="RepLiquidityCashVO">
+        select
+        <include refid="query_rep_liquidity_cash"/>
+        from rep_liquidity_cash
+        <where>
+            1=1
+            <if test="currentProjectId!=null">
+                and  current_project_id = #{currentProjectId}
+            </if>
+            <if test="currentTeamId!=null">
+                and current_team_id = #{currentTeamId}
+            </if>
+            <if test="currentStageId!=null">
+                and current_stage_id = #{currentStageId};
+            </if>
+        </where>
+    </select>
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepLiquidityCashExcelVO">
+        select
+         r.id,
+         r.current_stage_id,
+         t.name,
+         r.interbank_deposit,
+         r.inter_bank,
+         r.short_deposit,
+         r.long_deposit,
+         r.short_savings_deposit,
+         r.long_savings_deposit,
+         r.total_short_debt,
+         r.cash_liquidity_requirements,
+         r.solvency,
+         r.cash_solvency
+        from rep_liquidity_cash r left join t_department t on r.current_team_id=t.id
+                where r.current_Project_id = #{currentProjectId}
+        and r.current_stage_id = #{currentStageId}
+    </select>
+    <delete id="deleteById">
+        delete from rep_liquidity_cash where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_liquidity_cash where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

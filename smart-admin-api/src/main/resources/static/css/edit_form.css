@@ -1,0 +1,19 @@
+.no-open-service{
+    color: #fff;
+    border-bottom: 0px;
+}
+.el-form-item{
+    margin-bottom: 0px;
+}
+.el-form-item__content {
+    line-height: 20px !important;
+    position: relative;
+    font-size: 14px;
+}
+.cqtz .el-input__inner {
+    border: 1px solid #bbb6b6;
+    padding: 0px;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+}

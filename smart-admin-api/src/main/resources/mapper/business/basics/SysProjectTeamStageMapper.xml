@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.basics.dao.SysProjectTeamStageDao">
+
+    <resultMap id="SysProjectTeamStageVO" type="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectTeamStageVO"></resultMap>
+    <resultMap id="SysProjectTeamStageExcelVO" type="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectTeamStageExcelVO"></resultMap>
+
+    <insert id="insertProjectTeamStage">
+        INSERT INTO sys_project_team_stage (
+        pro_id,
+        team_id,
+        stage_id,
+        business_name,
+        status
+        )
+        VALUES
+            (#{proId},#{teamId},#{stageId},#{businessName},#{status})
+    </insert>
+
+    <update id="updateStatus">
+        UPDATE sys_project_team_stage
+        set status = #{status}
+        WHERE pro_id =#{proId} and team_id =#{teamId} and stage_id =#{stageId} and business_name =#{businessName}
+    </update>
+
+    <select id="queryByPage" resultMap="SysProjectTeamStageVO">
+        select
+          id,
+          pro_id,
+          team_id,
+          stage_id,
+          business_name,
+          status
+        from sys_project_team_stage
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="SysProjectTeamStageExcelVO">
+        select
+           id,
+           pro_id,
+           team_id,
+           stage_id,
+           business_name,
+           status
+        from sys_project_team_stage
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="SysProjectTeamStageExcelVO">
+        select
+         id,
+         pro_id,
+         team_id,
+         stage_id,
+         business_name,
+         status
+        from sys_project_team_stage
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectByStatus" resultMap="SysProjectTeamStageVO">
+        select  pro_id,
+        team_id,
+        stage_id,
+        business_name,
+        status from sys_project_team_stage
+        where pro_id=#{currentProjectId}  and stage_id=#{currentStageId}
+    </select>
+
+    <select id="queryStatus" resultType="java.lang.Integer">
+         select status from sys_project_team_stage
+        where pro_id=#{proId} and team_id=#{teamId} and stage_id=#{stageId} and business_name=#{businessName}
+    </select>
+    <select id="selectCurrentStageBusiness"
+            resultType="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectTeamStageVO">
+        SELECT
+            ssb.stage_id,
+            ssb.business_name
+        FROM
+            sys_stage_business ssb
+        WHERE ssb.stage_id =
+            ( SELECT sps.stage_id FROM sys_project_stage sps WHERE sps.pro_id = #{proId} AND sps.status = 1 )
+    </select>
+
+    <delete id="deleteById">
+        delete from sys_project_team_stage where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from sys_project_team_stage where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+    <delete id="deleteProjectTeamStage">
+        delete from sys_project_team_stage where pro_id = #{projectId} and team_id = #{id}
+    </delete>
+    <select id="selectStageBusiness" resultMap="SysProjectTeamStageVO">
+        SELECT
+            ssb.stage_id,
+            ssb.business_name,
+            sps.status
+        FROM
+            sys_stage_business ssb LEFT JOIN sys_project_stage sps
+         on
+             ssb.stage_id = sps.stage_id and sps.pro_id = #{proId}
+    </select>
+
+    <select id="querySubmitStatus" resultType="java.lang.Integer">
+        SELECT
+             STATUS
+        FROM
+           sys_project_team_stage
+            WHERE
+            pro_id = #{currentProjectId}
+            AND team_id = #{currentTeamId}
+            AND stage_id = #{currentStageId}
+            AND business_name = #{businessName}
+    </select>
+
+    <select id="queryBeforeStage" resultType="net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectTeamStageVO">
+        select
+        s.pro_id,
+        s.team_id,
+        t.name,
+        s.stage_id,
+        s.business_name,
+        s.status
+        from sys_project_team_stage s LEFT JOIN t_department t on s.team_id = t.id
+        where s.pro_id=#{sysBeginStageDTO.currentProjectId} and s.stage_id=#{sysBeginStageDTO.currentStageId} and s.status = 0
+    </select>
+
+</mapper>

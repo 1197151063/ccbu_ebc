@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParGencyBondDiscountDao">
+
+    <resultMap id="ParGencyBondDiscountVO"
+               type="net.lab1024.smartadmin.module.business.param.domain.vo.ParGencyBondDiscountVO"></resultMap>
+    <resultMap id="ParGencyBondDiscountExcelVO"
+               type="net.lab1024.smartadmin.module.business.param.domain.vo.ParGencyBondDiscountExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParGencyBondDiscountVO">
+        select
+        id,
+        current_stage_id,
+        bond_type,
+        discount
+        from par_gency_bond_discount
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParGencyBondDiscountExcelVO">
+        select
+        id,
+        current_stage_id,
+        bond_type,
+        discount
+        from par_gency_bond_discount
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParGencyBondDiscountExcelVO">
+        select
+        id,
+        current_stage_id,
+        bond_type,
+        discount
+        from par_gency_bond_discount
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryDiscount" resultType="java.lang.Integer">
+        select discount
+        from par_gency_bond_discount
+        where current_stage_id=#{currentStageId} and bond_type=#{bondType}
+    </select>
+
+    <delete id="deleteById">
+        delete from par_gency_bond_discount where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_gency_bond_discount where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

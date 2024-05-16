@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParPersonnelCostDao">
+
+    <resultMap id="ParPersonnelCostVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParPersonnelCostVO"></resultMap>
+    <resultMap id="ParPersonnelCostExcelVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParPersonnelCostExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParPersonnelCostVO">
+        select
+          id,
+          project,
+          loan_business,
+          deposit_business,
+          investment_business,
+          middle_business,
+          other_business
+        from par_personnel_cost
+        <where>
+            <if test="queryDTO.project != null and queryDTO.project != ''">
+                AND project = #{queryDTO.project}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParPersonnelCostExcelVO">
+        select
+           id,
+           project,
+           loan_business,
+           deposit_business,
+           investment_business,
+           middle_business,
+           other_business
+        from par_personnel_cost
+        <where>
+            <if test="queryDTO.project != null and queryDTO.project != ''">
+                AND project = #{queryDTO.project}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParPersonnelCostExcelVO">
+        select
+         id,
+         project,
+         loan_business,
+         deposit_business,
+         investment_business,
+         middle_business,
+         other_business
+        from par_personnel_cost
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryWages"
+            resultType="net.lab1024.smartadmin.module.business.param.domain.vo.ParPersonnelCostVO">
+        select
+         id,
+         project,
+         loan_business,
+         deposit_business,
+         investment_business,
+         middle_business,
+         other_business
+        from par_personnel_cost
+        where project= #{project}
+    </select>
+    <select id="queryAdditional"
+            resultType="net.lab1024.smartadmin.module.business.param.domain.vo.ParPersonnelCostVO">
+        select
+         loan_business
+        from par_personnel_cost
+        where project = "附加人员成本（%）"
+    </select>
+
+    <delete id="deleteById">
+        delete from par_personnel_cost where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_personnel_cost where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

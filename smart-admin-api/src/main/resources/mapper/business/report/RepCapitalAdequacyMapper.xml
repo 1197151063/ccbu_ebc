@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepCapitalAdequacyDao">
+
+    <resultMap id="RepCapitalAdequacyVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepCapitalAdequacyVO"></resultMap>
+    <resultMap id="RepCapitalAdequacyExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepCapitalAdequacyExcelVO"></resultMap>
+    <sql id="query_all_rep_capital_adequacy">
+        id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          property_risk,
+          cash,
+          due_central_bank,
+          deposit_interbank,
+          loan_trade,
+          short_mortgage_loan,
+          short_hypothecated_loan,
+          short_guarantee_loan,
+          short_credit_loan,
+          discount,
+          mlong_mortgage_loan,
+          mlong_hypothecated_loan,
+          mlong_guarantee_loan,
+          mlong_credit_loan,
+          current_investment_bond,
+          current_investment_stock,
+          long_debt_investment,
+          long_equity_investment,
+          fixed_assets,
+          intangible_assets,
+          other_assets,
+          total,
+          capital_adequacy_requirements,
+          capital_source_core_stock,
+          capital_source_core_capital_reserve,
+          capital_source_core_surplus_reserve,
+          capital_source_core_un_profit,
+          capital_source_loss_reserves,
+          capital_source_subord_bond,
+          capital_source_total,
+          capital_surplus_shortage
+    </sql>
+    <sql id="query_par_capital">
+        id,
+         current_stage_id,
+         property_risk,
+         cash,
+         due_central_bank,
+         deposit_interbank,
+         loan_trade,
+         short_mortgage_loan,
+         short_hypothecated_loan,
+         short_guarantee_loan,
+         short_credit_loan,
+         discount,
+         mlong_mortgage_loan,
+         mlong_hypothecated_loan,
+         mlong_guarantee_loan,
+         mlong_credit_loan,
+         current_investment_bond,
+         current_investment_stock,
+         long_debt_investment,
+         long_equity_investment,
+         fixed_assets,
+         intangible_assets,
+         other_assets,
+         total,
+         capital_adequacy_requirements,
+         capital_source_core_stock,
+         capital_source_core_capital_reserve,
+         capital_source_core_surplus_reserve,
+         capital_source_core_un_profit,
+         capital_source_loss_reserves,
+         capital_source_subord_bond,
+         capital_source_total,
+         capital_surplus_shortage
+    </sql>
+    <select id="queryByPage" resultMap="RepCapitalAdequacyVO">
+        select
+          <include refid="query_all_rep_capital_adequacy"/>
+        from rep_capital_adequacy
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentProjectId != null">
+                AND current_project_id = #{queryDTO.currentProjectId}
+            </if>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepCapitalAdequacyExcelVO">
+        select
+           <include refid="query_all_rep_capital_adequacy"/>
+        from rep_capital_adequacy
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentProjectId != null">
+                AND current_project_id = #{queryDTO.currentProjectId}
+            </if>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepCapitalAdequacyExcelVO">
+        select
+         <include refid="query_all_rep_capital_adequacy"/>
+        from rep_capital_adequacy
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectRepCapitalAdequacyPar" resultMap="RepCapitalAdequacyVO">
+        select
+         <include refid="query_par_capital"/>
+        from par_initial_data_capital_adequacy
+        where current_stage_id = #{currentStageId};
+    </select>
+    <select id="selectRepCapitalAdequacyRep" resultMap="RepCapitalAdequacyVO">
+        select
+         <include refid="query_all_rep_capital_adequacy"/>
+        from rep_capital_adequacy
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId};
+    </select>
+    <select id="query"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepCapitalAdequacyVO">
+        select
+         <include refid="query_all_rep_capital_adequacy"/>
+        from rep_capital_adequacy
+        where property_risk = "风险加权资产"
+        and current_project_id = #{currentProjectId}
+        and current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId};
+    </select>
+    <select id="queryCapitalPar"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepCapitalAdequacyVO">
+        select
+            <include refid="query_par_capital"/>
+        from par_initial_data_capital_adequacy
+        where property_risk = "风险加权资产(百万元)"
+        and current_stage_id = #{beforeCurrentStageId};
+    </select>
+
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepCapitalAdequacyExcelVO">
+        select
+          r.id,
+          r.current_project_id,
+          r.current_team_id,
+          r.current_stage_id,
+          t.name,
+          r.property_risk,
+          r.cash,
+          r.due_central_bank,
+          r.deposit_interbank,
+          r.loan_trade,
+          r.short_mortgage_loan,
+          r.short_hypothecated_loan,
+          r.short_guarantee_loan,
+          r.short_credit_loan,
+          r.discount,
+          r.mlong_mortgage_loan,
+          r.mlong_hypothecated_loan,
+          r.mlong_guarantee_loan,
+          r.mlong_credit_loan,
+          r.current_investment_bond,
+          r.current_investment_stock,
+          r.long_debt_investment,
+          r.long_equity_investment,
+          r.fixed_assets,
+          r.intangible_assets,
+          r.other_assets,
+          r.total,
+          r.capital_adequacy_requirements,
+          r.capital_source_core_stock,
+          r.capital_source_core_capital_reserve,
+          r.capital_source_core_surplus_reserve,
+          r.capital_source_core_un_profit,
+          r.capital_source_loss_reserves,
+          r.capital_source_subord_bond,
+          r.capital_source_total,
+          r.capital_surplus_shortage
+        from rep_capital_adequacy r left join t_department t on r.current_team_id=t.id
+                where r.current_Project_id = #{currentProjectId}
+        and r.current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_capital_adequacy where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_capital_adequacy where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

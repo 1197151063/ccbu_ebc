@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepMarketDataCustomerAccountDao">
+
+    <resultMap id="RepMarketDataCustomerAccountVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepMarketDataCustomerAccountVO"></resultMap>
+    <resultMap id="RepMarketDataCustomerAccountExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepMarketDataCustomerAccountExcelVO"></resultMap>
+    <sql id="query_rep_market_account">
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          customer_market_business_data,
+          account_type,
+          less_age,
+          between_age,
+          greater_age,
+          small_enterprise,
+          medium_enterprise,
+          major_enterprise,
+          public_institution,
+          account_sum
+    </sql>
+    <select id="queryByPage" resultMap="RepMarketDataCustomerAccountVO">
+        select
+            <include refid="query_rep_market_account"/>
+        from rep_market_data_customer_account
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentProjectId != null">
+                AND current_project_id = #{queryDTO.currentProjectId}
+            </if>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepMarketDataCustomerAccountExcelVO">
+        select
+        <include refid="query_rep_market_account"/>
+        from rep_market_data_customer_account
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentProjectId != null">
+                AND current_project_id = #{queryDTO.currentProjectId}
+            </if>
+            <if test="queryDTO.currentTeamId != null">
+                AND current_team_id = #{queryDTO.currentTeamId}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepMarketDataCustomerAccountExcelVO">
+        select
+        <include refid="query_rep_market_account"/>
+        from rep_market_data_customer_account
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectMarDatCusAccPar" resultMap="RepMarketDataCustomerAccountVO">
+        select
+         id,
+         current_stage_id,
+         customer_market_business_data,
+         account_type,
+         less_age,
+         between_age,
+         greater_age,
+         small_enterprise,
+         medium_enterprise,
+         major_enterprise,
+         public_institution,
+         account_sum
+        from par_initial_data_market_customer_account
+        where current_stage_id = #{currentStageId};
+    </select>
+    <select id="selectMarDatCusAccRep" resultMap="RepMarketDataCustomerAccountVO">
+        select
+        <include refid="query_rep_market_account"/>
+        from rep_market_data_customer_account
+        where current_team_id = #{currentTeamId}
+        and current_stage_id = #{currentStageId};
+    </select>
+
+    <select id="queryExportData"
+            resultType="net.lab1024.smartadmin.module.business.report.domain.vo.RepMarketDataCustomerAccountExcelVO">
+         select
+          r.id,
+          r.current_project_id,
+          r.current_team_id,
+          r.current_stage_id,
+          t.name,
+          r.customer_market_business_data,
+          r.account_type,
+          r.less_age,
+          r.between_age,
+          r.greater_age,
+          r.small_enterprise,
+          r.medium_enterprise,
+          r.major_enterprise,
+          r.public_institution,
+          r.account_sum
+        from rep_market_data_customer_account r left join t_department t on r.current_team_id=t.id
+           where r.current_Project_id = #{currentProjectId}
+        and r.current_stage_id = #{currentStageId};
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_market_data_customer_account where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_market_data_customer_account where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

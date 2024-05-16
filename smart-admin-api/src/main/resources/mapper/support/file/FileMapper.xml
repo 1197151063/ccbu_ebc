@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.support.file.FileDao">
+    <resultMap id="fileMap"
+               type="net.lab1024.smartadmin.module.support.file.domain.entity.FileEntity"></resultMap>
+    <resultMap id="fileDTO"
+               type="net.lab1024.smartadmin.module.support.file.domain.dto.FileDTO"></resultMap>
+
+    <resultMap id="fileVO" type="net.lab1024.smartadmin.module.support.file.domain.vo.FileVO"></resultMap>
+
+    <insert id="insertFileBatch" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
+        INSERT INTO t_file (
+        module_id,
+        module_type,
+        file_name,
+        file_size,
+        file_type,
+        file_path,
+        creater_user,
+        file_location_type
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.moduleId},#{item.moduleType},#{item.fileName},#{item.fileSize},#{item.fileType},#{item.filePath},#{item.createrUser},#{item.createrUserType},#{item.fileLocationType})
+        </foreach>
+    </insert>
+
+    <insert id="insertFileEntityBatch" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
+        INSERT INTO t_file (
+        module_id,
+        module_type,
+        file_name,
+        file_size,
+        file_type,
+        file_path,
+        creater_user,
+        file_location_type
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.moduleId},#{item.moduleType},#{item.fileName},#{item.fileSize},#{item.fileType},#{item.filePath},#{item.createrUser},#{item.fileLocationType})
+        </foreach>
+    </insert>
+
+    <update id="updateType">
+        update t_file
+        set file_upload_type = #{fileUploadType}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="deleteFileId">
+        DELETE FROM t_file WHERE id =#{id}
+    </delete>
+
+    <delete id="deleteFilesByModuleIdAndModuleType">
+        DELETE FROM t_file WHERE module_id =#{moduleId} and module_type=#{moduleType}
+    </delete>
+
+    <select id="listFilesByModuleId" resultMap="fileVO">
+        SELECT * FROM t_file WHERE module_id =#{moduleId}
+    </select>
+
+    <select id="listFilesByModuleIdAndModuleType" resultMap="fileVO">
+        SELECT * FROM t_file WHERE module_id =#{moduleId} and module_type=#{moduleType}
+    </select>
+
+    <select id="listFilesByModuleIdAndModuleTypes" resultMap="fileVO">
+        SELECT * FROM t_file WHERE module_id =#{moduleId} and module_type IN
+        <foreach collection="moduleTypes" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="listFilesByModuleIdsAndModuleType" resultMap="fileVO">
+        SELECT * FROM t_file WHERE
+        module_id IN
+        <foreach collection="moduleIds" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+        and module_type=#{moduleType}
+    </select>
+
+
+    <select id="listFilesByFileIds" resultMap="fileVO">
+        SELECT * FROM t_file WHERE id IN
+        <foreach collection="fileIds" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+<!--      SELECT f.*,e.actual_name FROM t_file f LEFT JOIN t_employee e on  f.creater_user = e.id-->
+    <select id="queryListByPage" resultMap="fileVO">
+        SELECT f.* FROM t_file f , t_employee e
+        <where>
+            f.creater_user = e.id
+            <if test="queryDTO.moduleType != null and queryDTO.moduleType != ''">
+                AND f.module_type = #{queryDTO.moduleType}
+            </if>
+            <if test="queryDTO.fileName != null and queryDTO.fileName != '' ">
+                <bind name="queryDTO.fileNameKey" value=" '%' + queryDTO.fileName +'%' "></bind>
+                AND f.file_name like #{queryDTO.fileNameKey}
+            </if>
+            <if test="queryDTO.actualName != null and queryDTO.actualName != '' ">
+                <bind name="queryDTO.actualNameKey" value=" '%' + queryDTO.actualName +'%' "></bind>
+                AND e.actual_name like #{queryDTO.actualNameKey}
+            </if>
+            <if test="queryDTO.fileLocationType != null ">
+                AND f.file_location_type = #{queryDTO.fileLocationType}
+            </if>
+        </where>
+        and e.id IN ( SELECT e.id FROM t_employee e
+        WHERE e.department_id IN ( SELECT d.id FROM t_department d
+        WHERE d.project_id = ( SELECT d.project_id FROM t_department d
+        WHERE d.id = ( SELECT e.department_id FROM t_employee e WHERE e.id = #{id} ))))
+        order by f.create_time desc
+    </select>
+
+    <select id="queryTeacherListByPage" resultMap="fileVO">
+        SELECT f.* FROM t_file f
+        <where>
+            <if test="fileUploadType != null and fileUploadType != '' ">
+                AND f.file_upload_type = #{fileUploadType}
+            </if>
+            <if test="queryDTO.fileName != null and queryDTO.fileName != '' ">
+                <bind name="queryDTO.fileNameKey" value=" '%' + queryDTO.fileName +'%' "></bind>
+                AND f.file_name like #{queryDTO.fileNameKey}
+            </if>
+        </where>
+        order by f.create_time desc
+    </select>
+
+    <select id="queryListByAll" resultType="net.lab1024.smartadmin.module.support.file.domain.vo.FileVO">
+        SELECT * FROM t_file
+    </select>
+
+</mapper>

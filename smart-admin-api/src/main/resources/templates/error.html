@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8">
+<title>错误提示</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<style type="text/css">
+	body{
+		text-align: center;
+		min-width: 1000px;
+	}
+	.error{
+		margin-top: 5%;
+	}
+	.error img{
+		width: 50%;
+		height: auto;
+	}
+	.prompt{
+		font-size: 18px;
+		line-height: 20px;
+		color: #666;
+		padding: 25px 0px 5px 0px;
+	}
+	.link{
+		font-size: 18px;
+		line-height: 20px;
+		color: #56ABE7;
+		padding-top: 5px;
+	}
+	.link a{
+		color: #419FE1;
+		text-decoration: none;
+	}
+	.link img {
+		width: 20px;
+		height: auto;
+		vertical-align: bottom;
+		margin-right: 5px;
+	}
+</style>
+</head>
+
+<body>
+<div class="error"><img th:src="@{/images/error.jpg}" alt=""/></div>
+<div class="prompt">系统错误，请联系管理员...</div>
+<div class="link"><img th:src="@{/images/back.png}" alt=""/><a href="#">返回首页</a></div>
+</body>
+</html>

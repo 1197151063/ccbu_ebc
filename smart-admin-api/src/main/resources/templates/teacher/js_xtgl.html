@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	   xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<div th:include="include/js_header"></div>
+<!--nav-->
+<!--main-->
+<div class="main">
+	<ul class="column-tabs">
+		<li class="column-tabs-a">
+			<a href="js_xtgl.html">进度管理</a>
+		</li>
+<!--		<li><a href="js_xtgl2.html">权限管理</a></li>-->
+<!--		<li><a href="js_xtgl3.html">配置管理</a></li>-->
+<!--		<li><a href="js_xtgl4.html">日志管理</a></li>-->
+<!--		<li><a href="js_xtgl5.html">初始数据</a></li>-->
+	</ul>
+	<div class="main-bg">
+		<div class="screen">
+			<dl>
+				<dt>请选择项目</dt>
+				<dd>
+					<el-select v-model="value" size="large" filterable placeholder="请选择项目" @change="changeProject">
+						<el-option
+								v-for="item in options"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+						>
+						</el-option>
+					</el-select>
+				</dd>
+			</dl>
+		</div>
+		<!--筛选-->
+		<div class="table">
+			<!--表格-->
+			<el-table
+					  :data="tableData"
+					  style="width: 100%"
+					  size="medium"
+					  stripe
+					  >
+				<el-table-column
+						prop="id"
+						label="阶段ID"
+						width="150">
+				</el-table-column>
+				<el-table-column
+								 prop="stage"
+								 label="阶段名称"
+								 width="150">
+				</el-table-column>
+				<el-table-column
+								 prop="businessName"
+								 label="所属业务"
+								 >
+				</el-table-column>
+				<el-table-column
+								 prop="status"
+								 label="阶段状态"
+								 width="250">
+				</el-table-column>
+				<el-table-column
+						label="操作"
+						align="center"
+						width="250">
+					<template v-slot="scope">
+<!--						<el-button type="primary" plain size="small" :disabled="scope.row.status=='已结束'?false:true&&scope.row.id==5?false:true"  @click="exportReport(scope.row.id)">导出报告</el-button>-->
+						<el-button type="primary" plain size="small"  @click="exportReport(scope.row.id)">导出报告</el-button>
+						<el-button v-if="scope.row.status == '未开始'" @click="openProjectStage(scope.row)" type="primary" round size="small">开启阶段</el-button>
+						<el-button v-if="scope.row.status == '已结束'" type="info" round size="small">已 结 束</el-button>
+						<el-button v-if="scope.row.status == '进行中'" type="success" round size="small">进 行 中</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+					<!--表格-->
+					<!--分页-->
+<!--					<el-pagination-->
+<!--								   background-->
+<!--								   @size-change="handleSizeChange"-->
+<!--								   @current-change="handleCurrentChange"-->
+<!--								   :current-page="currentPage1"-->
+<!--								   :page-sizes="[100, 200, 300, 400]"-->
+<!--								   :page-size="100"-->
+<!--								   layout="total, sizes, prev, pager, next, jumper"-->
+<!--								   :total="400">-->
+<!--					</el-pagination>-->
+					<!--分页-->
+				</div>
+		</div>
+</div>
+<!--main-->
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+</body>
+
+<script>
+	//搜索
+	const { defineComponent, ref } = Vue
+	var Main = {
+		data () {
+			return {
+				//搜索
+				input: ref(''),
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//表格
+				tableData: [{
+					id:'',
+					stage: '',
+					businessName: '',
+					status: ''
+				}],
+				//导航
+				activeIndex: '7',
+				//tabs
+				activeName: 'first',
+				//选择器
+				value: '',
+				//分页
+				currentPage1: 5,
+				currentPage2: 5,
+				currentPage3: 5,
+				currentPage4: 4,
+				//日期快捷选项
+				//弹出经济形势
+				dialogTableVisible: false,
+				options: [],
+				value: '',
+				defaultId: '',
+			}
+		},
+		mounted:function (){
+			//查询一个项目的信息
+			// this.projectTableData(proid);
+			//查询所有项目
+			this.selectAllProjecs()
+		},
+		methods: {
+			selectAllProjecs(){
+				let that = this
+				axios({
+					method:'get',
+					url:'queryAllProject',//相对路径即可，不用加/service
+					responseType:'json',
+				}).then(function(resp){
+					let data = resp.data.data
+					that.options = [];
+					data.forEach(function(item,index){
+						let temp = {value:'',label:''}
+						temp.value = item.proId
+						temp.label = item.proName
+						that.options.push(temp)
+					})
+					that.value = data[0].proName
+					that.defaultId = data[0].proId
+					that.projectTableData(that.defaultId)
+				})
+			},
+			//切换项目
+			changeProject(val){
+				this.projectTableData(val)
+			},
+			projectTableData(proId){
+				let that = this
+				this.value = proId
+				axios({
+					method:'get',
+					url:'sysProjectStage/all/byId?proId='+proId,//相对路径即可，不用加/service
+					responseType:'json',
+				}).then(function(resp){
+					let data = resp.data.data
+					that.tableData = []
+					data.forEach(function(item,index){
+						let temp = {
+							id:'',status:'',businessName:'',state:''
+						}
+						temp.stage = '第 '+(item.stageId-1)+' 阶段'
+						temp.businessName = item.businessName
+						if(item.status == '0'){
+							temp.status = '未开始'
+						}else if(item.status == '1'){
+							temp.status = '进行中'
+						}else{
+							temp.status = '已结束'
+						}
+						temp.id = item.stageId
+						that.tableData.push(temp)
+					})
+				})
+			},
+			//获取当前项目id
+			openProjectStage(row){
+				//获取项目id
+				let that = this
+				let projectId = this.value
+				// console.log(projectId)
+				//获取团队id
+				// let teamId = this.$refs['teamId'].attrs.value
+				axios({
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					method:'post',
+					url:'sysProject/queryBeforeStage',//相对路径即可，不用加/service
+					data: {currentProjectId:projectId,currentStageId:row.id-1},
+					responseType:'json',
+				}).then(function(resp){
+					if(resp.status == '200'){
+						console.log(resp)
+						if(resp.data.data.length!=0){
+							let model = resp.data.data
+							 console.log(model)
+							let stage =(model[0].stageId)-1
+							let data
+							let message=[]
+							for(i = 0; i < model.length; i++) {
+								data = '第'+stage+'阶段-'+model[i].name+'-'+model[i].businessName+'未提交'
+								message.push(data)
+								// console.log(model[i])
+							}
+							that.$message({
+								dangerouslyUseHTMLString: true,
+								showClose: true,
+								message: message,
+								duration: 10000,
+								type: 'success'
+							});
+
+							that.projectTableData(that.value);
+						}else {
+							// alert(1)
+							axios({
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								method:'post',
+								url:'sysProject/beginStage',//相对路径即可，不用加/service
+								data: {currentProjectId:projectId,currentStageId:row.id},
+								responseType:'json',
+							}).then(function(resp){
+								if(resp.status == '200'){
+									if(resp.data.code == '1'){
+										that.$message({
+											showClose: true,
+											message: '已成功开启第'+(row.id - 1)+'阶段',
+											type: 'success'
+										});
+										that.projectTableData(that.value);
+									}
+								}
+							})
+						}
+					}
+				})
+
+			},
+			//导出文件
+			exportReport(id){
+				let that = this
+				let params = new URLSearchParams()
+				params.append('proId', this.value)
+				params.append('stageId', id)
+				axios({
+					method: 'get',
+					url: 'sysProject/export',//相对路径即可，不用加/service
+					params: params,
+					responseType: "blob",
+					headers: {
+						'Content-Type': 'multipart/x-www-form-urlencoded'
+					}
+				}).then(function (res) {
+					console.log(res);
+
+					const filename = res.headers["content-disposition"];
+					const blob = new Blob([res.data]);
+					var downloadElement = document.createElement("a");
+					var href = window.URL.createObjectURL(blob);
+					downloadElement.href = href;
+					downloadElement.download = decodeURIComponent(filename.split("filename=")[1]);
+					document.body.appendChild(downloadElement);
+					downloadElement.click();
+					document.body.removeChild(downloadElement);
+					window.URL.revokeObjectURL(href);
+
+					if (res.status == 200) {
+						let message = '导出成功'
+						let type = "success"
+						that.$message({
+							showClose: true,
+							message: message,
+							type: type
+						});
+						// that.queryFileData();
+					}
+				})
+			},
+			//tab
+			formatter(row, column) {
+				return row.address;
+			},
+			handleClick(tab, event) {
+				console.log(tab, event);
+			},
+			//分页
+			handleSizeChange(val) {
+				console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				console.log(`当前页: ${val}`);
+			}
+		}	
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+</script>
+	
+</html>

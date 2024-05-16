@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<div th:include="include/header"></div>
+<!--nav-->
+<!--main-->
+<div class="main">
+	<div class="breadcrumb">
+		<el-breadcrumb separator="-">
+			<el-breadcrumb-item :to="{ path: '/' }"><a href="xy_index.html">首页</a></el-breadcrumb-item>
+			<el-breadcrumb-item><img  th:src="@{/images/form_title.png}" alt=""/>投资业务信息录入</el-breadcrumb-item>
+		</el-breadcrumb>
+	</div>
+	<div class="xxlr-main">
+		<el-row>
+			<el-col :span="12"  class="xxlr-bg">
+				<div class="xxlr-title" style="font-weight: bold">[[${session['app_user_login']!=null?session['app_user_login'].departmentName:'建设银行'}]]</div>
+				<div class="xxlr-title">短期投资<span>单位：百万元</span>
+					<el-popover
+								placement="top"
+								title="短期投资"
+								:width="500"
+								trigger="click"
+								content="短期投资在本阶段通过银行决策自行决定买入，在下阶段由系统自动为你卖出。所以，你的决策数即为本阶段该项短期投资余额。如你填入0，则表明在本阶段你不进行短期投资，你的资产负债表中的短期投资余额为0。"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</div>
+				<el-form :model="form1" ref="form1" :hide-required-asterisk="false" show-message :rules="rules">
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">股票</el-col>
+						<el-col :span="10">
+							<el-tooltip content="P1股指1075，P2股指1290" placement="top" effect="light">
+								<el-form-item prop="investmentStock">
+									<el-input v-model="form1.investmentStock" placeholder="请输入金额" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+						<el-col :span="5" class="input-list-unit">百万元</el-col>
+					</el-row>
+					<el-row class="input-list" :gutter="10">
+						<el-col :span="9" class="input-list-title">债券</el-col>
+						<el-col :span="10">
+							<el-tooltip content="P1利率4.68，P2利率4.05" placement="top" effect="light">
+								<el-form-item prop="nvestmentBond">
+									<el-input v-model="form1.nvestmentBond" placeholder="请输入金额" size="small"></el-input>
+								</el-form-item>
+							</el-tooltip>
+						</el-col>
+						<el-col :span="5" class="input-list-unit">百万元</el-col>
+					</el-row>
+				</el-form>
+				<div class="xxlr-title">长期投资<span>单位：百万元</span>
+					<el-popover
+								placement="top"
+								title="长期投资"
+								:width="500"
+								trigger="click"
+								content="作为长期投资，你可以在本阶段买入固定利率债券或股票，持有至你认为适当的阶段卖出，也可以在本阶段将以前各阶段买入的债券或股票买出。"
+								>
+						<template #reference><img  th:src="@{/images/tishi_b.png}" alt=""/></template>
+					</el-popover>
+				</div>
+				<div class="xxlr-content">
+					<el-form :model="form2" ref="form2" :hide-required-asterisk="false" show-message :rules="rules1">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" class="cqtz">
+						<tbody>
+							<tr align="center" valign="middle">
+								<th colspan="2" rowspan="2">长期投资</th>
+								<th colspan="6">买进/卖出</th>
+							</tr>
+							<tr align="center" valign="middle">
+								<th width="12%">P0</th>
+								<th width="12%">P1</th>
+								<th width="12%">P2</th>
+								<th width="12%">P3</th>
+								<th width="12%">P4</th>
+								<th width="12%">P5</th>
+							</tr>
+							<tr align="center" valign="middle">
+								<td colspan="2">股票（百万元）</td>
+								<td class="hui-bg">1000</td>
+								<td>
+									<dd>
+										<dt>0</dt>
+									</dd>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 3}">
+									<el-form-item prop="shares2" v-if="form2.currentStageId == 3">
+										<el-input v-model="form2.shares2" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 3">
+										<dt>{{form2.shares2}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 4}">
+									<el-form-item prop="shares3" v-if="form2.currentStageId == 4">
+										<el-input v-model="form2.shares3" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 4">
+										<dt>{{form2.shares3}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 5}">
+									<el-form-item prop="shares4" v-if="form2.currentStageId == 5">
+										<el-input v-model="form2.shares4" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 5">
+										<dt>{{form2.shares4}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 6}">
+									<el-form-item prop="shares5" v-if="form2.currentStageId == 6">
+										<el-input v-model="form2.shares5" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 6">
+										<dt>{{form2.shares5}}</dt>
+									</div>
+								</td>
+							</tr>
+							<tr align="center" valign="middle">
+								<td rowspan="6">债券<br>来自<br>阶段</td>
+								<td>A债券</td>
+								<td class="hui-bg">1000</td>
+								<td>
+									<dd>
+										<dt>0</dt>
+									</dd>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 3}">
+									<el-form-item prop="bond_a_2" v-if="form2.currentStageId == 3">
+										<el-input v-model="form2.bond_a_2" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 3">
+										{{form2.bond_a_2}}
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 4}" >
+									<el-form-item prop="bond_a_3" v-if="form2.currentStageId == 4">
+										<el-input v-model="form2.bond_a_3" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 4">
+										{{form2.bond_a_3}}
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 5}" >
+									<el-form-item prop="bond_a_4" v-if="form2.currentStageId == 5">
+										<el-input v-model="form2.bond_a_4" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 5">
+										<dt>{{form2.bond_a_4}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 6}" >
+									<el-form-item prop="bond_a_5" v-if="form2.currentStageId == 6">
+										<el-input v-model="form2.bond_a_5" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 6">
+										<dt>{{form2.bond_a_5}}</dt>
+									</div>
+								</td>
+							</tr>
+							<tr align="center" valign="middle">
+								<td>B债券</td>
+								<td class="hui-bg"></td>
+								<td>
+									<dd>
+										<dt>0</dt>
+									</dd>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 3}">
+									<el-form-item v-if="form2.currentStageId == 3" prop="bond_b_2">
+										<el-input v-model="form2.bond_b_2" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 3">
+										<dt>{{form2.bond_b_2}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 4}">
+									<el-form-item prop="bond_b_3" v-if="form2.currentStageId == 4">
+										<el-input v-model="form2.bond_b_3" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 4">
+										<dt>{{form2.bond_b_3}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 5}">
+									<el-form-item prop="bond_b_4" v-if="form2.currentStageId == 5">
+										<el-input v-model="form2.bond_b_4" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 5">
+										<dt>{{form2.bond_b_4}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 6}">
+									<el-form-item prop="bond_b_5" v-if="form2.currentStageId == 6">
+										<el-input v-model="form2.bond_b_5" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 6">
+										<dt>{{form2.bond_b_5}}</dt>
+									</div>
+								</td>
+							</tr>
+							<tr align="center" valign="middle">
+								<td>C债券</td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td :class="{'hui-bg' : form2.currentStageId < 3}">
+									<el-form-item prop="bond_c_2" v-if="form2.currentStageId == 3">
+										<el-input v-model="form2.bond_c_2" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 3">
+										<dt>{{form2.bond_c_2}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 4}">
+									<el-form-item prop="bond_c_3" v-if="form2.currentStageId == 4">
+										<el-input v-model="form2.bond_c_3" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 4">
+										<dt>{{form2.bond_c_3}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 5}">
+									<el-form-item prop="bond_c_4" v-if="form2.currentStageId == 5">
+										<el-input v-model="form2.bond_c_4" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 5">
+										<dt>{{form2.bond_c_4}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 6}">
+									<el-form-item prop="bond_c_5" v-if="form2.currentStageId == 6">
+										<el-input v-model="form2.bond_c_5" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 6">
+										<dt>{{form2.bond_c_5}}</dt>
+									</div>
+								</td>
+							</tr>
+							<tr align="center" valign="middle">
+								<td>D债券</td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td :class="{'hui-bg' : form2.currentStageId < 4}">
+									<el-form-item prop="bond_d_3" v-if="form2.currentStageId == 4">
+										<el-input v-model="form2.bond_d_3" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 4">
+										<dt>{{form2.bond_d_3}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 5}">
+									<el-form-item prop="bond_d_4" v-if="form2.currentStageId == 5">
+										<el-input v-model="form2.bond_d_4" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 5">
+										<dt>{{form2.bond_d_4}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 6}">
+									<el-form-item prop="bond_d_5" v-if="form2.currentStageId == 6">
+										<el-input v-model="form2.bond_d_5" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 6">
+										<dt>{{form2.bond_d_5}}</dt>
+									</div>
+								</td>
+							</tr>
+							<tr align="center" valign="middle">
+								<td>E债券</td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td :class="{'hui-bg' : form2.currentStageId < 5}">
+									<el-form-item prop="bond_e_4" v-if="form2.currentStageId == 5">
+										<el-input v-model="form2.bond_e_4" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 5">
+										<dt>{{form2.bond_e_4}}</dt>
+									</div>
+								</td>
+								<td :class="{'hui-bg' : form2.currentStageId < 6}">
+									<el-form-item prop="bond_e_5" v-if="form2.currentStageId == 6">
+										<el-input v-model="form2.bond_e_5" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 6">
+										<dt>{{form2.bond_e_5}}</dt>
+									</div>
+								</td>
+							</tr>
+							<tr align="center" valign="middle">
+								<td>F债券</td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td class="hui-bg"></td>
+								<td :class="{'hui-bg' : form2.currentStageId < 6}">
+									<el-form-item prop="bond_f_5" v-if="form2.currentStageId == 6">
+										<el-input v-model="form2.bond_f_5" placeholder="请输入金额" size="small"></el-input>
+									</el-form-item>
+									<div v-if="form2.currentStageId != 6">
+										<dt>{{form2.bond_f_5}}</dt>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					</el-form>
+				</div>
+			</el-col>
+			<!--右侧-->
+			<el-col :span="12" class="sjck-bg">
+				<div class="xxlr-title">数据参考
+					<div class="xxlr-title-right">
+						<el-select v-model="currentStageDesc" placeholder="当前进度" @change="switchStageInvestment" size="small">
+							<el-option
+									   v-for="item in optionsjindu"
+									   :key="item.value"
+									   :label="item.label"
+									   :value="item.value">
+							</el-option>
+						</el-select>
+					</div>
+				</div>
+				<el-tabs v-model="activeName" @tab-click="handleClick">
+					<!--资产负债表-->
+					<el-tab-pane label="债券投资业务" name="first">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+								<tr align="center" valign="middle">
+									<th rowspan="2">债券来自阶段</th>
+									<th rowspan="2" width="8%">价格（%）</th>
+									<th colspan="5">短期债券投资（百万元）</th>
+									<th colspan="5">长期债券投资（百万元）</th>
+								</tr>
+								<tr align="center" valign="middle">
+									<th width="8%">实际价值</th>
+									<th width="8%">名义价值</th>
+									<th width="8%">利率（%）</th>
+									<th width="8%">利息</th>
+									<th width="8%">账面损益</th>
+									<th width="8%">实际价值</th>
+									<th width="8%">名义价值</th>
+									<th width="8%">利率（%）</th>
+									<th width="8%">利息</th>
+									<th width="8%">账面损益</th>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>P0</td>
+									<td align="right">{{result11.bondPrice}}</td>
+									<td align="right">{{result11.realValue}}</td>
+									<td align="right">{{result11.nominalValue}}</td>
+									<td align="right">{{result11.rateInterest}}</td>
+									<td align="right">{{result11.interest}}</td>
+									<td align="right">{{result11.accountProfitLoss}}</td>
+									<td align="right">{{result18.realValue}}</td>
+									<td align="right">{{result18.nominalValue}}</td>
+									<td align="right">{{result18.rateInterest}}</td>
+									<td align="right">{{result18.interest}}</td>
+									<td align="right">{{result18.accountProfitLoss}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>P1</td>
+									<td align="right">{{result12.bondPrice}}</td>
+									<td align="right">{{result12.realValue}}</td>
+									<td align="right">{{result12.nominalValue}}</td>
+									<td align="right">{{result12.rateInterest}}</td>
+									<td align="right">{{result12.interest}}</td>
+									<td align="right">{{result12.accountProfitLoss}}</td>
+									<td align="right">{{result19.realValue}}</td>
+									<td align="right">{{result19.nominalValue}}</td>
+									<td align="right">{{result19.rateInterest}}</td>
+									<td align="right">{{result19.interest}}</td>
+									<td align="right">{{result19.accountProfitLoss}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>P2</td>
+									<td align="right">{{result13.bondPrice}}</td>
+									<td align="right">{{result13.realValue}}</td>
+									<td align="right">{{result13.nominalValue}}</td>
+									<td align="right">{{result13.rateInterest}}</td>
+									<td align="right">{{result13.interest}}</td>
+									<td align="right">{{result13.accountProfitLoss}}</td>
+									<td align="right">{{result20.realValue}}</td>
+									<td align="right">{{result20.nominalValue}}</td>
+									<td align="right">{{result20.rateInterest}}</td>
+									<td align="right">{{result20.interest}}</td>
+									<td align="right">{{result20.accountProfitLoss}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>P3</td>
+									<td align="right">{{result14.bondPrice}}</td>
+									<td align="right">{{result14.realValue}}</td>
+									<td align="right">{{result14.nominalValue}}</td>
+									<td align="right">{{result14.rateInterest}}</td>
+									<td align="right">{{result14.interest}}</td>
+									<td align="right">{{result14.accountProfitLoss}}</td>
+									<td align="right">{{result21.realValue}}</td>
+									<td align="right">{{result21.nominalValue}}</td>
+									<td align="right">{{result21.rateInterest}}</td>
+									<td align="right">{{result21.interest}}</td>
+									<td align="right">{{result21.accountProfitLoss}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>P4</td>
+									<td align="right">{{result15.bondPrice}}</td>
+									<td align="right">{{result15.realValue}}</td>
+									<td align="right">{{result15.nominalValue}}</td>
+									<td align="right">{{result15.rateInterest}}</td>
+									<td align="right">{{result15.interest}}</td>
+									<td align="right">{{result15.accountProfitLoss}}</td>
+									<td align="right">{{result22.realValue}}</td>
+									<td align="right">{{result22.nominalValue}}</td>
+									<td align="right">{{result22.rateInterest}}</td>
+									<td align="right">{{result22.interest}}</td>
+									<td align="right">{{result22.accountProfitLoss}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>P5</td>
+									<td align="right">{{result16.bondPrice}}</td>
+									<td align="right">{{result16.realValue}}</td>
+									<td align="right">{{result16.nominalValue}}</td>
+									<td align="right">{{result16.rateInterest}}</td>
+									<td align="right">{{result16.interest}}</td>
+									<td align="right">{{result16.accountProfitLoss}}</td>
+									<td align="right">{{result23.realValue}}</td>
+									<td align="right">{{result23.nominalValue}}</td>
+									<td align="right">{{result23.rateInterest}}</td>
+									<td align="right">{{result23.interest}}</td>
+									<td align="right">{{result23.accountProfitLoss}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>总计</td>
+									<td align="right">{{result17.bondPrice}}</td>
+									<td align="right">{{result17.realValue}}</td>
+									<td align="right">{{result17.nominalValue}}</td>
+									<td align="right">{{result17.rateInterest}}</td>
+									<td align="right">{{result17.interest}}</td>
+									<td align="right">{{result17.accountProfitLoss}}</td>
+									<td align="right">{{result24.realValue}}</td>
+									<td align="right">{{result24.nominalValue}}</td>
+									<td align="right">{{result24.rateInterest}}</td>
+									<td align="right">{{result24.interest}}</td>
+									<td align="right">{{result24.accountProfitLoss}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</el-tab-pane>
+					<!--资产负债表-->
+					<!--股票投资业务-->
+					<el-tab-pane label="股票投资业务" name="second">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tbody>
+								<tr align="center" valign="middle">
+									<th rowspan="2">股票投资（百万元）</th>
+									<th rowspan="2" width="8%">股票指数</th>
+									<th colspan="4">短期股票投资</th>
+									<th colspan="4">长期股票投资</th>
+								</tr>
+								<tr align="center" valign="middle">
+									<th width="8%">股票股数（手）</th>
+									<th width="8%">股票价值</th>
+									<th width="8%">股息</th>
+									<th width="8%">账面损益</th>
+									<th width="8%">股票股数（手）</th>
+									<th width="8%">股票价值</th>
+									<th width="8%">股息</th>
+									<th width="8%">账面损益</th>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>期初持有</td>
+									<td align="right">{{result1.stockIndex}}</td>
+									<td align="right">{{result1.stockNumber}}</td>
+									<td align="right">{{result1.stockCost}}</td>
+									<td align="right">{{result1.stockDividend}}</td>
+									<td align="right">{{result1.stockAccount}}</td>
+									<td align="right">{{result5.stockNumber}}</td>
+									<td align="right">{{result5.stockCost}}</td>
+									<td align="right">{{result5.stockDividend}}</td>
+									<td align="right">{{result5.stockAccount}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>最新持有</td>
+									<td align="right">{{result2.stockIndex}}</td>
+									<td align="right">{{result2.stockNumber}}</td>
+									<td align="right">{{result2.stockCost}}</td>
+									<td align="right">{{result2.stockDividend}}</td>
+									<td align="right">{{result2.stockAccount}}</td>
+									<td align="right">{{result6.stockNumber}}</td>
+									<td align="right">{{result6.stockCost}}</td>
+									<td align="right">{{result6.stockDividend}}</td>
+									<td align="right">{{result6.stockAccount}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>净买入/卖出</td>
+									<td align="right">{{result3.stockIndex}}</td>
+									<td align="right">{{result3.stockNumber}}</td>
+									<td align="right">{{result3.stockCost}}</td>
+									<td align="right">{{result3.stockDividend}}</td>
+									<td align="right">{{result3.stockAccount}}</td>
+									<td align="right">{{result7.stockNumber}}</td>
+									<td align="right">{{result7.stockCost}}</td>
+									<td align="right">{{result7.stockDividend}}</td>
+									<td align="right">{{result7.stockAccount}}</td>
+								</tr>
+								<tr align="center" valign="middle">
+									<td>期末持有</td>
+									<td align="right">{{result4.stockIndex}}</td>
+									<td align="right">{{result4.stockNumber}}</td>
+									<td align="right">{{result4.stockCost}}</td>
+									<td align="right">{{result4.stockDividend}}</td>
+									<td align="right">{{result4.stockAccount}}</td>
+									<td align="right">{{result8.stockNumber}}</td>
+									<td align="right">{{result8.stockCost}}</td>
+									<td align="right">{{result8.stockDividend}}</td>
+									<td align="right">{{result8.stockAccount}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</el-tab-pane>
+					<!--股票投资业务-->
+				</el-tabs>
+			</el-col>
+			<!--右侧-->
+		</el-row>
+	</div>
+	<div class="xxlr-tj" v-if="form1.status != 1">
+		<el-button type="primary" v-if="form1.currentStageId!=2" plain @click="preOperation('form1')">预计算</el-button>
+		<el-button type="primary" plain @click="saveForm('form')">保存</el-button>
+		<el-button type="primary" @click="submitFormBefore()">提交</el-button></div>
+</div>
+<!--main-->
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+</body>
+<script type="module" th:src="@{/service/investment.js}"></script>
+</html>

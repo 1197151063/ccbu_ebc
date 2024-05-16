@@ -1,0 +1,110 @@
+@charset "UTF-8";
+html {font-size: 12px !important;}
+@media only screen and (max-width: 1200px){html {font-size: 12px !important;}}
+@media only screen and (min-width: 1200px){html {font-size: 12px !important;}}
+@media only screen and (min-width: 1400px){html {font-size: 13px !important; }}
+@media only screen and (min-width: 1600px){html {font-size: 13px !important; }}
+@media only screen and (min-width: 1800px){html {font-size: 14px !important; }}
+@media only screen and (min-width: 2000px){html {font-size: 14px !important; }}
+@media only screen and (min-width: 2200px){html {font-size: 15px !important; }}
+@media only screen and (min-width: 2400px){html {font-size: 15px !important; }}
+@media only screen and (min-width: 2600px){html {font-size: 16px !important; }}
+@media only screen and (min-width: 2800px){html {font-size: 16px !important; }}
+
+/* 通用 */
+*, *:before, *:after {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
+BODY,DIV,UL,LI,FORM,INPUT,SPAN,P,A,DL,DT,DD,H1,H2,H3,H4,H5{margin:0px;padding:0px;list-style-type:none;font-weight: normal;}
+a:link{color: #333;text-decoration: none;}
+a:visited{color: #333;text-decoration: none;}
+a:hover{color: #4F75D3;text-decoration: none;}
+img{border:none}
+.clear{clear: both;}
+body{
+    font-size: 1rem;
+    font-family: "Microsoft YaHei","宋体";
+    color: #333;
+    background-color: #fff;
+	min-width: 100rem;
+}
+/* 登录 */
+.login-bg {
+	width: 100%;
+	min-height: 100%;
+    background-color: #3D85CC;
+    background-image: url("../images/login_bg.jpg");
+    background-position: left top;
+    background-repeat:no-repeat;
+}
+.login {
+	width: 80rem;
+	height: 37rem;
+	background: #fff;
+	position: relative;
+	margin: 7rem auto auto auto;
+	padding: 6rem 7rem 0rem 47rem;
+	-webkit-box-shadow: 0rem 0rem 1rem 0rem rgba(0,0,0,0.20);
+    box-shadow: 0rem 0rem 1rem 0rem rgba(0,0,0,0.20);
+}
+.login-img {
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	width: 37rem;
+	height:37rem;
+}
+.login-img img{
+	width: 37rem;
+	height:37rem;
+}
+.login-logo{
+	text-align: center;
+}
+.login-logo img{
+	width: 16rem;
+}
+.login-title {
+    font-size: 3rem;
+    font-weight: bold;
+	text-align: center;
+	padding: 0.7rem 0rem 3rem 0rem;
+}
+.login-list .el-form-item{
+	margin-bottom: 1.5rem;
+}
+.login-list .el-input__inner{
+    border-radius: 2rem;
+	padding-left: 3rem;
+	font-size: 1.1rem;
+}
+.login-list .el-input__icon{
+	width: 3rem;
+	font-size: 1.5rem;
+}
+.login-footer {
+	color: #fff;
+	text-align: center;
+	padding: 1.7rem;
+	font-size: 1.1rem;
+}
+/**自定义错误提示样式**/
+.el-form-item__error--inline {
+	left: auto;
+	position: absolute;
+	float: left;
+	top: auto;
+	/* right: auto; */
+	/* display: inline-block; */
+	/* margin-left: 10px; */
+	width: 100%;
+	line-height: 36px;
+}
+.el-form-item__error {
+	color: #F56C6C;
+	font-size: 12px;
+	line-height: 36px;
+	padding-top: 4px;
+/* position: relative; */
+/* top: 100%; */
+/* left: 0;*/
+}
+/**自定义错误提示样式**/

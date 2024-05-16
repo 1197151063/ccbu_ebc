@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.teacher.dao.TSceneManagementDao">
+
+    <resultMap id="TSceneManagementVO" type="net.lab1024.smartadmin.module.business.teacher.domain.vo.TSceneManagementVO"></resultMap>
+    <resultMap id="TSceneManagementExcelVO" type="net.lab1024.smartadmin.module.business.teacher.domain.vo.TSceneManagementExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="TSceneManagementVO">
+        select
+          id,
+          title,
+          content,
+          team,
+          creater_user,
+          release_type,
+          release_mode,
+          status,
+          release_time,
+          end_time,
+          create_time,
+          update_time
+        from t_scene_management
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+            <if test="queryDTO.title != null and queryDTO.title != ''">
+                <bind name="queryDTO.titleKey" value=" '%' + queryDTO.title +'%' "></bind>
+                AND title like #{queryDTO.titleKey}
+            </if>
+            AND release_type = #{releaseType}
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="TSceneManagementExcelVO">
+        select
+           id,
+           title,
+           content,
+           team,
+           creater_user,
+           release_type,
+           release_mode,
+           status,
+           release_time,
+           end_time,
+           create_time,
+           update_time
+        from t_scene_management
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="TSceneManagementExcelVO">
+        select
+         id,
+         title,
+         content,
+         team,
+         creater_user,
+         release_type,
+         release_mode,
+         status,
+         release_time,
+         end_time,
+         create_time,
+         update_time
+        from t_scene_management
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryDataIndex"
+            resultType="net.lab1024.smartadmin.module.business.teacher.domain.vo.TSceneManagementVO">
+         select
+             id,
+             title,
+             content,
+             team,
+             creater_user,
+             release_type,
+             release_mode,
+             status,
+             release_time,
+             end_time,
+             create_time,
+             update_time
+        from t_scene_management
+        where release_type=#{releaseType} order by create_time  limit 6
+    </select>
+
+    <select id="queryData"
+            resultType="net.lab1024.smartadmin.module.business.teacher.domain.entity.TSceneManagementEntity">
+                 select
+             id,
+             title,
+             content,
+             team,
+             creater_user,
+             release_type,
+             release_mode,
+             status,
+             release_time,
+             end_time,
+             create_time,
+             update_time
+        from t_scene_management
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteById">
+        delete from t_scene_management where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from t_scene_management where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

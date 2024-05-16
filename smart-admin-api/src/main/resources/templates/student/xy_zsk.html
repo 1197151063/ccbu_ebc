@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<div th:include="include/header"></div>
+<!--nav-->
+<!--main-->
+<div class="main">
+    <div class="breadcrumb">
+        <el-breadcrumb separator="-">
+            <el-breadcrumb-item :to="{ path: '/' }"><a href="xy_index.html">首页</a></el-breadcrumb-item>
+            <el-breadcrumb-item><img th:src="@{/images/form_title.png}" alt=""/>知识库</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+    <div class="main-bg">
+        <!--筛选-->
+        <div class="screen" style="height: 100px">
+            <dl>
+                <dd>
+                    <el-input placeholder="关键字查询" v-model="fileData.fileName" size="small">
+                        <template #append>
+                            <el-button icon="el-icon-search" @click="queryFileData(fileData.fileName,'')"></el-button>
+                        </template>
+                    </el-input>
+                </dd>
+            </dl>
+<!--            <dl>-->
+<!--                <dd>-->
+<!--                    <el-input placeholder="发布人查询" v-model="fileData.actualName" size="small">-->
+<!--                        <template #append>-->
+<!--                            <el-button icon="el-icon-search"  @click="queryFileData('',fileData.actualName)"></el-button>-->
+<!--                        </template>-->
+<!--                    </el-input>-->
+<!--                </dd>-->
+<!--            </dl>-->
+            <dl class="screen-right">
+                <dd>
+                    <!--                    <el-button type="primary" size="small" >-->
+                    <!--                        <a style="color: #FFFFFF" th:href="@{/service/knowledge_upload}">上传</a>-->
+                    <!--                    </el-button>-->
+
+                    <!--                    :show-file-list="false"-->
+<!--                    <el-upload-->
+<!--                            class="upload-demo"-->
+<!--                            action="api/file/localUpload/1"-->
+<!--                            multiple-->
+<!--                            :limit="1"-->
+<!--                            :file-list="fileList"-->
+<!--                    >-->
+<!--                        <el-button size="small" type="success" @click="submitUpload">点击上传</el-button>-->
+                        <!--                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+<!--                        <el-button type="primary" plain size="small">删除</el-button>-->
+                    </el-upload>
+                </dd>
+
+            </dl>
+        </div>
+            <el-table
+                    :data="fileData"
+                    style="width: 100%"
+                    :default-sort="{prop: 'list', order: 'descending'}"
+                    size="medium">
+<!--                <el-table-column-->
+<!--                        prop="id"-->
+<!--                        label="id"-->
+<!--                        width="100px">-->
+<!--                </el-table-column>-->
+                <el-table-column
+                        prop="fileName"
+                        label="文件名"
+                        style="width: 50%">
+                </el-table-column>
+<!--                <el-table-column-->
+<!--                        prop="actualName"-->
+<!--                        label="发布人"-->
+<!--                        width="150px"-->
+<!--                        align="right">-->
+<!--                </el-table-column>-->
+<!--                <el-table-column-->
+<!--                        prop="createTime"-->
+<!--                        label="发布日期"-->
+<!--                        width="200px"-->
+<!--                        align="right">-->
+<!--                </el-table-column>-->
+                <el-table-column
+                        label="操作"
+                        width="200px"
+                        align="center" key="slot">
+                    <template #default="scope">
+                        <el-button type="primary" plain size="small"  @click="downLoad(scope.row.id)">下载</el-button>
+<!--                        <el-button type="danger" plain size="small"  @click="deleteFile(scope.row.id)">删除</el-button>-->
+                    </template>
+                </el-table-column>
+            </el-table>
+            <!-- 分页 -->
+            <el-pagination :model="form" ref="form"
+                    :current-page="form.pageNum"
+                    :page-size="form.pageSize"
+                    :total="form.total"
+                    style="padding: 30px 0; text-align: center;"
+                    layout="total, prev, pager, next, jumper"
+                    @current-change="changePage"
+            />
+        </el-form>
+    </div>
+</div>
+<!--main-->
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+</body>
+<script type="module" th:src="@{/service/knowledge_base.js}"></script>
+
+</html>
+
+<!--	&lt;!&ndash;					&lt;!&ndash;分页&ndash;&gt;&ndash;&gt;-->
+<!--	&lt;!&ndash;					<el-pagination&ndash;&gt;-->
+<!--	&lt;!&ndash;								   background&ndash;&gt;-->
+<!--	&lt;!&ndash;								   @size-change="handleSizeChange"&ndash;&gt;-->
+<!--	&lt;!&ndash;								   @current-change="handleCurrentChange"&ndash;&gt;-->
+<!--	&lt;!&ndash;								   :current-page="currentPage1"&ndash;&gt;-->
+<!--	&lt;!&ndash;								   :page-sizes="[100, 200, 300, 400]"&ndash;&gt;-->
+<!--	&lt;!&ndash;								   :page-size="100"&ndash;&gt;-->
+<!--	&lt;!&ndash;								   layout="total, sizes, prev, pager, next, jumper"&ndash;&gt;-->
+<!--	&lt;!&ndash;								   :total="400">&ndash;&gt;-->
+<!--	&lt;!&ndash;					</el-pagination>&ndash;&gt;-->
+<!--	&lt;!&ndash;					&lt;!&ndash;分页&ndash;&gt;&ndash;&gt;-->
+<!--	&lt;!&ndash;				</div>&ndash;&gt;-->
+<!--	&lt;!&ndash;			</el-tab-pane>&ndash;&gt;-->
+<!--	&lt;!&ndash;常用工具&ndash;&gt;-->
+<!--</el-tabs>-->

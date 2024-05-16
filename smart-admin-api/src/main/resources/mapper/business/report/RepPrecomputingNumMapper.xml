@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.report.dao.RepPrecomputingNumDao">
+
+    <resultMap id="RepPrecomputingNumVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepPrecomputingNumVO"></resultMap>
+    <resultMap id="RepPrecomputingNumExcelVO" type="net.lab1024.smartadmin.module.business.report.domain.vo.RepPrecomputingNumExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="RepPrecomputingNumVO">
+        select
+          id,
+          current_project_id,
+          current_team_id,
+          current_stage_id,
+          pre_num
+        from rep_precomputing_num
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="RepPrecomputingNumExcelVO">
+        select
+           id,
+           current_project_id,
+           current_team_id,
+           current_stage_id,
+           pre_num
+        from rep_precomputing_num
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="RepPrecomputingNumExcelVO">
+        select
+         id,
+         current_project_id,
+         current_team_id,
+         current_stage_id,
+         pre_num
+        from rep_precomputing_num
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryPreNum" resultType="java.lang.Integer">
+        select
+         pre_num
+        from rep_precomputing_num
+        where current_project_id = #{currentProjectId} and current_team_id = #{currentTeamId} and current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from rep_precomputing_num where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from rep_precomputing_num where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="updateNum">
+       UPDATE rep_precomputing_num
+        set pre_num = #{repPrecomputingNumEntity.preNum}
+        WHERE current_project_id = #{repPrecomputingNumEntity.currentProjectId} and current_team_id = #{repPrecomputingNumEntity.currentTeamId} and current_stage_id = #{repPrecomputingNumEntity.currentStageId}
+    </update>
+</mapper>

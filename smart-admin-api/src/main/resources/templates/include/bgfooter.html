@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <!--隐藏域-->
+    <!--<div class="nav" th:if="${session['app_user_login']!=null && session['app_user_login'].userPosition == '教师'}">-->
+    <el-input type="hidden" ref="employeeId" th:value="${session['app_user_login']!=null?session['app_user_login'].id:'0'}"></el-input>
+    <el-input type="hidden" ref="bgProjectId" th:value="${session['projectStage']!=null?session['projectStage'].proId:'0'}"></el-input>
+    <el-input type="hidden" ref="bgTeamId" th:value="${session['projectStage']!=null?session['projectStage'].teamId:'0'}"></el-input>
+    <el-input type="hidden" ref="bgStageId" th:value="${session['projectStage']!=null?session['projectStage'].stageId:'0'}"></el-input>
+    <!--</div>-->
+    <!--隐藏域-->
+    <!--footer-->
+    <div class="footer" th:fragment="footer">
+        <p>copyright [[${copyright}]] [[${icpsecurity}]] 京公网安备：[[${plcecurity}]]</p>
+        <p>邮 箱：[[${hotmail}]]     详情咨询：[[${hotphone}]]</p>
+    </div>
+    <!--footer-->
+</html>

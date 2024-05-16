@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParInitialDataLoanDepositDao">
+
+    <resultMap id="ParInitialDataLoanDepositVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParInitialDataLoanDepositVO"></resultMap>
+    <resultMap id="ParInitialDataLoanDepositExcelVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParInitialDataLoanDepositExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParInitialDataLoanDepositVO">
+        select
+          id,
+          current_stage_id,
+          cash,
+          due_central_bank,
+          deposit_interbank,
+          loan_trade,
+          short_loan,
+          interest_receivable,
+          other_receivables,
+          discount,
+          short_investment,
+          other_property,
+          property_sum,
+          mlong_loan,
+          loss_reserves,
+          long_debt_investment,
+          long_equity_investment,
+          fixed_assets,
+          construction_process,
+          long_total_asset,
+          intangible_assets,
+          other_assets,
+          intangible_aother_assets,
+          total_assets,
+          short_deposit,
+          short_savings_deposit,
+          borrowings_central_bank,
+          interbank_deposit,
+          inter_bank,
+          deposit_short_margin,
+          payment_interest,
+          total_current_liability,
+          long_deposit,
+          long_savings_deposit,
+          deposit_long_margin,
+          payment_long_bond,
+          payment_sub_bond,
+          total_long_liabilities,
+          total_liabilities,
+          capital,
+          capital_reserve,
+          surplus_reserve,
+          undistributed_profit,
+          total_shareholders_equity,
+          total_liabilities_equity_indebted
+        from par_initial_data_loan_deposit
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParInitialDataLoanDepositExcelVO">
+        select
+           id,
+           current_stage_id,
+           cash,
+           due_central_bank,
+           deposit_interbank,
+           loan_trade,
+           short_loan,
+           interest_receivable,
+           other_receivables,
+           discount,
+           short_investment,
+           other_property,
+           property_sum,
+           mlong_loan,
+           loss_reserves,
+           long_debt_investment,
+           long_equity_investment,
+           fixed_assets,
+           construction_process,
+           long_total_asset,
+           intangible_assets,
+           other_assets,
+           intangible_aother_assets,
+           total_assets,
+           short_deposit,
+           short_savings_deposit,
+           borrowings_central_bank,
+           interbank_deposit,
+           inter_bank,
+           deposit_short_margin,
+           payment_interest,
+           total_current_liability,
+           long_deposit,
+           long_savings_deposit,
+           deposit_long_margin,
+           payment_long_bond,
+           payment_sub_bond,
+           total_long_liabilities,
+           total_liabilities,
+           capital,
+           capital_reserve,
+           surplus_reserve,
+           undistributed_profit,
+           total_shareholders_equity,
+           total_liabilities_equity_indebted
+        from par_initial_data_loan_deposit
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+            <if test="queryDTO.currentStageId != null">
+                AND current_stage_id = #{queryDTO.currentStageId}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParInitialDataLoanDepositExcelVO">
+        select
+         id,
+         current_stage_id,
+         cash,
+         due_central_bank,
+         deposit_interbank,
+         loan_trade,
+         short_loan,
+         interest_receivable,
+         other_receivables,
+         discount,
+         short_investment,
+         other_property,
+         property_sum,
+         mlong_loan,
+         loss_reserves,
+         long_debt_investment,
+         long_equity_investment,
+         fixed_assets,
+         construction_process,
+         long_total_asset,
+         intangible_assets,
+         other_assets,
+         intangible_aother_assets,
+         total_assets,
+         short_deposit,
+         short_savings_deposit,
+         borrowings_central_bank,
+         interbank_deposit,
+         inter_bank,
+         deposit_short_margin,
+         payment_interest,
+         total_current_liability,
+         long_deposit,
+         long_savings_deposit,
+         deposit_long_margin,
+         payment_long_bond,
+         payment_sub_bond,
+         total_long_liabilities,
+         total_liabilities,
+         capital,
+         capital_reserve,
+         surplus_reserve,
+         undistributed_profit,
+         total_shareholders_equity,
+         total_liabilities_equity_indebted
+        from par_initial_data_loan_deposit
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from par_initial_data_loan_deposit where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_initial_data_loan_deposit where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

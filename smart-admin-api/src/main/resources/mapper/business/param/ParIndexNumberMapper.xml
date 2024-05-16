@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.module.business.param.dao.ParIndexNumberDao">
+
+    <resultMap id="ParIndexNumberVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParIndexNumberVO"></resultMap>
+    <resultMap id="ParIndexNumberExcelVO" type="net.lab1024.smartadmin.module.business.param.domain.vo.ParIndexNumberExcelVO"></resultMap>
+
+
+    <select id="queryByPage" resultMap="ParIndexNumberVO">
+        select
+          id,
+          current_stage_id,
+          index_number,
+          rate_of_change,
+          cumulative_investment
+        from par_index_number
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllExportData" resultMap="ParIndexNumberExcelVO">
+        select
+           id,
+           current_stage_id,
+           index_number,
+           rate_of_change,
+           cumulative_investment
+        from par_index_number
+        <where>
+            <if test="queryDTO.id != null">
+                AND id = #{queryDTO.id}
+            </if>
+
+            <if test="queryDTO.createTimeBegin != null ">
+                AND create_time &gt;= #{queryDTO.createTimeBegin}
+            </if>
+            <if test="queryDTO.createTimeEnd != null ">
+                AND create_time &lt;= #{queryDTO.createTimeEnd}
+            </if>
+
+            <if test="queryDTO.updateTimeBegin != null ">
+                AND update_time &gt;= #{queryDTO.updateTimeBegin}
+            </if>
+            <if test="queryDTO.updateTimeEnd != null ">
+                AND update_time &lt;= #{queryDTO.updateTimeEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBatchExportData" resultMap="ParIndexNumberExcelVO">
+        select
+         id,
+         current_stage_id,
+         index_number,
+         rate_of_change,
+         cumulative_investment
+        from par_index_number
+        where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    <select id="queryData"
+            resultType="net.lab1024.smartadmin.module.business.param.domain.vo.ParIndexNumberVO">
+        select
+         id,
+         current_stage_id,
+         index_number,
+         rate_of_change,
+         cumulative_investment
+        from par_index_number
+        where current_stage_id = #{currentStageId}
+    </select>
+
+    <delete id="deleteById">
+        delete from par_index_number where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdList">
+        delete from par_index_number where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+
+<body id="index" class="bg">
+<!--在线交流-->
+<div class="zxjl"><a href="#"><img th:src="@{/images/zxjl.png}" alt=""/></a></div>
+<!--在线交流-->
+<!--header-->
+<div th:include="include/header"></div>
+<!--nav-->
+<!--main-->
+<div class="main">
+    <div class="breadcrumb">
+        <el-breadcrumb separator="-">
+            <el-breadcrumb-item :to="{ path: '/' }"><a href="xy_index.html">首页</a></el-breadcrumb-item>
+            <el-breadcrumb-item><img th:src="@{/images/form_title.png}" alt=""/>财务管理信息录入</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+    <div class="scyx-main">
+        <el-row>
+            <el-col :span="18" class="xxlr-bg">
+                <div class="xxlr-title">[[${session['app_user_login']!=null?session['app_user_login'].departmentName:'建设银行'}]]</div>
+                <el-form :model="form" ref="form" :hide-required-asterisk="false" show-message :rules="rules">
+                    <el-row class="input-list" :gutter="10">
+                        <el-col :span="9" class="input-list-title">分红（%）
+                            <el-popover
+                                    placement="top"
+                                    title="分红（%）"
+                                    :width="500"
+                                    trigger="click"
+                                    content="当上阶段净利润大于0时，银行可以进行分红。你所决策的分红比例为上阶段股本总额的一定比例。分红将对本银行股票价格产生影响。分红总量不超过上阶段税后净利润，银行在进行分红决策时应注意是否有可供分配的利润和现金。"
+                            >
+                                <template #reference><img th:src="@{/images/tishi_b.png}" alt=""/></template>
+                            </el-popover>
+                        </el-col>
+                        <el-col :span="10">
+                            <!--提示语-->
+<!--                            <el-tooltip :content="limitMsg.shareBonus_msg" placement="top" effect="light">-->
+                                <el-form-item prop="shareBonus">
+                                    <el-input v-model="form.shareBonus" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-tooltip>
+                        </el-col>
+                    </el-row>
+                    <el-row class="input-list" :gutter="10">
+                        <el-col :span="9" class="input-list-title">增效（百万元）
+                            <el-popover
+                                    placement="top"
+                                    title="增效（百万元）"
+                                    :width="500"
+                                    trigger="click"
+                                    content="银行可在适当的时候通过增发新股时行增资。银行增资应由董事会作出决议后提请股东会批准实施。"
+                            >
+                                <template #reference><img th:src="@{/images/tishi_b.png}" alt=""/></template>
+                            </el-popover>
+                        </el-col>
+                        <el-col :span="10">
+                            <!--提示语-->
+<!--                            <el-tooltip :content="limitMsg.synergia_msg" placement="top" effect="light">-->
+                                <el-form-item prop="synergia">
+                                    <el-input v-model="form.synergia" placeholder="请输入" size="small"></el-input>
+                                </el-form-item>
+                            </el-tooltip>
+                        </el-col>
+                    </el-row>
+                    <!--                    <div style="height: 120px"></div>-->
+                </el-form>
+            </el-col>
+        </el-row>
+    </div>
+    <div v-show="submitAlert">
+    <el-alert
+            title="请检查您的决策数据是否为空或有效"
+            type="error"
+            center
+            close-text="知道了">
+    </el-alert>
+</div>
+    <div class="xxlr-tj" v-if="form.status!=1">
+        <el-button type="primary" v-if="form.currentStageId!=2" plain @click="preOperation('form')">预计算</el-button>
+        <el-button type="primary" plain @click="saveForm('form')">保存</el-button>
+        <el-button type="primary" @click="submitFormBefore('form')">提交</el-button>
+    </div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+</body>
+
+<script type="module" th:src="@{/service/deposit-financia.js}"></script>
+<!--<script type="text/javascript" th:src="@{/service/deposit-financia.js}"></script>-->
+<style>
+    .el-form-item {
+        margin-bottom: 0px;
+    }
+
+    .input-list .el-input__inner {
+        /* background-color: #F8F9FB; */
+        padding: 0rem 0.8rem;
+        text-align: left;
+    }
+</style>
+</html>

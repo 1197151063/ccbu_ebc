@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/bg_import_index"></head>
+<body id="index" class="bg">
+<!--在线交流-->
+<!--<div class="zxjl"><a href="#"><img  th:src="@{/images/zxjl.png}" alt=""/></a></div>-->
+<!--在线交流-->
+<!--header-->
+<div th:include="include/bgheader"></div>
+<!--main-->
+<div class="main">
+    <div class="breadcrumb">
+        <el-breadcrumb separator="-">
+<!--            <el-breadcrumb-item :to="{ path: '/' }"><a th:href="@{/service/home}">同业报告</a></el-breadcrumb-item>-->
+<!--            <el-breadcrumb-item><img  th:src="@{/images/form_title.png}" alt=""/>存贷款业务报告</el-breadcrumb-item>-->
+        </el-breadcrumb>
+    </div>
+    <div class="xxlr-main">
+        <el-row>
+            <el-col :span="24" class="sjck-bg">
+                <div class="xxlr-title">同业报告
+                </div>
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+                    <!--资产负债表-->
+                    <el-tab-pane label="资产负债表" name="first">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th>资产</th>
+                                <th>{{bgStageName}}阶段</th>
+                                <th>负债及股东权益</th>
+                                <th>{{bgStageName}}阶段</th>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"><strong>流动资产</strong></td>
+                                <td colspan="2"><strong>流动负债</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>现金</td>
+                                <td align="right">{{asset1.cash}}</td>
+                                <td>短期存款</td>
+                                <td align="right">{{asset1.shortDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>存放中央银行款项</td>
+                                <td align="right">{{asset1.dueCentralBank}}</td>
+                                <td>短期储蓄存款</td>
+                                <td align="right">{{asset1.shortSavingsDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>存放同业款项</td>
+                                <td align="right">{{asset1.depositInterbank}}</td>
+                                <td>向中央银行借款</td>
+                                <td align="right">{{asset1.borrowingsCentralBank}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>拆放同业</td>
+                                <td align="right">{{asset1.loanTrade}}</td>
+                                <td>同业存放款项</td>
+                                <td align="right">{{asset1.interbankDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期贷款</td>
+                                <td align="right">{{asset1.shortLoan}}</td>
+                                <td>同业拆入</td>
+                                <td align="right">{{asset1.interBank}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>应收利息</td>
+                                <td align="right">{{asset1.interestReceivable}}</td>
+                                <td>存入短期保证金</td>
+                                <td align="right">{{asset1.depositShortMargin}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其他应收款</td>
+                                <td align="right">-</td>
+                                <td>应付利息</td>
+                                <td align="right">{{asset1.paymentInterest}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>贴现</td>
+                                <td align="right">{{asset1.discount}}</td>
+                                <td><strong>流动负债合计</strong></td>
+                                <td align="right"><strong>{{asset1.totalCurrentLiability}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期投资</td>
+                                <td align="right">{{asset1.shortInvestment}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其他流动资产</td>
+                                <td align="right">-</td>
+                                <td colspan="2"><strong>长期负债</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>流动资产合计</strong></td>
+                                <td align="right"><strong>{{asset1.propertySum}}</strong></td>
+                                <td>长期存款</td>
+                                <td align="right">{{asset1.longDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"></td>
+                                <td>长期储蓄存款</td>
+                                <td align="right">{{asset1.longSavingsDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"><strong>长期资产</strong></td>
+                                <td>存入长期保证金</td>
+                                <td align="right">{{asset1.depositLongMargin}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>中长期贷款</td>
+                                <td align="right">{{asset1.mlongLoan}}</td>
+                                <td>应付长期债券</td>
+                                <td align="right">{{asset1.paymentLongBond}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>&nbsp;&nbsp;减：贷款损失准备</td>
+                                <td align="right">{{asset1.lossReserves}}</td>
+                                <td>应付次级债券</td>
+                                <td align="right">{{asset1.paymentSubBond}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>长期债权投资</td>
+                                <td align="right">{{asset1.longDebtInvestment}}</td>
+                                <td><strong>长期负债合计</strong></td>
+                                <td align="right"><strong>{{asset1.totalLongLiabilities}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>长期股权投资</td>
+                                <td align="right">{{asset1.longEquityInvestment}}</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>固定资产</td>
+                                <td align="right">{{asset1.fixedAssets}}</td>
+                                <td><strong>负债合计</strong></td>
+                                <td align="right"><strong>{{asset1.totalLiabilities}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>在建工程</td>
+                                <td align="right">-</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>长期资产合计</strong></td>
+                                <td align="right"><strong>{{asset1.longTotalAsset}}</strong></td>
+                                <td colspan="2"><strong>股东权益</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"></td>
+                                <td>股本</td>
+                                <td align="right">{{asset1.capital}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"><strong>无形资产及其他资产</strong></td>
+                                <td>资本公积</td>
+                                <td align="right">{{asset1.capitalReserve}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>无形资产</td>
+                                <td align="right">{{asset1.intangibleAssets}}</td>
+                                <td>盈余公积</td>
+                                <td align="right">{{asset1.surplusReserve}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其他资产</td>
+                                <td align="right">{{asset1.otherAssets}}</td>
+                                <td>一般风险准备</td>
+                                <td align="right">-</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>无形资产及其他资产合计</strong></td>
+                                <td align="right"><strong>{{asset1.intangibleAotherAssets}}</strong></td>
+                                <td>未分配利润</td>
+                                <td align="right">{{asset1.undistributedProfit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2"></td>
+                                <td><strong>股东权益合计</strong></td>
+                                <td align="right"><strong>{{asset1.totalShareholdersEquity}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="2">&nbsp;</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>资产总计</strong></td>
+                                <td align="right"><strong>{{asset1.totalAssets}}</strong></td>
+                                <td><strong>负债和股东权益总计</strong></td>
+                                <td align="right"><strong>{{asset1.totalLiabilitiesEquityIndebted}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="4">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="4"><strong>补充资料</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="4">本阶段委托资产托管业务余额 28088 百万元；担保业务余额 2313 百万元。</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--资产负债表-->
+                    <!--利润表-->
+                    <el-tab-pane label="利润表" name="second">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th>项目</th>
+                                <th>{{this.bgStageName}}阶段</th>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3"><strong>营业收入</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>利息收入</td>
+                                <td align="right">{{profit1.interestIncome}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>金融机构往来收入</td>
+                                <td align="right">{{profit1.financialOrganizationIncome}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>手续费收入</td>
+                                <td align="right">{{profit1.serviceChargeIncome}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>营业收入合计</strong></td>
+                                <td align="right"><strong>{{profit1.totalRevenues}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3"><strong>营业支出</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>利息支出</td>
+                                <td align="right">{{profit1.interestExpense}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>金融机构往来支出</td>
+                                <td align="right">{{profit1.financialOrganizationExpense}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>手续费支出</td>
+                                <td align="right">{{profit1.serviceChargeExpense}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>营业支出合计</strong></td>
+                                <td align="right"><strong>{{profit1.expenseRevenues}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3"><strong>营业费用</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>人员开支</td>
+                                <td align="right">{{profit1.peopleCosts}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>附加人员成本</td>
+                                <td align="right">{{profit1.additionPeopleCosts}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其他人员开支</td>
+                                <td align="right">{{profit1.otherPeopleCosts}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>固定资产折旧</td>
+                                <td align="right">{{profit1.fixedAssetsDepreciation}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>其它营业费用</td>
+                                <td align="right">{{profit1.otherBusinessCosts}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>营业费用合计</strong></td>
+                                <td align="right"><strong>{{profit1.totalOperatingExpenses}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>投资收益</strong></td>
+                                <td align="right"><strong>{{profit1.incomeInvestment}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>营业利润</strong></td>
+                                <td align="right"><strong>{{profit1.operatingProfit}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>扣除资产减值前利润总额</strong></td>
+                                <td align="right"><strong>{{profit1.deductAssetImpairmentBeforeTotalProfit}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>扣除资产减值后利润总额</strong></td>
+                                <td align="right"><strong>{{profit1.deductAssetImpairmentAfterTotalProfit}}</strong></td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td><strong>净利润</strong></td>
+                                <td align="right"><strong>{{profit1.retainedProfits}}</strong></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--利润表-->
+                    <!--流动性报表-->
+                    <el-tab-pane label="流动性报表" name="third">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th>项目</th>
+                                <th>说明</th>
+                                <th>金额</th>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="3">负债</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>同业存放款项</td>
+                                <td>小于3个月的同业存放款项</td>
+                                <td align="right">{{liquiditycash.interbankDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>同业拆入</td>
+                                <td>小于3个月的同业拆入款项</td>
+                                <td align="right">{{liquiditycash.interBank}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期存款</td>
+                                <td>短期存款余额</td>
+                                <td align="right">{{liquiditycash.shortDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>长期存款</td>
+                                <td>长期存款的50%</td>
+                                <td align="right">{{liquiditycash.longDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期储蓄存款</td>
+                                <td>小于3个月的短期储蓄存款</td>
+                                <td align="right">{{liquiditycash.shortSavingsDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>长期储蓄存款</td>
+                                <td>长期储蓄存款的20%</td>
+                                <td align="right">{{liquiditycash.longSavingsDeposit}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>短期债务总计</td>
+                                <td>小于3个月的短期债务总额</td>
+                                <td align="right">{{liquiditycash.totalShortDebt}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>现金流动性要求</td>
+                                <td>短期债务总计的2.5%</td>
+                                <td align="right">{{liquiditycash.cashLiquidityRequirements}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>清偿力</td>
+                                <td></td>
+                                <td align="right">{{liquiditycash.solvency}}</td>
+                            </tr>
+                            <tr valign="middle">
+                                <td>现金清偿力</td>
+                                <td>清偿力——现金流动性要求</td>
+                                <td align="right">{{liquiditycash.cashSolvency}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--流动性报表-->
+                    <!--资产负债表-->
+                    <el-tab-pane label="债券投资业务" name="fourth">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th rowspan="2">债券来自阶段</th>
+                                <th rowspan="2" width="8%">价格（%）</th>
+                                <th colspan="5">短期债券投资（百万元）</th>
+                                <th colspan="5">长期债券投资（百万元）</th>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <th width="8%">实际价值</th>
+                                <th width="8%">名义价值</th>
+                                <th width="8%">利率（%）</th>
+                                <th width="8%">利息</th>
+                                <th width="8%">账面损益</th>
+                                <th width="8%">实际价值</th>
+                                <th width="8%">名义价值</th>
+                                <th width="8%">利率（%）</th>
+                                <th width="8%">利息</th>
+                                <th width="8%">账面损益</th>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P0</td>
+                                <td align="right">{{result11.bondPrice}}</td>
+                                <td align="right">{{result11.realValue}}</td>
+                                <td align="right">{{result11.nominalValue}}</td>
+                                <td align="right">{{result11.rateInterest}}</td>
+                                <td align="right">{{result11.interest}}</td>
+                                <td align="right">{{result11.accountProfitLoss}}</td>
+                                <td align="right">{{result18.realValue}}</td>
+                                <td align="right">{{result18.nominalValue}}</td>
+                                <td align="right">{{result18.rateInterest}}</td>
+                                <td align="right">{{result18.interest}}</td>
+                                <td align="right">{{result18.accountProfitLoss}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P1</td>
+                                <td align="right">{{result12.bondPrice}}</td>
+                                <td align="right">{{result12.realValue}}</td>
+                                <td align="right">{{result12.nominalValue}}</td>
+                                <td align="right">{{result12.rateInterest}}</td>
+                                <td align="right">{{result12.interest}}</td>
+                                <td align="right">{{result12.accountProfitLoss}}</td>
+                                <td align="right">{{result19.realValue}}</td>
+                                <td align="right">{{result19.nominalValue}}</td>
+                                <td align="right">{{result19.rateInterest}}</td>
+                                <td align="right">{{result19.interest}}</td>
+                                <td align="right">{{result19.accountProfitLoss}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P2</td>
+                                <td align="right">{{result13.bondPrice}}</td>
+                                <td align="right">{{result13.realValue}}</td>
+                                <td align="right">{{result13.nominalValue}}</td>
+                                <td align="right">{{result13.rateInterest}}</td>
+                                <td align="right">{{result13.interest}}</td>
+                                <td align="right">{{result13.accountProfitLoss}}</td>
+                                <td align="right">{{result20.realValue}}</td>
+                                <td align="right">{{result20.nominalValue}}</td>
+                                <td align="right">{{result20.rateInterest}}</td>
+                                <td align="right">{{result20.interest}}</td>
+                                <td align="right">{{result20.accountProfitLoss}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P3</td>
+                                <td align="right">{{result14.bondPrice}}</td>
+                                <td align="right">{{result14.realValue}}</td>
+                                <td align="right">{{result14.nominalValue}}</td>
+                                <td align="right">{{result14.rateInterest}}</td>
+                                <td align="right">{{result14.interest}}</td>
+                                <td align="right">{{result14.accountProfitLoss}}</td>
+                                <td align="right">{{result21.realValue}}</td>
+                                <td align="right">{{result21.nominalValue}}</td>
+                                <td align="right">{{result21.rateInterest}}</td>
+                                <td align="right">{{result21.interest}}</td>
+                                <td align="right">{{result21.accountProfitLoss}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P4</td>
+                                <td align="right">{{result15.bondPrice}}</td>
+                                <td align="right">{{result15.realValue}}</td>
+                                <td align="right">{{result15.nominalValue}}</td>
+                                <td align="right">{{result15.rateInterest}}</td>
+                                <td align="right">{{result15.interest}}</td>
+                                <td align="right">{{result15.accountProfitLoss}}</td>
+                                <td align="right">{{result22.realValue}}</td>
+                                <td align="right">{{result22.nominalValue}}</td>
+                                <td align="right">{{result22.rateInterest}}</td>
+                                <td align="right">{{result22.interest}}</td>
+                                <td align="right">{{result22.accountProfitLoss}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>P5</td>
+                                <td align="right">{{result16.bondPrice}}</td>
+                                <td align="right">{{result16.realValue}}</td>
+                                <td align="right">{{result16.nominalValue}}</td>
+                                <td align="right">{{result16.rateInterest}}</td>
+                                <td align="right">{{result16.interest}}</td>
+                                <td align="right">{{result16.accountProfitLoss}}</td>
+                                <td align="right">{{result23.realValue}}</td>
+                                <td align="right">{{result23.nominalValue}}</td>
+                                <td align="right">{{result23.rateInterest}}</td>
+                                <td align="right">{{result23.interest}}</td>
+                                <td align="right">{{result23.accountProfitLoss}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>总计</td>
+                                <td align="right">{{result17.bondPrice}}</td>
+                                <td align="right">{{result17.realValue}}</td>
+                                <td align="right">{{result17.nominalValue}}</td>
+                                <td align="right">{{result17.rateInterest}}</td>
+                                <td align="right">{{result17.interest}}</td>
+                                <td align="right">{{result17.accountProfitLoss}}</td>
+                                <td align="right">{{result24.realValue}}</td>
+                                <td align="right">{{result24.nominalValue}}</td>
+                                <td align="right">{{result24.rateInterest}}</td>
+                                <td align="right">{{result24.interest}}</td>
+                                <td align="right">{{result24.accountProfitLoss}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--资产负债表-->
+                    <!--股票投资业务-->
+                    <el-tab-pane label="股票投资业务" name="fifth">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th rowspan="2">股票投资（百万元）</th>
+                                <th rowspan="2" width="8%">股票指数</th>
+                                <th colspan="4">短期股票投资</th>
+                                <th colspan="4">长期股票投资</th>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <th width="8%">股票股数（手）</th>
+                                <th width="8%">股票价值</th>
+                                <th width="8%">股息</th>
+                                <th width="8%">账面损益</th>
+                                <th width="8%">股票股数（手）</th>
+                                <th width="8%">股票价值</th>
+                                <th width="8%">股息</th>
+                                <th width="8%">账面损益</th>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>期初持有</td>
+                                <td align="right">{{result1.stockIndex}}</td>
+                                <td align="right">{{result1.stockNumber}}</td>
+                                <td align="right">{{result1.stockCost}}</td>
+                                <td align="right">{{result1.stockDividend}}</td>
+                                <td align="right">{{result1.stockAccount}}</td>
+                                <td align="right">{{result5.stockNumber}}</td>
+                                <td align="right">{{result5.stockCost}}</td>
+                                <td align="right">{{result5.stockDividend}}</td>
+                                <td align="right">{{result5.stockAccount}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>最新持有</td>
+                                <td align="right">{{result2.stockIndex}}</td>
+                                <td align="right">{{result2.stockNumber}}</td>
+                                <td align="right">{{result2.stockCost}}</td>
+                                <td align="right">{{result2.stockDividend}}</td>
+                                <td align="right">{{result2.stockAccount}}</td>
+                                <td align="right">{{result6.stockNumber}}</td>
+                                <td align="right">{{result6.stockCost}}</td>
+                                <td align="right">{{result6.stockDividend}}</td>
+                                <td align="right">{{result6.stockAccount}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>净买入/卖出</td>
+                                <td align="right">{{result3.stockIndex}}</td>
+                                <td align="right">{{result3.stockNumber}}</td>
+                                <td align="right">{{result3.stockCost}}</td>
+                                <td align="right">{{result3.stockDividend}}</td>
+                                <td align="right">{{result3.stockAccount}}</td>
+                                <td align="right">{{result7.stockNumber}}</td>
+                                <td align="right">{{result7.stockCost}}</td>
+                                <td align="right">{{result7.stockDividend}}</td>
+                                <td align="right">{{result7.stockAccount}}</td>
+                            </tr>
+                            <tr align="center" valign="middle">
+                                <td>期末持有</td>
+                                <td align="right">{{result4.stockIndex}}</td>
+                                <td align="right">{{result4.stockNumber}}</td>
+                                <td align="right">{{result4.stockCost}}</td>
+                                <td align="right">{{result4.stockDividend}}</td>
+                                <td align="right">{{result4.stockAccount}}</td>
+                                <td align="right">{{result8.stockNumber}}</td>
+                                <td align="right">{{result8.stockCost}}</td>
+                                <td align="right">{{result8.stockDividend}}</td>
+                                <td align="right">{{result8.stockAccount}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--股票投资业务-->
+                    <!--代理债券发行业务数据表-->
+                    <el-tab-pane label="代理债券发行业务数据表" name="sixth">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr valign="middle">
+                                <td colspan="4">{{result0.bondType}}，票面利率{{result0.couponRate}}%，期限{{result0.deadline}}年，评级{{result0.creditRating}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 发行金额（百万元）：{{result0.issueAmount}}</dt>
+                                        <dt> 承销发行银行：{{result0.underwritingBank}}</dt>
+                                    </dl>
+                                </td>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 承销金额（百万元）：{{result0.underwritingMount}}</dt>
+                                        <dt> 认购额度（%）：{{result0.subscriptionLimit}}</dt>
+                                        <dt> 承销价格（%）：{{result0.underwritingPrice}}</dt>
+                                        <dt> 折扣（%）：{{result0.discount}}</dt>
+                                    </dl>
+                                </td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="4">{{result111.bondType}}，票面利率{{result111.couponRate}}%，期限{{result111.deadline}}年，评级{{result111.creditRating}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 发行金额（百万元）：{{result111.issueAmount}}</dt>
+                                        <dt> 承销发行银行：{{result111.underwritingBank}}</dt>
+                                    </dl>
+                                </td>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 承销金额（百万元）：{{result111.underwritingMount}}</dt>
+                                        <dt> 认购额度（%）：{{result111.subscriptionLimit}}</dt>
+                                        <dt> 承销价格（%）：{{result111.underwritingPrice}}</dt>
+                                        <dt> 折扣（%）：{{result111.discount}}</dt>
+                                    </dl>
+                                </td>
+                            </tr>
+                            <tr valign="middle">
+                                <td colspan="4">{{result211.bondType}}，票面利率{{result211.couponRate}}%，期限{{result211.deadline}}年，评级{{result211.creditRating}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 发行金额（百万元）：{{result211.issueAmount}}</dt>
+                                        <dt> 承销发行银行：{{result211.underwritingBank}}</dt>
+                                    </dl>
+                                </td>
+                                <td colspan="2" align="left">
+                                    <dl>
+                                        <dt> 承销金额（百万元）：{{result211.underwritingMount}}</dt>
+                                        <dt> 认购额度（%）：{{result211.subscriptionLimit}}</dt>
+                                        <dt> 承销价格（%）：{{result211.underwritingPrice}}</dt>
+                                        <dt> 折扣（%）：{{result211.discount}}</dt>
+                                    </dl>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--代理债券发行业务数据表-->
+                    <!--人事后勤数据-->
+                    <el-tab-pane label="人事后勤数据" name="seventh">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr align="center" valign="middle">
+                                <th>项目</th>
+                                <th>贷款业务</th>
+                                <th>存款业务</th>
+                                <th>投资业务</th>
+                                <th>中间业务</th>
+                                <th>其 他</th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>期初员工数（人）</dt>
+                                        <dt>本期雇佣/解雇（人）</dt>
+                                        <dt>本阶段流失人数（人）</dt>
+                                        <dt>期末员工数（人）</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>{{result033.startEmployeeQuantity}}</dt>
+                                    <dt>{{result033.hareFire}}</dt>
+                                    <dt>{{result033.drain}}</dt>
+                                    <dt>{{result033.endEmployeeQuantity}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result133.startEmployeeQuantity}}</dt>
+                                    <dt>{{result133.hareFire}}</dt>
+                                    <dt>{{result133.drain}}</dt>
+                                    <dt>{{result133.endEmployeeQuantity}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result233.startEmployeeQuantity}}</dt>
+                                    <dt>{{result233.hareFire}}</dt>
+                                    <dt>{{result233.drain}}</dt>
+                                    <dt>{{result233.endEmployeeQuantity}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result333.startEmployeeQuantity}}</dt>
+                                    <dt>{{result333.hareFire}}</dt>
+                                    <dt>{{result333.drain}}</dt>
+                                    <dt>{{result333.endEmployeeQuantity}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result433.startEmployeeQuantity}}</dt>
+                                    <dt>0</dt>
+                                    <dt>0</dt>
+                                    <dt>{{result433.endEmployeeQuantity}}</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>下阶段人员流失率（%）</dt>
+                                        <dt>下阶段流失人员数（人）</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>{{result033.lossRate}}</dt>
+                                    <dt>{{result033.lostPersonnel}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result133.lossRate}}</dt>
+                                    <dt>{{result133.lostPersonnel}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result233.lossRate}}</dt>
+                                    <dt>{{result233.lostPersonnel}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result333.lossRate}}</dt>
+                                    <dt>{{result333.lostPersonnel}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result433.lossRate}}</dt>
+                                    <dt>{{result433.lostPersonnel}}</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>有效营业时间（千小时）</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>{{result033.effectiveTime}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result133.effectiveTime}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result233.effectiveTime}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result333.effectiveTime}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result433.effectiveTime}}</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>人员调配（千小时）</dt>
+                                        <dt>—培训时间</dt>
+                                        <dt>—市场拓展</dt>
+                                        <dt>—客户维护</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>{{result033.trainingTime}}</dt>
+                                    <dt>{{result033.marketDevelopment}}</dt>
+                                    <dt>{{result033.customerMaintenance}}</dt>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>{{result133.trainingTime}}</dt>
+                                    <dt>{{result133.marketDevelopment}}</dt>
+                                    <dt>{{result133.customerMaintenance}}</dt>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>{{result233.trainingTime}}</dt>
+                                    <dt>{{result233.marketDevelopment}}</dt>
+                                    <dt>{{result233.customerMaintenance}}</dt>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>{{result333.trainingTime}}</dt>
+                                    <dt>{{result333.marketDevelopment}}</dt>
+                                    <dt>{{result333.customerMaintenance}}</dt>
+                                </th>
+                                <th>
+                                    <dt></dt>
+                                    <dt>{{result433.trainingTime}}</dt>
+                                    <dt>{{result433.marketDevelopment}}</dt>
+                                    <dt>{{result433.customerMaintenance}}</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>可用营业时间（千小时）</dt>
+                                        <dt>需要营业时间（千小时）</dt>
+                                        <dt>加班（千小时）</dt>
+                                        <dt>临时工（人）</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>{{result033.availableTime}}</dt>
+                                    <dt>{{result033.needTime}}</dt>
+                                    <dt>{{result033.workOvertime}}</dt>
+                                    <dt>{{result033.temporaryWorker}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result133.availableTime}}</dt>
+                                    <dt>{{result133.needTime}}</dt>
+                                    <dt>{{result133.workOvertime}}</dt>
+                                    <dt>{{result133.temporaryWorker}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result233.availableTime}}</dt>
+                                    <dt>{{result233.needTime}}</dt>
+                                    <dt>{{result233.workOvertime}}</dt>
+                                    <dt>{{result233.temporaryWorker}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result333.availableTime}}</dt>
+                                    <dt>{{result333.needTime}}</dt>
+                                    <dt>{{result333.workOvertime}}</dt>
+                                    <dt>{{result333.temporaryWorker}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result433.availableTime}}</dt>
+                                    <dt>{{result433.needTime}}</dt>
+                                    <dt>{{result433.workOvertime}}</dt>
+                                    <dt>{{result433.temporaryWorker}}</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>培训水平</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>{{result033.trainingLevel}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result133.trainingLevel}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result233.trainingLevel}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result333.trainingLevel}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result433.trainingLevel}}</dt>
+                                </th>
+                            </tr>
+                            <tr valign="left">
+                                <th>
+                                    <dl>
+                                        <dt>工作满意度</dt>
+                                    </dl>
+                                </th>
+                                <th>
+                                    <dt>{{result033.jobSatisfaction}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result133.jobSatisfaction}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result233.jobSatisfaction}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result333.jobSatisfaction}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{result433.jobSatisfaction}}</dt>
+                                </th>
+                            </tr>
+                            <tr valign="middel">
+                                <th th:colspan="6"></th>
+                            </tr>
+                            <tr valign="middle">
+                                <th>
+                                    <dl>
+                                        <dt>项目</dt>
+                                    </dl>
+                                </th>
+                                <th th:colspan="2">
+                                    <dt>本阶段</dt>
+                                </th>
+                                <th th:colspan="2">
+                                    <dt>累计投资</dt>
+                                </th>
+                                <th>
+                                    <dt>指数</dt>
+                                </th>
+                            </tr>
+                            <tr valign="middle">
+                                <th>
+                                    <dl>
+                                        <dt>自动化投资（百万元）</dt>
+                                    </dl>
+                                </th>
+                                <th th:colspan="2">
+                                    <dt>{{automation.presentStage}}</dt>
+                                </th>
+                                <th th:colspan="2">
+                                    <dt>{{automation.cumulativeInvestment}}</dt>
+                                </th>
+                                <th>
+                                    <dt>{{automation.exponent}}</dt>
+                                </th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+                    <!--人事后勤数据-->
+                    <!--市场营销-->
+                    <!--财务管理-->
+                </el-tabs>
+            </el-col>
+            <!--右侧-->
+        </el-row>
+    </div>
+</div>
+<!--main-->
+<!--footer-->
+<div th:include="include/bgfooter"></div>
+<!--footer-->
+</body>
+<script type="module" th:src="@{/service/bg-deposit-loan.js}"></script>
+<style>
+    .el-form-item {
+        margin-bottom: 0px;
+    }
+    .input-list .el-input__inner {
+        /* background-color: #F8F9FB; */
+        padding: 0rem 0.8rem;
+        text-align: left;
+    }
+</style>
+</html>

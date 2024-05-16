@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:white-space="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--在线交流-->
+<!--<div class="zxjl"><a href="#"><img  th:src="@{/images/zxjl.png}" alt=""/></a></div>-->
+<!--在线交流-->
+<!--header-->
+<div th:include="include/header"></div>
+<!--nav-->
+<!--main-->
+<div class="main">
+    <div class="breadcrumb">
+        <el-breadcrumb separator="-">
+            <el-breadcrumb-item :to="{ path: '/' }"><a th:href="@{/service/home}">首页</a></el-breadcrumb-item>
+            <el-breadcrumb-item><img th:src="@{/images/form_title.png}" alt=""/>购买记录</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+    <div class="gmjl-main">
+        <div class="gmjl-title">同业报告</div>
+        <div class="gmjl-sm">同业报告购买记录
+            <div class="gmjl-sm-right">
+                <el-button type="primary" size="small" @click="queryPeerReport(true)">购买报告</el-button>
+            </div>
+        </div>
+        <div class="gmjl-list" v-for="(buy,index) in buyData">
+            <dl>
+                <dt><img src="../images/format_docx.png" alt=""/>{{buy.teamName}}第{{buy.stage}}同业报告</dt>
+<!--                <dt></dt>-->
+                <dd>
+                    <p><a :href="buy.toSeeUrl" target="_blank">查看</a></p>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div th:include="include/footer"></div>
+<!--footer-->
+
+<!--购买同业报告-->
+<el-dialog title="购买同业报告" v-model="gmtybg" top="20vh" width="700px">
+    <el-form :model="form" ref="form" :hide-required-asterisk="false" show-message :rules="rules">
+        <div v-for="(team,index) in reportData">
+            <div class="gmtybg">
+                <el-row>
+                    <el-col :span="2">
+                        <div class="gmtybg-photo"><img :src="team.logo" alt=""/></div>
+                    </el-col>
+                    <el-col :span="3">
+                        <div class="gmtybg-name">{{team.name}}</div>
+                    </el-col>
+                    <el-col :span="15">
+                        <el-form-item>
+                            <div class="gmtybg-label" v-for="(stage,i) in team.stages" style="width:90px;white-space:nowrap;overflow:hidden">
+<!--                                <div v-for="(item,i) in form">-->
+<!--                                    <div v-if="item.stage == stage.stageName && item.teamName == team.name">-->
+<!--                                        <label><input type="checkbox" :value="stage.checkValue" v-model="checkVal" :disabled="true">{{stage.stageName}}</label>-->
+<!--                                    </div>-->
+<!--                                    <div v-else>-->
+<!--                                        <label><input type="checkbox" :value="stage.checkValue" v-model="checkVal">{{stage.stageName}}</label>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                                <label><input type="checkbox" :value="stage.checkValue" v-model="checkVal" >第{{stage.stageName}}</label>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="2">
+                        <el-form-item>
+                            <div class="gmtybg-btn">
+                                <el-button type="primary" size="small" @click="buy(team.id)">购买</el-button>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
+    </el-form>
+    </div>
+</el-dialog>
+<!--购买同业报告-->
+</body>
+
+<script type="module" th:src="@{/service/buy-report.js}"></script>
+<style>
+    .el-form-item {
+        margin-bottom: 0px;
+    }
+
+    .input-list .el-input__inner {
+        /* background-color: #F8F9FB; */
+        padding: 0rem 0.8rem;
+        text-align: left;
+    }
+</style>
+
+</html>

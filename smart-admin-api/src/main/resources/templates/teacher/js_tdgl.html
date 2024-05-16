@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--main-->
+<div class="main">
+	<div class="screen">
+		<dl>
+			<dt><font size="4">请选择项目</font></dt>
+			<dd>
+				<el-select v-model="value" size="large" style="width: 150%"  filterable placeholder="请选择项目" @change="changeProject">
+					<el-option
+							v-for="item in options"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+					>
+					</el-option>
+				</el-select>
+			</dd>
+		</dl>
+	</div>
+	<ul class="column-tabs">
+		<template v-for="(value,key) in reportData" :key="key">
+		<li class="column-tabs-a"><a href="js_tdgl">{{key}}</a></li>
+<!--		<li><a href="js_tdgl2.html">虎队银行</a></li>-->
+<!--		<li><a href="js_tdgl3.html">全球鹰队银行</a></li>-->
+<!--		<li><a href="js_tdgl4.html">豹队银行</a></li>-->
+		</template>
+	</ul>
+	<div class="main-bg">
+		<el-tabs v-model="activeName" @tab-click="handleClick">
+			<!--团队基本信息-->
+			<el-tab-pane  label="团队基本信息" name="first">
+				<div class="team-content">
+					<el-form :model="teamData" ref="form" :hide-required-asterisk="false" show-message :rules="rules">
+                        <ul>
+                            <li>
+<!--								<img src="../photo/team_logo1.jpg" alt=""/>-->
+								<img v-if="teamData.logo" :src="'../upload/' + teamData.logo" class="avatar"/>
+								<img v-else :src="defaultTeamLogo" class="avatar"/>
+							</li>
+                            <li><el-button plain size="small" @click="updateTeamData()">修改团队logo</el-button></li>
+                        </ul>
+                        <dl>
+                            <dt>团队名称：</dt>
+                            <dd>{{teamData.name}}</dd>
+                        </dl>
+                        <dl>
+                            <dt>团队口号：</dt>
+                            <dd>{{teamData.shortName}}</dd>
+                        </dl>
+    					<dl>
+    						<dt>董事长：</dt>
+    						<dd><img src="../photo/user_photo2.png" alt=""/><a href="#">{{teamData.actualName}}</a></dd>
+    					</dl>
+
+                        <dl>
+                            <dt></dt>
+                            <dd><el-button plain size="small"  @click="updateTeamData()">修改团队信息</el-button></dd>
+                        </dl>
+					</el-form>
+			  </div>
+			</el-tab-pane>
+			<!--团队基本信息-->
+			<!--团队成员-->
+			<el-tab-pane label="团队成员" name="second">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dt>学员姓名</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="form.actualName" size="small"  style="width: 80%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryStudentData(teamData.id,form.actualName,'')"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<div class="screen-right">
+						<el-button type="primary" size="small" @click="addStudent()" >添加</el-button>
+						<el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="teamByData"
+							  style="width: 100%"
+							  size="medium"
+							  @selection-change="handleSelectionChange"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="actualName"
+										 label="姓名"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="loginName"
+										 label="用户名"
+										 sortable
+										 width="200">
+						</el-table-column>
+						<el-table-column
+										 prop="email"
+										 label="邮箱"
+										 width="300">
+						</el-table-column>
+						<el-table-column
+										 prop="phone"
+										 label="电话"
+										 align="center"
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="newscz"
+										 label="操作"
+										 align="center"
+										 >
+							<template #default="scope" style="float:right">
+								<el-button type="primary" plain size="small" @click="update(scope.row.id)" >编辑</el-button>
+								<el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--团队成员-->
+			<!--角色管理-->
+			<el-tab-pane label="角色管理" name="third">
+				<!--筛选-->
+				<div class="screen">
+<!--					<dl>-->
+<!--						<dd>-->
+<!--							<el-select v-model="value" placeholder="本期学员" size="small">-->
+<!--								<el-option-->
+<!--										   v-for="item in options"-->
+<!--										   :key="item.value"-->
+<!--										   :label="item.label"-->
+<!--										   :value="item.value">-->
+<!--								</el-option>-->
+<!--							</el-select>-->
+<!--							<el-select v-model="value" placeholder="中国龙队银行" size="small">-->
+<!--								<el-option-->
+<!--										   v-for="item in options"-->
+<!--										   :key="item.value"-->
+<!--										   :label="item.label"-->
+<!--										   :value="item.value">-->
+<!--								</el-option>-->
+<!--							</el-select>-->
+<!--						</dd>-->
+<!--					</dl>-->
+					<dl>
+						<dt>学员姓名</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="form.actualName" size="small"  style="width: 80%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryStudentData(teamData.id,form.actualName,'')"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<dl>
+						<dt>角色</dt>
+						<dd>
+							<el-input placeholder="请输入关键字" v-model="form.remark" size="small"  style="width: 80%">
+								<template #append>
+									<el-button icon="el-icon-search" @click="queryStudentData(teamData.id,form.actualName,form.remark)"></el-button>
+								</template>
+							</el-input>
+						</dd>
+					</dl>
+					<div class="screen-right">
+						<el-button type="primary" size="small" onclick="window.location.href ='js_tjtdjs'">新增</el-button>
+						<el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button>
+					</div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="teamByData"
+							  style="width: 100%"
+							  size="medium"
+							  @selection-change="handleSelectionChange"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="actualName"
+										 label="姓名"
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="loginName"
+										 label="用户名"
+										 width="300">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="团队"
+										 width="350">
+						</el-table-column>
+						<el-table-column
+										 prop="remark"
+										 label="角色"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 label="操作"
+										 align="center"
+										 sortable>
+							<template #default="scope" style="float:right">
+								<el-button type="primary" plain size="small" @click="update(scope.row.id)" >编辑</el-button>
+								<el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination :model="form" ref="form"
+								   :current-page="form.pageNum"
+								   :page-size="form.pageSize"
+								   :total="form.total"
+								   style="padding: 30px 0; text-align: center;"
+								   layout="total, prev, pager, next, jumper"
+								   @current-change="changePage"
+					/>
+<!--					<el-pagination-->
+<!--								   background-->
+<!--								   @size-change="handleSizeChange"-->
+<!--								   @current-change="handleCurrentChange"-->
+<!--								   :current-page="currentPage1"-->
+<!--								   :page-sizes="[100, 200, 300, 400]"-->
+<!--								   :page-size="100"-->
+<!--								   layout="total, sizes, prev, pager, next, jumper"-->
+<!--								   :total="400">-->
+<!--					</el-pagination>-->
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--角色管理-->
+			<!--团队点评-->
+			<el-tab-pane label="团队点评" name="fourth">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-select v-model="value" placeholder="本期学员" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>点评人</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>点评时间</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<div class="screen-right"><el-button type="primary" plain size="small">删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="new"
+										 label="标题"
+										 width="650">
+						</el-table-column>
+						<el-table-column
+										 prop="zjr"
+										 label="点评人"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="点评日期"
+										 align="center"
+										 sortable
+										 width="120">
+						</el-table-column>
+						<el-table-column
+										 prop="newscz"
+										 label="操作"
+										 align="center"
+										 sortable>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--团队点评-->
+			<!--决策总结-->
+			<el-tab-pane label="决策总结" name="fifth">
+				<!--筛选-->
+				<div class="screen">
+					<dl>
+						<dd>
+							<el-select v-model="value" placeholder="本期学员" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>决策人</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>决策时间</dt>
+						<dd>
+							<el-select v-model="value" placeholder="全部" size="small">
+								<el-option
+										   v-for="item in options"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</dd>
+					</dl>
+					<div class="screen-right"><el-button type="primary" plain size="small">删除</el-button></div>
+				</div>
+				<!--筛选-->
+				<div class="table">
+					<!--表格-->
+					<el-table
+							  :data="tableData"
+							  style="width: 100%"
+							  size="medium"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  >
+						<el-table-column
+										 type="selection">
+						</el-table-column>
+						<el-table-column
+										 prop="name"
+										 label="决策人"
+										 width="100">
+						</el-table-column>
+						<el-table-column
+										 prop="new"
+										 label="标题"
+										 width="450">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="决策日期"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="zjr"
+										 label="总结人"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="date"
+										 label="总结日期"
+										 align="center"
+										 sortable
+										 width="150">
+						</el-table-column>
+						<el-table-column
+										 prop="cz"
+										 label="操作"
+										 align="center"
+										 sortable>
+						</el-table-column>
+					</el-table>
+					<!--表格-->
+					<!--分页-->
+					<el-pagination
+								   background
+								   @size-change="handleSizeChange"
+								   @current-change="handleCurrentChange"
+								   :current-page="currentPage1"
+								   :page-sizes="[100, 200, 300, 400]"
+								   :page-size="100"
+								   layout="total, sizes, prev, pager, next, jumper"
+								   :total="400">
+					</el-pagination>
+					<!--分页-->
+				</div>
+			</el-tab-pane>
+			<!--决策总结-->
+		</el-tabs>
+	</div>
+</div>
+<!--main-->
+
+<!--footer-->
+
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+<script>
+	var Main = {
+		data () {
+			return {
+				//头像
+				circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+				squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+				sizeList: ["large", "medium", "small"],
+				//表格
+				tableData: [],
+				//导航
+				activeIndex: '2',
+				//tabs
+				activeName: 'first',
+                teamData:{
+					id:'',name:'',shortName:'',logo:'',actualName:''
+				},
+                teamId:'',
+                teamByData:[],
+				//选择器
+				options: [],
+				value: '',
+				// pageNum: 1,  //当前页
+				// pageSize: 5, //每页记录数
+				// total: 3, //总记录数
+				form: {
+					pageNum: '1',
+					pageSize: '5',
+					total:'3',
+					deptId:'',
+					actualName:'',
+					remark:''
+				},
+				selectedData: [],
+				defaultTeamLogo:'../photo/team_logo1.jpg',
+				//分页
+				currentPage1: 5,
+				currentPage2: 5,
+				currentPage3: 5,
+				currentPage4: 4,
+				//弹出经济形势
+				dialogTableVisible: false
+			}
+		},
+		mounted:function (){
+			//查询所有项目
+			this.selectAllProjecs()
+				},
+		methods: {
+			selectAllProjecs(){
+				let that = this
+				axios({
+					method:'get',
+					url:'queryAllProject',//相对路径即可，不用加/service
+					responseType:'json',
+				}).then(function(resp){
+					let data = resp.data.data
+					that.options = [];
+					data.forEach(function(item,index){
+						let temp = {value:'',label:''}
+						temp.value = item.proId
+						temp.label = item.proName
+						that.options.push(temp)
+					})
+					that.value = data[0].proName
+					that.defaultId = data[0].proId
+					that.projectTableData(that.defaultId)
+				})
+			},
+			//切换项目
+			changeProject(val){
+				this.projectTableData(val)
+			},
+			projectTableData(proId){
+				let that = this
+				let params= new URLSearchParams()
+				params.append('currentProjectId', proId)
+				axios({
+					method:'get',
+					url:'queryTeamData',//相对路径即可，不用加/service
+					params:params,
+				}).then(function(resp){
+					if(resp.status==200){
+						that.reportData = resp.data.data
+                        // let value ='';
+						for(let key in that.reportData){
+							that.teamData=that.reportData[key]
+							break
+						}
+						console.log(that.teamData)
+                        // that.activeName=that.teamData.name
+						// alert(that.activeName)
+                        that.teamId =that.teamData.id
+						 console.log("id=",that.teamId)
+						that.queryStudentData(that.teamId,'','')
+                        // console.log(that.activeName)
+                        // console.log(that.teamData)
+					}
+				})
+
+			},
+			//查询团队数据
+			queryStudentData(deptId,actualName,remark){
+				let that = this
+				let params= new URLSearchParams()
+				params.append('deptId', deptId)
+				params.append('actualName', actualName)
+				params.append('remark', remark)
+				axios({
+					method:'get',
+					url:'employee/teamToStudent',//相对路径即可，不用加/service
+					params:params,
+				}).then(function(resp){
+					if(resp.status==200){
+						that.teamByData = resp.data.data
+						// console.log(that.teamByData)
+					}
+				})
+			},
+			addStudent(){
+				window.location.href ='js_tjtdcy?proId='+this.defaultId
+	        },
+			//修改团队数据
+			updateTeamData(){
+				window.location.href ='js_xgtd?teamId='+this.teamId
+			},
+			//批量删除文件
+			handleDelete(id) {
+				let that = this;
+				that.$confirm('确定要删除吗?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					let vals = this.selectedData;
+					let ids =new Array();
+					ids.push(id)
+					for (let i = 0; i <vals.length; i++) {
+						ids.push(vals[i].id)
+					}
+					axios({
+						method: 'post',
+						url: 'employee/deleteByIds',//相对路径即可，不用加/service
+						data: ids,
+						responseType: 'json',
+					}).then(function (resp) {
+						if (resp.status == 200) {
+							let message = '删除成功'
+							let type = "success"
+							that.$message({
+								showClose: true,
+								message: message,
+								type: type
+							});
+							that.queryStudentData(that.teamId,'','');
+						}
+					})
+				}).catch(() => {
+				});
+			},
+			//tab
+			formatter(row, column) {
+				return row.address;
+			},
+			handleClick(tab, event) {
+				// console.log(tab, event);
+			},
+			//分页
+			handleSizeChange(val) {
+				// console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				// console.log(`当前页: ${val}`);
+			},
+			// 页码改变
+			changePage(pageNum) {
+				this.form.pageNum = pageNum;
+				// this.queryFileData(null,this.activeName);
+				this.queryStudentData(this.teamId,'','')
+			},
+			handleSelectionChange(data) {
+				this.selectedData = data;
+			},
+		}
+	}
+	;const app = Vue.createApp(Main);
+	app.use(ElementPlus);
+	app.mount("#index");
+
+
+</script>
+
+
+</html>

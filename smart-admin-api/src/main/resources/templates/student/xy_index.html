@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import_index"></head>
+<body id="index" class="bg">
+<div th:include="include/header"></div>
+<div class="main">
+	<el-row :gutter="20">
+		<el-col :span="8">
+			<div class="column">
+				<!--团队-->
+				<div class="team" style="cursor: pointer">
+					<div class="team-logo" @click="openTeamDialog">
+						<img  v-if="teamInfo.logo" :src="'../upload/' + teamInfo.logo" width="90" height="90" alt=""/>
+						<img  v-else src="../photo/team_logo1.jpg" width="90" height="90" alt=""/>
+					</div>
+					<div class="team-name" v-text="teamInfo.name"></div>
+					<template v-for="(item,i) in teamMembers">
+						<div v-if="item.id === teamLeader.id" class="team-teacher">
+							<span v-text="item.remark"></span>
+							<img  v-if="item.userPhoto" :src="'../upload/' + item.userPhoto" alt=""/>
+							<img  v-else src="../images/user_photo.png" alt=""/>
+							<a href="#" v-html="item.actualName"></a>
+						</div>
+					</template>
+				</div>
+				<div class="column-title">高管成员</div>
+				<div class="team-member">
+					<template v-for="(item,i) in teamMembers">
+						<dl v-if="item.id != teamLeader.id">
+							<img  v-if="item.userPhoto" :src="'../upload/' + item.userPhoto" alt=""/>
+							<img  v-else src="../images/user_photo.png" alt=""/>
+							<dt><a href="#">{{item.actualName}}</a></dt>
+							<dd>{{item.remark}}</dd>
+						</dl>
+					</template>
+				</div>
+				<!--团队-->
+			</div>
+		</el-col>
+		<el-col :span="8">
+			<div class="column">
+				<!--各银行市场占比-->
+				<div class="column-title">市场占比
+					<ul class="column-title-right">
+						<li>
+							<el-select @change="typeChanged" ref="serviceType" v-model="value1" placeholder="业务类型" size="small">
+							<el-option
+									   v-for="item in optionsyewu"
+									   :key="item.value"
+									   :label="item.label"
+									   :value="item.value">
+							</el-option>
+							</el-select>
+						</li>
+						<li>
+							<el-select @change="scfeStageChange" v-model="currentStageDesc" ref="scfeSelect" placeholder="当前进度" size="small">
+								<el-option
+										   v-for="item in optionsjindu"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</li>
+					</ul>
+				</div>
+				<div class="sczb" id="sczb"></div>
+				<!--各银行市场占比-->
+			</div>
+		</el-col>
+		<el-col :span="8">
+			<div class="column">
+				<!--同业报告-->
+				<div class="column-title">同业报告
+					<ul class="column-title-right">
+						<li>
+							<el-select @change="tybgStageChange" v-model="currentStageDesc2" placeholder="当前进度" size="small">
+								<el-option
+										   v-for="item in optionsjindu"
+										   :key="item.value"
+										   :label="item.label"
+										   :value="item.value">
+								</el-option>
+							</el-select>
+						</li>
+					</ul>
+				</div>
+				<div class="tybg">
+					<!--tab-->
+					<el-tabs v-model="tybgtabs" @tab-click="handleClick">
+						<!--银行-->
+						<template v-for="(value,key) in reportData" :key="key">
+							<el-tab-pane :label="key" :name="key">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0" class="tybg-table">
+									<tbody>
+									<tr>
+										<td class="hui">资产负债表总额（百万元）</td>
+										<td align="right">{{value.totalAssets}}</td>
+									</tr>
+									<tr>
+										<td class="hui">净利润（百万元）</td>
+										<td align="right">{{value.retainedProfits}}</td>
+									</tr>
+									<tr>
+										<td class="hui">短期贷款份额（%）</td>
+										<td align="right">{{value.shortLoanShare}}</td>
+									</tr>
+									<tr>
+										<td class="hui">中长期贷款份额（%）</td>
+										<td align="right">{{value.middleLoanShare}}</td>
+									</tr>
+									<tr>
+										<td class="hui">短期存款份额（%）</td>
+										<td align="right">{{value.shortDepositShare}}</td>
+									</tr>
+									<tr>
+										<td class="hui">长期存款份额（%）</td>
+										<td align="right">{{value.longDepositShare}}</td>
+									</tr>
+									<tr>
+										<td class="hui">股票价格（元/股）</td>
+										<td align="right">{{value.stockPrice}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</el-tab-pane>
+						</template>
+					</el-tabs>
+					<!--tab-->
+				</div>	
+				<!--同业报告-->
+			</div>
+		</el-col>
+	</el-row>
+	<el-row :gutter="20">
+		<el-col :span="24">
+			<div class="column">
+				<!--各阶段银行股价-->
+				<div class="column-title">各阶段银行股价<span>单位：元/每股</span>
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhexian_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+					</ul>
+				</div>
+				<div class="yhgj" id="yhgj"></div>
+				<!--各阶段银行股价-->
+			</div>
+		</el-col>
+	</el-row>
+	<el-row :gutter="20">
+		<el-col :span="12">
+			<div class="column">
+				<!--市场营销-->
+				<div class="column-title">人员满意度
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_leida_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+						<li>
+							<el-select v-model="currentStageDesc" @change="mycdStageChange" placeholder="当前进度" size="small">
+							<el-option
+									   v-for="item in optionsjindu"
+									   :key="item.value"
+									   :label="item.label"
+									   :value="item.value">
+							</el-option>
+							</el-select>
+						</li>
+					</ul>
+				</div>
+				<div class="rymyd" id="rymyd"></div>
+				<!--市场营销-->
+			</div>
+		</el-col>
+		<el-col :span="12">
+			<div class="column">
+				<!--同业报告-->
+				<div class="column-title">人员分配<span>单位：人</span>
+					<ul class="column-title-right">
+						<li>
+							<el-select v-model="currentStageDesc" @change="ryfpStageChange" placeholder="当前进度" size="small">
+							<el-option
+									   v-for="item in optionsjindu"
+									   :key="item.value"
+									   :label="item.label"
+									   :value="item.value">
+							</el-option>
+							</el-select>
+						</li>
+					</ul>
+				</div>
+				<div class="ryfp">
+					<el-table 
+							  :data="tableData"
+							  style="width: 100%"
+							  :default-sort = "{prop: 'date', order: 'descending'}"
+							  size="medium"
+							  >
+						<el-table-column
+								 prop="businessType"
+								 label="业务类型"
+								 width="160">
+						</el-table-column>
+						<el-table-column
+								 prop="startEmployeeQuantity"
+								 label="期初员工数"
+								 width="90"
+								 align="right">
+						</el-table-column>
+						<el-table-column
+								 prop="hareFire"
+								 label="雇佣／解雇"
+								 width="90"
+								 align="right">
+						</el-table-column>
+						<el-table-column
+								 prop="drain"
+								 label="流失人数"
+								 width="90"
+								 align="right">
+						</el-table-column>
+						<el-table-column
+								 prop="endEmployeeQuantity"
+								 label="期末员工数"
+								 width="90"
+								 align="right">
+						</el-table-column>
+					</el-table>
+				</div>
+				<!--同业报告-->
+			</div>
+		</el-col>
+	</el-row>
+	<el-row :gutter="20">
+		<el-col :span="12">
+			<div class="column">
+				<!--资产总额-->
+				<div class="column-title">资产总额<span>单位：亿元</span>
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhu_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+					</ul>
+				</div>
+				<div class="zcze" id="zcze"></div>
+				<!--资产总额-->
+			</div>
+		</el-col>
+		<el-col :span="12">
+			<div class="column">
+				<!--利润总额-->
+				<div class="column-title">利润总额<span>单位：亿元</span>
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhu_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+					</ul>
+				</div>
+				<div class="lrze" id="lrze"></div>
+				<!--利润总额-->
+			</div>
+		</el-col>
+	</el-row>
+	<el-row :gutter="20">
+		<el-col :span="24">
+			<div class="column">
+				<!--资产增长率-->
+				<div class="column-title">资产增长率
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_zhexian_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+					</ul>
+				</div>
+				<div class="zczzl" id="zczzl"></div>
+				<!--资产增长率-->
+			</div>
+		</el-col>
+	</el-row>
+	<el-row :gutter="20">
+		<el-col :span="12">
+			<div class="column">
+				<!--市场营销-->
+				<div class="column-title">市场营销
+					<ul class="column-title-right">
+						<li class="column-title-right-a"><a href="#"><img  th:src="@{/images/icon_leida_a.png}" alt=""/></a></li>
+						<li><a href="#"><img  th:src="@{/images/icon_table_b.png}" alt=""/></a></li>
+						<li>
+							<el-select v-model="currentStageDesc" @change="scyxStageChange" placeholder="当前进度" size="small">
+							<el-option
+									   v-for="item in optionsjindu"
+									   :key="item.value"
+									   :label="item.label"
+									   :value="item.value">
+							</el-option>
+							</el-select>
+						</li>
+					</ul>
+				</div>
+				<div class="scyx" id="scyx"></div>
+				<!--市场营销-->
+			</div>
+		</el-col>
+		<el-col :span="12">
+			<div class="column">
+				<!--tab-->
+				<el-tabs v-model="zsktabs" @tab-click="handleClick">
+					<!--学习资料-->
+					<el-tab-pane label="学习资料" name="first">
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_docx.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">变革时代的银行行长，追求卓越的领导力 课程培训</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_image.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">管理者的自我发展战略</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_pdf.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">职业竞争力的塑造与提升 银行市场竞争策略</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_pptx.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">职业经理人的七项建设</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_rar.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">如何建立以客户为导向的服务体系 优质团队建设</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_xlsx.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">银行市场竞争策略</a></dt>
+						</dl>
+					</el-tab-pane>
+					<!--学习资料-->
+					<!--常用工具-->
+					<el-tab-pane label="常用工具" name="second">
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_pptx.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">职业经理人的七项建设</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_rar.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">如何建立以客户为导向的服务体系 优质团队建设</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_xlsx.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">银行市场竞争策略</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_docx.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">变革时代的银行行长，追求卓越的领导力 课程培训</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_image.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">管理者的自我发展战略</a></dt>
+						</dl>
+						<dl class="download">
+							<dd><img  th:src="@{/images/format_pdf.png}" alt=""/></dd>
+							<dt><a href="xy_content.html">职业竞争力的塑造与提升 银行市场竞争策略</a></dt>
+						</dl>
+					</el-tab-pane>
+					<!--常用工具-->
+				</el-tabs>
+				<!--tab-->
+			</div>
+	  </el-col>
+	</el-row>
+</div>
+<!--main-->	
+<!--浮动按钮-->
+<!--<div class="zxjl" @click="zxjl=true"><a href="#"><img  th:src="@{/images/zxjl.png}" alt=""/></a></div>-->
+<div class="tcsp">
+	<p @click="gmjl"><a th:href="@{/service/toBuyOrToSee}" >购买记录</a></p>
+</div>
+<!--浮动按钮-->
+	
+<!--弹出视频-->	
+<!--<el-dialog title="模拟银行的经济背景" v-model="tcsp" top="30vh">-->
+<!--	<div class="tc-video"><img  th:src="@{/photo/video_img.jpg}" alt=""/></div>-->
+<!--</el-dialog>	-->
+<!--弹出视频-->
+	
+<!--突发预警-->	
+<!--<el-dialog title="突发事件" v-model="tfyj" top="80vh">-->
+<!--	<div class="tfsj">因国外股票投资市场发生震荡，已严重影响国内的经济形势，股价将出现较大波动，请及时做出应对策略！</div>-->
+<!--</el-dialog>	-->
+<!--突发预警-->
+<!--团队信息-->
+<el-dialog title="团队信息" v-model="team_model" center>
+	<el-tabs v-model="activeName" @tab-click="handleClick">
+		<el-tab-pane label="基本信息" name="first">
+			<el-row :justify="center">
+				<el-col :span="8" center>
+					<el-upload
+							class="avatar-uploader"
+							action="upload"
+							:show-file-list="false"
+							:on-success="teamUploadSuccess"
+							:before-upload="beforeAvatarUpload">
+						<img v-if="teamInfo.logo" :src="'../upload/' + teamInfo.logo" class="avatar"/>
+						<img v-else :src="defaultTeamLogo" class="avatar"/>
+<!--						<el-icon v-else class="avatar-uploader-icon"><plus /></el-icon>-->
+					</el-upload>
+				</el-col>
+				<el-col :span="16">
+					<el-form ref="peopleForm" lable-position="left" label-width="100px" :model="people">
+						<el-form-item label="团队名称:" >
+							<el-input v-model="teamInfo.name" ></el-input>
+						</el-form-item>
+						<el-form-item label="团队口号:">
+							<el-input type="textarea" v-model="teamInfo.shortName" ></el-input>
+						</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
+		</el-tab-pane>
+		<el-tab-pane label="团队成员" name="second">
+			<el-table :data="teamMembers" style="width: 100%">
+				<el-table-column align="center" label="ID" prop="id"></el-table-column>
+				<el-table-column align="center" label="姓名" prop="actualName"></el-table-column>
+				<el-table-column align="center" label="电话" prop="phone"></el-table-column>
+				<el-table-column align="center" label="设置角色">
+					<template #default="scope">
+						<el-select v-model="scope.row.remark" @change="setMemberRole($event,scope.row)" placeholder="成员角色" size="small">
+							<el-option
+									v-for="item in roleList"
+									:key="item.roleName"
+									:label="item.roleName"
+									:value="item.roleName">
+							</el-option>
+						</el-select>
+					</template>
+				</el-table-column>
+			</el-table>
+		</el-tab-pane>
+	</el-tabs>
+	<template #footer>
+		  <span class="dialog-footer">
+			<el-button @click="team_model = false">关闭</el-button>
+			<el-button type="primary" @click="updateTeamInfo">保存</el-button>
+		  </span>
+	</template>
+</el-dialog>
+<!--团队信息-->
+<!--在线交流-->	
+<!--<el-dialog title="在线交流" v-model="zxjl" width="700px" top="30vh">-->
+<!--	<div class="tc-video"><img  th:src="@{/photo/zxjl_img.png}" alt=""/></div>-->
+<!--</el-dialog>	-->
+<!--在线交流-->
+	
+<!--欢迎界面-->	
+<el-dialog v-model="hyjm" top="5%" width="900px">
+	<div class="hyjm">
+		<div class="hyjm-photo">
+			<img  v-if="teamInfo.logo" :src="'../upload/' + teamInfo.logo" width="90" height="90" alt=""/>
+			<img  v-else th:src="@{/photo/team_logo1.jpg}" width="90" height="90" alt=""/>
+		</div>
+		<div class="hyjm-name">{{teamInfo.name}}</div>
+		<div class="hyjm-kh"><img  th:src="@{/images/hyjm_kh_l.png}" alt=""/>{{teamInfo.shortName}}<img  th:src="@{/images/hyjm_kh_l.png}" alt=""/></div>
+		<div class="hyjm-title">
+			欢迎<span>[[${session['app_user_login']!=null?session['app_user_login'].actualName:'您'}]]</span>
+			来到中国建设银行<span>[[${session['system_project']!=null?session['system_project'].proName:'新一期'}]]</span>
+			卓越银行家俱乐部！
+		</div>
+	</div>
+</el-dialog>	
+<!--欢迎界面-->
+
+<div th:include="include/footer"></div>
+</body>
+<script type="module" th:src="@{/service/student-index.js}"></script>
+</html>
