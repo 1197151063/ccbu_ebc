@@ -24,16 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-/**
- * [ 财务管理表 ]
- *
- * @author SMS
- * @version 1.0
- * @company SMS
- * @copyright (c)  SMSInc. All rights reserved.
- * @date 2021-11-23 16:32:30
- * @since JDK1.8
- */
+
 @RestController
 @RequestMapping("/service")
 @Api(tags = {SwaggerTagConst.StudentDec.STUDENT_DECISION_FINANACE})
