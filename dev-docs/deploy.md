@@ -6,7 +6,7 @@
 >*4、Maven*\
 >*5、lombok*\
 >*6、nodejs*\
->*7、npm*\
+>*7、npm*
 
 
 ### 1 Pull the project
