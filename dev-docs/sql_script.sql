@@ -14,8 +14,8 @@ create table act_evt_log
     LOCK_TIME_    timestamp(3)                              null,
     IS_PROCESSED_ tinyint      default 0                    null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_ge_property
 (
@@ -24,8 +24,8 @@ create table act_ge_property
     VALUE_ varchar(300) null,
     REV_   int          null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_hi_actinst
 (
@@ -45,8 +45,8 @@ create table act_hi_actinst
     DURATION_          bigint                  null,
     TENANT_ID_         varchar(255) default '' null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_HI_ACT_INST_END
     on act_hi_actinst (END_TIME_);
@@ -75,8 +75,8 @@ create table act_hi_attachment
     CONTENT_ID_   varchar(64)   null,
     TIME_         datetime(3)   null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_hi_comment
 (
@@ -91,8 +91,8 @@ create table act_hi_comment
     MESSAGE_      varchar(4000) null,
     FULL_MSG_     longblob      null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_hi_detail
 (
@@ -113,8 +113,8 @@ create table act_hi_detail
     TEXT_         varchar(4000) null,
     TEXT2_        varchar(4000) null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_HI_DETAIL_ACT_INST
     on act_hi_detail (ACT_INST_ID_);
@@ -141,8 +141,8 @@ create table act_hi_identitylink
     TASK_ID_      varchar(64)  null,
     PROC_INST_ID_ varchar(64)  null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_HI_IDENT_LNK_PROCINST
     on act_hi_identitylink (PROC_INST_ID_);
@@ -173,8 +173,8 @@ create table act_hi_procinst
     constraint PROC_INST_ID_
         unique (PROC_INST_ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_HI_PRO_INST_END
     on act_hi_procinst (END_TIME_);
@@ -206,8 +206,8 @@ create table act_hi_taskinst
     CATEGORY_       varchar(255)            null,
     TENANT_ID_      varchar(255) default '' null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_HI_TASK_INST_PROCINST
     on act_hi_taskinst (PROC_INST_ID_);
@@ -230,8 +230,8 @@ create table act_hi_varinst
     CREATE_TIME_       datetime(3)   null,
     LAST_UPDATED_TIME_ datetime(3)   null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_HI_PROCVAR_NAME_TYPE
     on act_hi_varinst (NAME_, VAR_TYPE_);
@@ -250,8 +250,8 @@ create table act_id_group
     NAME_ varchar(255) null,
     TYPE_ varchar(255) null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_id_info
 (
@@ -265,8 +265,8 @@ create table act_id_info
     PASSWORD_  longblob     null,
     PARENT_ID_ varchar(255) null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_id_user
 (
@@ -279,8 +279,8 @@ create table act_id_user
     PWD_        varchar(255) null,
     PICTURE_ID_ varchar(64)  null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_id_membership
 (
@@ -292,8 +292,8 @@ create table act_id_membership
     constraint ACT_FK_MEMB_USER
         foreign key (USER_ID_) references act_id_user (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_re_deployment
 (
@@ -304,8 +304,8 @@ create table act_re_deployment
     TENANT_ID_   varchar(255) default '' null,
     DEPLOY_TIME_ timestamp(3)            null
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_ge_bytearray
 (
@@ -319,8 +319,8 @@ create table act_ge_bytearray
     constraint ACT_FK_BYTEARR_DEPL
         foreign key (DEPLOYMENT_ID_) references act_re_deployment (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_re_model
 (
@@ -345,8 +345,8 @@ create table act_re_model
     constraint ACT_FK_MODEL_SOURCE_EXTRA
         foreign key (EDITOR_SOURCE_EXTRA_VALUE_ID_) references act_ge_bytearray (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_re_procdef
 (
@@ -368,8 +368,8 @@ create table act_re_procdef
     constraint ACT_UNIQ_PROCDEF
         unique (KEY_, VERSION_, TENANT_ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_procdef_info
 (
@@ -385,8 +385,8 @@ create table act_procdef_info
     constraint ACT_FK_INFO_PROCDEF
         foreign key (PROC_DEF_ID_) references act_re_procdef (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_INFO_PROCDEF
     on act_procdef_info (PROC_DEF_ID_);
@@ -421,8 +421,8 @@ create table act_ru_execution
     constraint ACT_FK_EXE_SUPER
         foreign key (SUPER_EXEC_) references act_ru_execution (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_ru_event_subscr
 (
@@ -441,8 +441,8 @@ create table act_ru_event_subscr
     constraint ACT_FK_EVENT_EXEC
         foreign key (EXECUTION_ID_) references act_ru_execution (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_EVENT_SUBSCR_CONFIG_
     on act_ru_event_subscr (CONFIGURATION_);
@@ -473,8 +473,8 @@ create table act_ru_job
     constraint ACT_FK_JOB_EXCEPTION
         foreign key (EXCEPTION_STACK_ID_) references act_ge_bytearray (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_ru_task
 (
@@ -505,8 +505,8 @@ create table act_ru_task
     constraint ACT_FK_TASK_PROCINST
         foreign key (PROC_INST_ID_) references act_ru_execution (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create table act_ru_identitylink
 (
@@ -526,8 +526,8 @@ create table act_ru_identitylink
     constraint ACT_FK_TSKASS_TASK
         foreign key (TASK_ID_) references act_ru_task (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_ATHRZ_PROCEDEF
     on act_ru_identitylink (PROC_DEF_ID_);
@@ -563,8 +563,8 @@ create table act_ru_variable
     constraint ACT_FK_VAR_PROCINST
         foreign key (PROC_INST_ID_) references act_ru_execution (ID_)
 )
-    engine = InnoDB
-    collate = utf8_bin;
+    collate = utf8_bin
+    row_format = DYNAMIC;
 
 create index ACT_IDX_VARIABLE_TASK_ID
     on act_ru_variable (TASK_ID_);
@@ -579,8 +579,8 @@ create table data_parameter
     file_path       varchar(255) null comment '文件路径',
     file_name       varchar(255) null comment '文件名称'
 )
-    comment '参数表' engine = InnoDB
-                     charset = utf8mb4;
+    comment '参数表' charset = utf8mb4
+                     row_format = DYNAMIC;
 
 create table dec_financial_management
 (
@@ -592,8 +592,8 @@ create table dec_financial_management
     share_bonus        double(10, 2) null comment '分红（%）',
     synergia           int(10)       null comment '增效（百万元）'
 )
-    comment '财务管理表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '财务管理表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table dec_investment_long
 (
@@ -605,8 +605,8 @@ create table dec_investment_long
     bond_type          varchar(10) null comment '股票/债券类型(P0~5)',
     buy_sell           int(10)     null comment '买入或卖出(债券第一次只能买)'
 )
-    comment '投资业务(长期投资)提交表' engine = InnoDB
-                                       charset = utf8mb4;
+    comment '投资业务(长期投资)提交表' charset = utf8mb4
+                                       row_format = DYNAMIC;
 
 create table dec_investment_short
 (
@@ -619,8 +619,8 @@ create table dec_investment_short
     investment_stock   int(10) null comment '股票',
     nvestment_bond     int(10) null comment '债券'
 )
-    comment '投资业务(短期投资)提交表' engine = InnoDB
-                                       charset = utf8mb4;
+    comment '投资业务(短期投资)提交表' charset = utf8mb4
+                                       row_format = DYNAMIC;
 
 create table dec_loan_deposit
 (
@@ -665,8 +665,8 @@ create table dec_loan_deposit
     long_de_posit_rise           double(10, 2) null comment '长期存款-利率%',
     long_savings_deposit_rise    double(10, 2) null
 )
-    comment '存贷款' engine = InnoDB
-                     charset = utf8mb4;
+    comment '存贷款' charset = utf8mb4
+                     row_format = DYNAMIC;
 
 create table dec_market_strategy
 (
@@ -731,8 +731,8 @@ create table dec_market_strategy
     business_marketing_deposit_bloan_transaction int(10) null comment '业务营销-存款业务(单位：百万元)',
     business_marketing_middle_transaction        int(10) null comment '业务营销-中间业务(单位：百万元)'
 )
-    comment '市场营销策略' engine = InnoDB
-                           charset = utf8mb4;
+    comment '市场营销策略' charset = utf8mb4
+                           row_format = DYNAMIC;
 
 create table dec_middle_custody
 (
@@ -749,8 +749,8 @@ create table dec_middle_custody
     second_underwrit_price_bond  double(10, 2) null comment '乙债券承销价(%)',
     third_underwrit_price_bond   double(10, 2) null comment '丙债券承销价(%)'
 )
-    comment '中间业务提交表' engine = InnoDB
-                             charset = utf8mb4;
+    comment '中间业务提交表' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table dec_personnel
 (
@@ -778,8 +778,8 @@ create table dec_personnel
     additional_personnel_cost    double(10, 2) null comment '附加人员成本(%)',
     automation_investment        int(10)       null comment '自动化投资(百万元)'
 )
-    comment '人事后勤信息录入' engine = InnoDB
-                               charset = utf8mb4;
+    comment '人事后勤信息录入' charset = utf8mb4
+                               row_format = DYNAMIC;
 
 create table par_agency_bond_issue
 (
@@ -794,8 +794,8 @@ create table par_agency_bond_issue
     min_price          double(10, 2) not null comment '最低承销价格(%)',
     subscription_limit double(10, 2) null comment '认购额度'
 )
-    comment '代理债券发行业务信息表' engine = InnoDB
-                                     charset = utf8mb4;
+    comment '代理债券发行业务信息表' charset = utf8mb4
+                                     row_format = DYNAMIC;
 
 create table par_bond_parameter
 (
@@ -805,8 +805,8 @@ create table par_bond_parameter
     bond_parameter   varchar(50)   not null comment '债券种类(各阶段解锁一个，初始值只能加不能减)',
     bond_price       double(10, 1) not null comment '债券价格%'
 )
-    comment '债券参数表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '债券参数表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table par_capital_adequacy
 (
@@ -843,8 +843,8 @@ create table par_capital_adequacy
     capital_source_total                int(10) null comment '资本来源总额',
     capital_surplus_shortage            int(10) null comment '资本盈余/不足'
 )
-    comment '资本充足率-风险加权系数%' engine = InnoDB
-                                       charset = utf8mb4;
+    comment '资本充足率-风险加权系数%' charset = utf8mb4
+                                       row_format = DYNAMIC;
 
 create table par_comprehensive_score
 (
@@ -856,8 +856,8 @@ create table par_comprehensive_score
     fraction             double(10, 1) null comment '分数',
     calculation_formula  varchar(255)  null comment '计算公式'
 )
-    comment '人员成本表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '人员成本表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table par_economic_situation
 (
@@ -868,8 +868,8 @@ create table par_economic_situation
     financial_policy varchar(255) null comment '金融政策',
     global_economy   varchar(255) null comment '全球经济'
 )
-    comment '经济形势分析报告' engine = InnoDB
-                               charset = utf8mb4;
+    comment '经济形势分析报告' charset = utf8mb4
+                               row_format = DYNAMIC;
 
 create table par_formula
 (
@@ -878,8 +878,8 @@ create table par_formula
     business_name varchar(50)   null comment '业务名称',
     parameter     double(10, 2) null comment '参数'
 )
-    comment '存贷款计算公式表' engine = InnoDB
-                               charset = utf8mb4;
+    comment '存贷款计算公式表' charset = utf8mb4
+                               row_format = DYNAMIC;
 
 create table par_formula_total
 (
@@ -889,8 +889,8 @@ create table par_formula_total
     project  varchar(50)  null comment '项目',
     formula  varchar(255) null comment '公式'
 )
-    comment '公式' engine = InnoDB
-                   charset = utf8mb4;
+    comment '公式' charset = utf8mb4
+                   row_format = DYNAMIC;
 
 create table par_gency_bond_discount
 (
@@ -900,8 +900,8 @@ create table par_gency_bond_discount
     bond_type        varchar(50) null comment '债券类型',
     discount         int(10)     null comment '折扣'
 )
-    comment '代理债券折扣' engine = InnoDB
-                           charset = utf8mb4;
+    comment '代理债券折扣' charset = utf8mb4
+                           row_format = DYNAMIC;
 
 create table par_index_number
 (
@@ -912,8 +912,8 @@ create table par_index_number
     rate_of_change        double(10, 2) null comment '所需工作小时变动率',
     cumulative_investment int(10)       null comment '累计投资'
 )
-    comment '自动化投资指数' engine = InnoDB
-                             charset = utf8mb4;
+    comment '自动化投资指数' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table par_initial_data_agency_bond
 (
@@ -931,8 +931,8 @@ create table par_initial_data_agency_bond
     underwriting_price double(10, 2) null comment '承销价格（%）',
     discount           int(10)       null comment '折扣（%）'
 )
-    comment '代理债券参数表' engine = InnoDB
-                             charset = utf8mb4;
+    comment '代理债券参数表' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table par_initial_data_automation
 (
@@ -944,8 +944,8 @@ create table par_initial_data_automation
     cumulative_investment double(10, 1) null comment '累计投资',
     exponent              double(10, 1) null comment '指数'
 )
-    comment '初始数据表-人事后勤数据表(自动化投资)' engine = InnoDB
-                                                    charset = utf8mb4;
+    comment '初始数据表-人事后勤数据表(自动化投资)' charset = utf8mb4
+                                                    row_format = DYNAMIC;
 
 create table par_initial_data_capital_adequacy
 (
@@ -984,8 +984,8 @@ create table par_initial_data_capital_adequacy
     capital_source_total                double(10, 2) null comment '资本来源总额',
     capital_surplus_shortage            double(10, 2) null comment '资本盈余/不足'
 )
-    comment '初始数据表-资本充足率报告' engine = InnoDB
-                                        charset = utf8mb4;
+    comment '初始数据表-资本充足率报告' charset = utf8mb4
+                                        row_format = DYNAMIC;
 
 create table par_initial_data_investbus_bond
 (
@@ -1001,8 +1001,8 @@ create table par_initial_data_investbus_bond
     interest            int(10)       null comment '利息',
     account_profit_loss int(10)       null comment '账面损益'
 )
-    comment '初始数据表-投资业务营业数据表(债券)' engine = InnoDB
-                                                  charset = utf8mb4;
+    comment '初始数据表-投资业务营业数据表(债券)' charset = utf8mb4
+                                                  row_format = DYNAMIC;
 
 create table par_initial_data_investbus_stock
 (
@@ -1017,8 +1017,8 @@ create table par_initial_data_investbus_stock
     stock_dividend   int(10)       null comment '股息',
     stock_account    int(10)       null comment '账面损益'
 )
-    comment '初始数据表-投资业务营业数据表(股票)' engine = InnoDB
-                                                  charset = utf8mb4;
+    comment '初始数据表-投资业务营业数据表(股票)' charset = utf8mb4
+                                                  row_format = DYNAMIC;
 
 create table par_initial_data_liquidity_cash
 (
@@ -1036,8 +1036,8 @@ create table par_initial_data_liquidity_cash
     solvency                    int(10) null comment '清偿力',
     cash_solvency               int(10) null comment '现金清偿力'
 )
-    comment '初始数据表-流动性报表-现金' engine = InnoDB
-                                         charset = utf8mb4;
+    comment '初始数据表-流动性报表-现金' charset = utf8mb4
+                                         row_format = DYNAMIC;
 
 create table par_initial_data_liquidity_totality
 (
@@ -1066,8 +1066,8 @@ create table par_initial_data_liquidity_totality
     totality_solvency                  int(10) null comment '总体清偿力',
     overall_liquidity_surplus_shortage int(10) null comment '总体流动性盈余/不足'
 )
-    comment '初始数据表-流动性报表-总体' engine = InnoDB
-                                         charset = utf8mb4;
+    comment '初始数据表-流动性报表-总体' charset = utf8mb4
+                                         row_format = DYNAMIC;
 
 create table par_initial_data_loan_deposit
 (
@@ -1118,8 +1118,8 @@ create table par_initial_data_loan_deposit
     total_shareholders_equity         int(10) null comment '股东权益合计',
     total_liabilities_equity_indebted int(10) null comment '负债和股东权益总计'
 )
-    comment '初始内容表-资产负债' engine = InnoDB
-                                  charset = utf8mb4;
+    comment '初始内容表-资产负债' charset = utf8mb4
+                                  row_format = DYNAMIC;
 
 create table par_initial_data_market_customer_account
 (
@@ -1137,8 +1137,8 @@ create table par_initial_data_market_customer_account
     public_institution            int(10)     null comment '公共机构',
     account_sum                   int(10)     null comment '账户合计'
 )
-    comment '初始数据表-市场营销数据(客户账户)' engine = InnoDB
-                                                charset = utf8mb4;
+    comment '初始数据表-市场营销数据(客户账户)' charset = utf8mb4
+                                                row_format = DYNAMIC;
 
 create table par_initial_data_market_customer_bazaar
 (
@@ -1155,8 +1155,8 @@ create table par_initial_data_market_customer_bazaar
     public_institution            int(10)     null comment '公共机构',
     amount_sum                    int(10)     null comment '金额合计'
 )
-    comment '初始数据表-市场营销数据(客户市场)单位：百万元' engine = InnoDB
-                                                           charset = utf8mb4;
+    comment '初始数据表-市场营销数据(客户市场)单位：百万元' charset = utf8mb4
+                                                           row_format = DYNAMIC;
 
 create table par_initial_data_people_logistics
 (
@@ -1181,8 +1181,8 @@ create table par_initial_data_people_logistics
     training_level          varchar(50)   null comment '培训水平',
     job_satisfaction        varchar(50)   null comment '工作满意度'
 )
-    comment '人事后勤信息录入' engine = InnoDB
-                               charset = utf8mb4;
+    comment '人事后勤信息录入' charset = utf8mb4
+                               row_format = DYNAMIC;
 
 create table par_initial_data_personnel_logistics
 (
@@ -1196,8 +1196,8 @@ create table par_initial_data_personnel_logistics
     middle_transaction  varchar(50) null comment '中间业务',
     other               varchar(50) null comment '其他'
 )
-    comment '初始数据表-人事后勤数据表' engine = InnoDB
-                                        charset = utf8mb4;
+    comment '初始数据表-人事后勤数据表' charset = utf8mb4
+                                        row_format = DYNAMIC;
 
 create table par_initial_data_profit
 (
@@ -1229,8 +1229,8 @@ create table par_initial_data_profit
     subtract_income_tax                         int(10) null comment '减：所得税',
     retained_profits                            int(10) null comment '净利润'
 )
-    comment '初始数据表-利润' engine = InnoDB
-                              charset = utf8mb4;
+    comment '初始数据表-利润' charset = utf8mb4
+                              row_format = DYNAMIC;
 
 create table par_market_share
 (
@@ -1242,8 +1242,8 @@ create table par_market_share
     business           varchar(50)   null comment '业务',
     market_share       double(10, 2) null comment '市场份额'
 )
-    comment '市场份额' engine = InnoDB
-                       charset = utf8mb4;
+    comment '市场份额' charset = utf8mb4
+                       row_format = DYNAMIC;
 
 create table par_market_supply_demand_forecast
 (
@@ -1253,8 +1253,8 @@ create table par_market_supply_demand_forecast
     project_name     varchar(50) not null comment '项目名',
     market_prospect  varchar(50) not null comment '预期市场供求(%)'
 )
-    comment '市场供求预测表' engine = InnoDB
-                             charset = utf8mb4;
+    comment '市场供求预测表' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table par_marketshares_test
 (
@@ -1265,8 +1265,8 @@ create table par_marketshares_test
     business_type    varchar(50)   null comment '业务类型',
     market_shares    double(10, 2) null comment '市场份额'
 )
-    comment '各团队各阶段市场份额(开发阶段测试数据用:共6个团队，数据按六个团队计算)' engine = InnoDB
-                                                                                    charset = utf8mb4;
+    comment '各团队各阶段市场份额(开发阶段测试数据用:共6个团队，数据按六个团队计算)' charset = utf8mb4
+                                                                                    row_format = DYNAMIC;
 
 create table par_personnel_cost
 (
@@ -1277,10 +1277,11 @@ create table par_personnel_cost
     deposit_business    int(10)     null comment '存款业务',
     investment_business int(10)     null comment '投资业务',
     middle_business     int(10)     null comment '中间业务',
-    other_business      int(10)     null comment '其他'
+    other_business      int(10)     null comment '其他',
+    sys_project_id      mediumtext  null comment '项目id'
 )
-    comment '人员成本表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '人员成本表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table par_project_rate
 (
@@ -1290,8 +1291,8 @@ create table par_project_rate
     project_name     varchar(50)   not null comment '项目名',
     interest_rate    double(10, 2) not null comment '利率 利率/股指'
 )
-    comment '项目利率表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '项目利率表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table par_property_liability_rate
 (
@@ -1303,8 +1304,8 @@ create table par_property_liability_rate
     interest_rate_average double(10, 2) not null comment '平均',
     interest_rate_max     double(10, 2) not null comment '最高'
 )
-    comment '资产负债利率表' engine = InnoDB
-                             charset = utf8mb4;
+    comment '资产负债利率表' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table par_stock_calculation_index
 (
@@ -1316,8 +1317,8 @@ create table par_stock_calculation_index
     max_score   double(10, 4) null comment '最大值',
     score       double(10, 2) null comment '分值'
 )
-    comment '股价计划指标' engine = InnoDB
-                           charset = utf8mb4;
+    comment '股价计划指标' charset = utf8mb4
+                           row_format = DYNAMIC;
 
 create table par_total_market
 (
@@ -1327,8 +1328,8 @@ create table par_total_market
     classification_type varchar(50) null comment '分类类型',
     total_market_value  int(10)     null comment '市场总额值'
 )
-    comment '市场总额' engine = InnoDB
-                       charset = utf8mb4;
+    comment '市场总额' charset = utf8mb4
+                       row_format = DYNAMIC;
 
 create table par_wastage_rate
 (
@@ -1338,8 +1339,8 @@ create table par_wastage_rate
     business_type    varchar(50)   null comment '业务类型',
     wastage_rate     double(10, 1) null comment '人员流失率'
 )
-    comment '人员流失率' engine = InnoDB
-                         charset = utf8mb4;
+    comment '人员流失率' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table poi_templet
 (
@@ -1356,8 +1357,8 @@ create table poi_templet
     comments_regular_expression varchar(255)                       null comment '批注正则表达式',
     comments_page               varchar(255)                       null comment '批注页数'
 )
-    comment '模板表' engine = InnoDB
-                     charset = utf8mb4;
+    comment '模板表' charset = utf8mb4
+                     row_format = DYNAMIC;
 
 create table qrtz_calendars
 (
@@ -1366,7 +1367,7 @@ create table qrtz_calendars
     CALENDAR      blob         not null,
     primary key (SCHED_NAME, CALENDAR_NAME)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table qrtz_fired_triggers
 (
@@ -1385,7 +1386,7 @@ create table qrtz_fired_triggers
     REQUESTS_RECOVERY varchar(1)   null,
     primary key (SCHED_NAME, ENTRY_ID)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create index IDX_QRTZ_FT_INST_JOB_REQ_RCVRY
     on qrtz_fired_triggers (SCHED_NAME, INSTANCE_NAME, REQUESTS_RECOVERY);
@@ -1419,7 +1420,7 @@ create table qrtz_job_details
     JOB_DATA          blob         null,
     primary key (SCHED_NAME, JOB_NAME, JOB_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create index IDX_QRTZ_J_GRP
     on qrtz_job_details (SCHED_NAME, JOB_GROUP);
@@ -1441,7 +1442,7 @@ create table qrtz_job_details_copy1
     JOB_DATA          blob         null,
     primary key (SCHED_NAME, JOB_NAME, JOB_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create index IDX_QRTZ_J_GRP
     on qrtz_job_details_copy1 (SCHED_NAME, JOB_GROUP);
@@ -1455,7 +1456,7 @@ create table qrtz_locks
     LOCK_NAME  varchar(40)  not null,
     primary key (SCHED_NAME, LOCK_NAME)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table qrtz_paused_trigger_grps
 (
@@ -1463,7 +1464,7 @@ create table qrtz_paused_trigger_grps
     TRIGGER_GROUP varchar(190) not null,
     primary key (SCHED_NAME, TRIGGER_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table qrtz_scheduler_state
 (
@@ -1473,7 +1474,7 @@ create table qrtz_scheduler_state
     CHECKIN_INTERVAL  bigint(13)   not null,
     primary key (SCHED_NAME, INSTANCE_NAME)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table qrtz_triggers
 (
@@ -1497,7 +1498,7 @@ create table qrtz_triggers
     constraint qrtz_triggers_ibfk_1
         foreign key (SCHED_NAME, JOB_NAME, JOB_GROUP) references qrtz_job_details (SCHED_NAME, JOB_NAME, JOB_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table qrtz_blob_triggers
 (
@@ -1509,7 +1510,7 @@ create table qrtz_blob_triggers
     constraint qrtz_blob_triggers_ibfk_1
         foreign key (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP) references qrtz_triggers (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create index SCHED_NAME
     on qrtz_blob_triggers (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP);
@@ -1524,7 +1525,7 @@ create table qrtz_blob_triggers_copy1
     constraint qrtz_blob_triggers_copy1_ibfk_1
         foreign key (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP) references qrtz_triggers (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create index SCHED_NAME
     on qrtz_blob_triggers_copy1 (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP);
@@ -1540,7 +1541,7 @@ create table qrtz_cron_triggers
     constraint qrtz_cron_triggers_ibfk_1
         foreign key (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP) references qrtz_triggers (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table qrtz_simple_triggers
 (
@@ -1554,7 +1555,7 @@ create table qrtz_simple_triggers
     constraint qrtz_simple_triggers_ibfk_1
         foreign key (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP) references qrtz_triggers (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table qrtz_simprop_triggers
 (
@@ -1576,7 +1577,7 @@ create table qrtz_simprop_triggers
     constraint qrtz_simprop_triggers_ibfk_1
         foreign key (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP) references qrtz_triggers (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create index IDX_QRTZ_T_C
     on qrtz_triggers (SCHED_NAME, CALENDAR_NAME);
@@ -1632,8 +1633,8 @@ create table rep_agency_bond
     underwriting_price double(10, 2) null comment '承销价格（%）',
     discount           int(10)       null comment '折扣（%）'
 )
-    comment '代理债券发行业务数据表' engine = InnoDB
-                                     charset = utf8mb4;
+    comment '代理债券发行业务数据表' charset = utf8mb4
+                                     row_format = DYNAMIC;
 
 create table rep_balance_sheet
 (
@@ -1686,8 +1687,8 @@ create table rep_balance_sheet
     total_shareholders_equity         int(10) null comment '股东权益合计',
     total_liabilities_equity_indebted int(10) null comment '负债和股东权益总计'
 )
-    comment '资产负债表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '资产负债表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table rep_capital_adequacy
 (
@@ -1728,8 +1729,8 @@ create table rep_capital_adequacy
     capital_source_total                int(10)     null comment '资本来源总额',
     capital_surplus_shortage            int(10)     null comment '资本盈余/不足'
 )
-    comment '资本充足率报告' engine = InnoDB
-                             charset = utf8mb4;
+    comment '资本充足率报告' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table rep_comprehensive_ranking_score
 (
@@ -1754,8 +1755,8 @@ create table rep_comprehensive_ranking_score
     share_out_bonus           double(10, 2) null comment '分红',
     total_score               double(10, 2) null comment '总分数'
 )
-    comment '综合排名分数表' engine = InnoDB
-                             charset = utf8mb4;
+    comment '综合排名分数表' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table rep_investbus_operat_data_bond
 (
@@ -1773,8 +1774,8 @@ create table rep_investbus_operat_data_bond
     interest            int(10)       null comment '利息',
     account_profit_loss int(10)       null comment '账面损益'
 )
-    comment '投资业务营业数据表(债券)' engine = InnoDB
-                                       charset = utf8mb4;
+    comment '投资业务营业数据表(债券)' charset = utf8mb4
+                                       row_format = DYNAMIC;
 
 create table rep_investbus_operat_data_stock
 (
@@ -1791,8 +1792,8 @@ create table rep_investbus_operat_data_stock
     stock_dividend     int(10)       null comment '股息',
     stock_account      int(10)       null comment '账面损益'
 )
-    comment '投资业务营业数据表(股票)' engine = InnoDB
-                                       charset = utf8mb4;
+    comment '投资业务营业数据表(股票)' charset = utf8mb4
+                                       row_format = DYNAMIC;
 
 create table rep_liquidity_cash
 (
@@ -1812,8 +1813,8 @@ create table rep_liquidity_cash
     solvency                    int(10) null comment '清偿力',
     cash_solvency               int(10) null comment '现金清偿力'
 )
-    comment '流动性报表-现金' engine = InnoDB
-                              charset = utf8mb4;
+    comment '流动性报表-现金' charset = utf8mb4
+                              row_format = DYNAMIC;
 
 create table rep_liquidity_totality
 (
@@ -1844,8 +1845,8 @@ create table rep_liquidity_totality
     totality_solvency                  int(10) null comment '总体清偿力',
     overall_liquidity_surplus_shortage int(10) null comment '总体流动性盈余/不足'
 )
-    comment '流动性报表-总体' engine = InnoDB
-                              charset = utf8mb4;
+    comment '流动性报表-总体' charset = utf8mb4
+                              row_format = DYNAMIC;
 
 create table rep_market_data_customer_account
 (
@@ -1865,8 +1866,8 @@ create table rep_market_data_customer_account
     public_institution            int(10)     null comment '公共机构',
     account_sum                   int(10)     null comment '账户合计'
 )
-    comment '市场营销数据(客户账户)' engine = InnoDB
-                                     charset = utf8mb4;
+    comment '市场营销数据(客户账户)' charset = utf8mb4
+                                     row_format = DYNAMIC;
 
 create table rep_market_data_customer_bazaar
 (
@@ -1885,8 +1886,8 @@ create table rep_market_data_customer_bazaar
     public_institution            int(10)     null comment '公共机构',
     amount_sum                    int(10)     null comment '金额合计'
 )
-    comment '市场营销数据(客户市场)单位：百万元' engine = InnoDB
-                                                charset = utf8mb4;
+    comment '市场营销数据(客户市场)单位：百万元' charset = utf8mb4
+                                                row_format = DYNAMIC;
 
 create table rep_peer_report_purchase
 (
@@ -1903,8 +1904,8 @@ create table rep_peer_report_purchase
     update_time datetime default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间',
     create_time datetime default CURRENT_TIMESTAMP null comment '购买时间'
 )
-    comment '同业报告购买记录表' engine = InnoDB
-                                 charset = utf8mb4;
+    comment '同业报告购买记录表' charset = utf8mb4
+                                 row_format = DYNAMIC;
 
 create table rep_people_logistics
 (
@@ -1931,8 +1932,8 @@ create table rep_people_logistics
     training_level          varchar(50)   null comment '培训水平',
     job_satisfaction        varchar(50)   null comment '工作满意度'
 )
-    comment '人事后勤信息录入' engine = InnoDB
-                               charset = utf8mb4;
+    comment '人事后勤信息录入' charset = utf8mb4
+                               row_format = DYNAMIC;
 
 create table rep_personnel_logistics_data_automation
 (
@@ -1946,8 +1947,8 @@ create table rep_personnel_logistics_data_automation
     cumulative_investment int(10)       null comment '累计投资',
     exponent              double(10, 1) null comment '指数'
 )
-    comment '人事后勤数据表(自动化投资)' engine = InnoDB
-                                         charset = utf8mb4;
+    comment '人事后勤数据表(自动化投资)' charset = utf8mb4
+                                         row_format = DYNAMIC;
 
 create table rep_precomputing_num
 (
@@ -1958,8 +1959,8 @@ create table rep_precomputing_num
     current_stage_id   int(3)  not null comment '当前阶段ID',
     pre_num            int(10) null comment '预计算次数'
 )
-    comment '预计算次数表' engine = InnoDB
-                           charset = utf8mb4;
+    comment '预计算次数表' charset = utf8mb4
+                           row_format = DYNAMIC;
 
 create table rep_profit
 (
@@ -1993,8 +1994,8 @@ create table rep_profit
     subtract_income_tax                         int(10) null comment '减：所得税',
     retained_profits                            int(10) null comment '净利润'
 )
-    comment '利润表' engine = InnoDB
-                     charset = utf8mb4;
+    comment '利润表' charset = utf8mb4
+                     row_format = DYNAMIC;
 
 create table rep_stock_price
 (
@@ -2013,8 +2014,8 @@ create table rep_stock_price
     per_share_net_assets      double(10, 2) null comment '每股净资产',
     stock_price               double(10, 2) null comment '股价'
 )
-    comment '股价表' engine = InnoDB
-                     charset = utf8mb4;
+    comment '股价表' charset = utf8mb4
+                     row_format = DYNAMIC;
 
 create table sys_log
 (
@@ -2029,8 +2030,8 @@ create table sys_log
     ip         varchar(64)   null comment 'IP地址',
     gmt_create datetime      null comment '创建时间'
 )
-    comment '系统日志' engine = InnoDB
-                       charset = utf8;
+    comment '系统日志' charset = utf8
+                       row_format = DYNAMIC;
 
 create table sys_project
 (
@@ -2042,8 +2043,8 @@ create table sys_project
     status      int(3)       null comment '项目状态',
     remarks     varchar(255) null comment '备注'
 )
-    comment '项目表' engine = InnoDB
-                     charset = utf8mb4;
+    comment '项目表' charset = utf8mb4
+                     row_format = DYNAMIC;
 
 create table sys_project_stage
 (
@@ -2053,8 +2054,8 @@ create table sys_project_stage
     stage_id int(10) null comment '阶段id',
     status   int(1)  null comment '阶段是否开放（0：未开放1：已开放 2：结束）'
 )
-    comment '项目阶段关联表' engine = InnoDB
-                             charset = utf8mb4;
+    comment '项目阶段关联表' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table sys_project_team
 (
@@ -2063,8 +2064,8 @@ create table sys_project_team
     pro_id  int(10) null comment '项目id',
     team_id int(10) null comment '团队id'
 )
-    comment '项目团队关联表' engine = InnoDB
-                             charset = utf8mb4;
+    comment '项目团队关联表' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table sys_project_team_stage
 (
@@ -2076,8 +2077,8 @@ create table sys_project_team_stage
     business_name varchar(255) null comment '业务名称',
     status        int(1)       null comment '业务提交状态'
 )
-    comment '项目团队阶段业务关联表' engine = InnoDB
-                                     charset = utf8mb4;
+    comment '项目团队阶段业务关联表' charset = utf8mb4
+                                     row_format = DYNAMIC;
 
 create table sys_stage
 (
@@ -2087,8 +2088,8 @@ create table sys_stage
     stage_name_eng      varchar(3)   null comment '阶段英文名称',
     stage_business_name varchar(100) null
 )
-    comment '阶段表' engine = InnoDB
-                     charset = utf8mb4;
+    comment '阶段表' charset = utf8mb4
+                     row_format = DYNAMIC;
 
 create table sys_stage_business
 (
@@ -2098,8 +2099,8 @@ create table sys_stage_business
     stage_name    varchar(50) null comment '阶段名称',
     business_name varchar(50) null comment '业务名称'
 )
-    comment '阶段业务名称' engine = InnoDB
-                           charset = utf8mb4;
+    comment '阶段业务名称' charset = utf8mb4
+                           row_format = DYNAMIC;
 
 create table sys_team
 (
@@ -2111,8 +2112,8 @@ create table sys_team
     delete_time timestamp    null comment '结束时间',
     sort        varchar(255) null comment '排序'
 )
-    comment '团队表' engine = InnoDB
-                     charset = utf8mb4;
+    comment '团队表' charset = utf8mb4
+                     row_format = DYNAMIC;
 
 create table sys_team_stage
 (
@@ -2121,8 +2122,8 @@ create table sys_team_stage
     team_id  int(10) null comment '团队id',
     stage_id int(10) null comment '阶段id'
 )
-    comment '团队阶段关联表' engine = InnoDB
-                             charset = utf8mb4;
+    comment '团队阶段关联表' charset = utf8mb4
+                             row_format = DYNAMIC;
 
 create table t_decision_summary
 (
@@ -2137,8 +2138,8 @@ create table t_decision_summary
     update_time datetime                           null on update CURRENT_TIMESTAMP comment '上次更新时间',
     status      int(1)                             null comment '总结状态'
 )
-    comment '决策总结表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '决策总结表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table t_department
 (
@@ -2154,7 +2155,7 @@ create table t_department
     project_id  int(10)                            null comment '项目ID',
     logo        varchar(255)                       null comment '头像'
 )
-    comment '???' engine = InnoDB;
+    comment '???' row_format = DYNAMIC;
 
 create index parent_id
     on t_department (parent_id);
@@ -2170,7 +2171,7 @@ create table t_email
     create_time datetime default CURRENT_TIMESTAMP not null comment '????',
     update_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_employee
 (
@@ -2193,7 +2194,7 @@ create table t_employee
     create_time   datetime    default CURRENT_TIMESTAMP not null comment '????',
     is_delete     int         default 0                 not null comment '????0? 1?'
 )
-    comment '???' engine = InnoDB;
+    comment '???' row_format = DYNAMIC;
 
 create table t_file
 (
@@ -2211,7 +2212,7 @@ create table t_file
     update_time        datetime                           null on update CURRENT_TIMESTAMP comment '上次更新时间',
     create_time        datetime default CURRENT_TIMESTAMP not null comment '创建时间'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create index module_id_module_type
     on t_file (module_id, module_type);
@@ -2229,7 +2230,7 @@ create table t_heart_beat_record
     process_start_time datetime     null comment '??????',
     heart_beat_time    datetime     null comment '????'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_id_generator
 (
@@ -2245,7 +2246,7 @@ create table t_id_generator
     constraint key_name
         unique (key_name)
 )
-    comment 'id??????' engine = InnoDB;
+    comment 'id??????' row_format = DYNAMIC;
 
 create table t_id_generator_record
 (
@@ -2256,7 +2257,7 @@ create table t_id_generator_record
     last_number  int not null,
     primary key (generator_id, year, month, day)
 )
-    comment 'id_generator???' engine = InnoDB;
+    comment 'id_generator???' row_format = DYNAMIC;
 
 create table t_message
 (
@@ -2274,8 +2275,8 @@ create table t_message
     update_time  datetime                           null on update CURRENT_TIMESTAMP comment '上次更新时间',
     create_time  datetime default CURRENT_TIMESTAMP null comment '创建时间'
 )
-    comment '消息管理表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '消息管理表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table t_notice
 (
@@ -2289,7 +2290,7 @@ create table t_notice
     create_time datetime         default CURRENT_TIMESTAMP not null comment '????',
     update_time datetime         default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_notice_receive_record
 (
@@ -2300,7 +2301,7 @@ create table t_notice_receive_record
     create_time datetime default CURRENT_TIMESTAMP not null comment '????',
     update_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_order_operate_log
 (
@@ -2318,7 +2319,7 @@ create table t_order_operate_log
     create_time     datetime default CURRENT_TIMESTAMP not null comment '????'
 )
     comment '????????
-' engine = InnoDB;
+' row_format = DYNAMIC;
 
 create index order_id_order_type
     on t_order_operate_log (order_id, order_type);
@@ -2334,8 +2335,8 @@ create table t_peony
     create_time datetime default CURRENT_TIMESTAMP null comment '????',
     update_time datetime default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '????'
 )
-    comment '???' engine = InnoDB
-                  charset = utf8;
+    comment '???' charset = utf8
+                  row_format = DYNAMIC;
 
 create table t_position
 (
@@ -2346,7 +2347,7 @@ create table t_position
     update_time   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time   datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    comment '???' engine = InnoDB;
+    comment '???' row_format = DYNAMIC;
 
 create table t_position_relation
 (
@@ -2357,7 +2358,7 @@ create table t_position_relation
     update_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     create_time datetime default CURRENT_TIMESTAMP not null comment '创建时间'
 )
-    comment '?????' engine = InnoDB;
+    comment '?????' row_format = DYNAMIC;
 
 create index employee_id
     on t_position_relation (employee_id);
@@ -2380,8 +2381,8 @@ create table t_privilege
     constraint `key`
         unique (`key`)
 )
-    comment '?????' engine = InnoDB
-                    charset = utf8;
+    comment '?????' charset = utf8
+                    row_format = DYNAMIC;
 
 create index parent_key
     on t_privilege (parent_key);
@@ -2402,7 +2403,7 @@ create table t_quartz_task
     update_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_quartz_task_log
 (
@@ -2418,7 +2419,7 @@ create table t_quartz_task_log
     update_time      datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time      datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_reload_item
 (
@@ -2429,7 +2430,7 @@ create table t_reload_item
     update_time    datetime                           null on update CURRENT_TIMESTAMP,
     create_time    datetime default CURRENT_TIMESTAMP not null
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_reload_result
 (
@@ -2440,7 +2441,7 @@ create table t_reload_result
     exception      text                               null,
     create_time    datetime default CURRENT_TIMESTAMP not null
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_role
 (
@@ -2451,8 +2452,8 @@ create table t_role
     update_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    comment '???' engine = InnoDB
-                  charset = utf8;
+    comment '???' charset = utf8
+                  row_format = DYNAMIC;
 
 create table t_role_data_scope
 (
@@ -2464,7 +2465,7 @@ create table t_role_data_scope
     update_time     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time     datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_role_employee
 (
@@ -2475,7 +2476,7 @@ create table t_role_employee
     update_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    comment '???????' engine = InnoDB;
+    comment '???????' row_format = DYNAMIC;
 
 create table t_role_privilege
 (
@@ -2486,7 +2487,7 @@ create table t_role_privilege
     update_time   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time   datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    comment '???????' engine = InnoDB;
+    comment '???????' row_format = DYNAMIC;
 
 create table t_scene_management
 (
@@ -2504,8 +2505,8 @@ create table t_scene_management
     create_time  datetime default CURRENT_TIMESTAMP null comment '创建时间',
     update_time  datetime                           null on update CURRENT_TIMESTAMP comment '上次更新时间'
 )
-    comment '场景管理表' engine = InnoDB
-                         charset = utf8mb4;
+    comment '场景管理表' charset = utf8mb4
+                         row_format = DYNAMIC;
 
 create table t_system_config
 (
@@ -2520,7 +2521,7 @@ create table t_system_config
     update_time  datetime default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '上次修改时间',
     create_time  datetime default CURRENT_TIMESTAMP not null comment '创建时间'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table t_user_login_log
 (
@@ -2536,7 +2537,7 @@ create table t_user_login_log
     update_time    datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time    datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    comment '??????' engine = InnoDB;
+    comment '??????' row_format = DYNAMIC;
 
 create index auditor_id
     on t_user_login_log (remote_browser);
@@ -2560,7 +2561,7 @@ create table t_user_operate_log
     update_time datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '????',
     create_time datetime default CURRENT_TIMESTAMP not null comment '????'
 )
-    engine = InnoDB;
+    row_format = DYNAMIC;
 
 create table user_photo
 (
@@ -2569,7 +2570,7 @@ create table user_photo
     user_id    int          not null,
     user_photo varchar(100) not null
 )
-    engine = InnoDB
-    charset = utf8mb4;
+    charset = utf8mb4
+    row_format = DYNAMIC;
 
 
