@@ -22,7 +22,12 @@ public class ParPersonnelCostEntity extends BaseEntity{
     /**
      * 项目
      */
+    private Long sysProjectId;
+
     private String project;
+
+
+//    private Integer stage;
 
     /**
      * 贷款业务

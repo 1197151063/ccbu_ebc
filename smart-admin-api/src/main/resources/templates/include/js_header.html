@@ -1,46 +1,43 @@
 <!doctype html>
 <html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<!--nav-->
-<!--年度-->
-<!--<div class="season">-->
-<!--	<li class="season-end">第一年度 已完成</li>-->
-<!--	<li class="season-now"><div style="width:67%"><p>第二年度 进行中 当前进度<span>67</span>%</p></div></li>-->
-<!--	<li>第三年度 还未开始</li>-->
-<!--	<li>第四年度 还未开始</li>-->
-<!--</div>-->
-<!--年度-->
-<!--main-->
-<div class="header" th:fragment="header">
-    <div class="header-logo"><img th:src="@{/images/login_logo.png}" alt=""/></div>
-    <div class="header-title">卓越银行家俱乐部</div>
-    <ul class="header-nav">
-        <li>欢迎您：<span th:text="${session['app_user_login']!=null?session['app_user_login'].actualName:''}"></span></li>
-        <li><el-avatar :size="40" :src="circleUrl"></el-avatar></li>
-        <li>
-            <el-dropdown trigger="click">
-                <span class="el-dropdown-link"><i class="el-icon-s-fold el-icon--right"></i></span>
-                <template #dropdown>
-                    <el-dropdown-menu>
-                        <el-dropdown-item icon="el-icon-document-copy"><a  th:href="@{/service/home}">用户信息</a></el-dropdown-item>
-<!--
-                        <el-dropdown-item icon="el-icon-document-copy"><a href="teacher/js_index.html">教师端首页</a></el-dropdown-item>
--->
-                        <el-dropdown-item icon="el-icon-switch-button"><a th:href="@{/service/logout}">退出</a></el-dropdown-item>
-                    </el-dropdown-menu>
-                </template>
-            </el-dropdown>
-        </li>
-        <li><el-divider direction="vertical"></el-divider></li>
-        <li>
-            <el-badge is-dot class="item">
-                <el-link th:href="@{xy_yhxx}" :underline="false"><i class="el-icon-bell"></i></el-link>
-            </el-badge>
-        </li>
-        <li><el-divider direction="vertical"></el-divider></li>
-        <li>意见反馈</li>
-    </ul>
+<div class="season">
+	<li class="season-end">第一阶段 已完成</li>
+	<li class="season-now"><div style="width:67%"><p>第二阶段 进行中 当前进度<span>67</span>%</p></div></li>
+	<li>第三阶段 还未开始</li>
+	<li>第四阶段 还未开始</li>
 </div>
+
+<!--<div class="header" th:fragment="header">-->
+<!--&lt;!&ndash;    <div class="header-logo"><img th:src="@{/images/login_logo.png}" alt=""/></div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="header-title">卓越银行家俱乐部</div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <ul class="header-nav">&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>欢迎您：<span th:text="${session['app_user_login']!=null?session['app_user_login'].actualName:''}"></span></li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li><el-avatar :size="40" :src="circleUrl"></el-avatar></li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>&ndash;&gt;-->
+<!--&lt;!&ndash;            <el-dropdown trigger="click">&ndash;&gt;-->
+<!--&lt;!&ndash;                <span class="el-dropdown-link"><i class="el-icon-s-fold el-icon&#45;&#45;right"></i></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                <template #dropdown>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <el-dropdown-menu>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <el-dropdown-item icon="el-icon-document-copy"><a  th:href="@{/service/home}">用户信息</a></el-dropdown-item>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;&ndash;&gt;-->
+<!--&lt;!&ndash;                        <el-dropdown-item icon="el-icon-document-copy"><a href="teacher/js_index.html">教师端首页</a></el-dropdown-item>&ndash;&gt;-->
+<!--&lt;!&ndash;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                        <el-dropdown-item icon="el-icon-switch-button"><a th:href="@{/service/logout}">退出</a></el-dropdown-item>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </el-dropdown-menu>&ndash;&gt;-->
+<!--&lt;!&ndash;                </template>&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-dropdown>&ndash;&gt;-->
+<!--&lt;!&ndash;        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li><el-divider direction="vertical"></el-divider></li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>&ndash;&gt;-->
+<!--&lt;!&ndash;            <el-badge is-dot class="item">&ndash;&gt;-->
+<!--&lt;!&ndash;                <el-link th:href="@{xy_yhxx}" :underline="false"><i class="el-icon-bell"></i></el-link>&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-badge>&ndash;&gt;-->
+<!--&lt;!&ndash;        </li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li><el-divider direction="vertical"></el-divider></li>&ndash;&gt;-->
+<!--&lt;!&ndash;        <li>意见反馈</li>&ndash;&gt;-->
+<!--&lt;!&ndash;    </ul>&ndash;&gt;-->
+<!--</div>-->
 <!--header-->
 <div class="nav" th:switch="${session['app_user_login']!=null?session['app_user_login'].userPosition:''}">
     <el-menu th:case="'教师'" :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
@@ -51,7 +48,8 @@
         <el-menu-item index="5"><a th:href="@{/service/message}">消息管理</a></el-menu-item>
         <el-menu-item index="6"><a th:href="@{/service/knowledge}">知识管理</a></el-menu-item>
         <el-menu-item index="7"><a th:href="@{/service/system}">系统管理</a></el-menu-item>
-<!--        <el-button class="nav-right" type="text" icon="el-icon-s-data" @click="jjxs=true">查看当前经济形势</el-button>-->
+        <el-menu-item index="8"><a th:href="@{/service/params_parser}">数据维护</a></el-menu-item>
+<!--        <el-button class="na    v-right" type="text" icon="el-icon-s-data" @click="jjxs=true">查看当前经济形势</el-button>-->
     </el-menu>
 </div>
 </html>

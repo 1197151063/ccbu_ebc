@@ -28,6 +28,10 @@ import java.util.List;
 public interface ParPersonnelCostDao extends BaseMapper<ParPersonnelCostEntity> {
 
     /**
+     * 根据项目查询
+     */
+    ParPersonnelCostVO queryByProject(@Param("project")String project);
+    /**
      * 分页查询
      * @param queryDTO
      * @return ParPersonnelCostVO
@@ -63,6 +67,6 @@ public interface ParPersonnelCostDao extends BaseMapper<ParPersonnelCostEntity> 
     List<ParPersonnelCostExcelVO> queryBatchExportData(@Param("idList")List<Long> idList);
 
     ParPersonnelCostVO queryWages(@Param("project")String project);
-
+    List<ParPersonnelCostVO> queryByAllProject();
     ParPersonnelCostVO queryAdditional(ParPersonnelCostEntity parPersonnelCostEntity);
 }

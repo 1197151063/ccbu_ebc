@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<div class="main">
+    <div class="main-bg">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <!--二级 nav bar-->
+            <el-tab-pane label="人力成本维护" name="first">
+                <!--tableData.data进行过滤-->
+                <div class="screen">
+                    <dl>
+                        <dt>项目</dt>
+                        <dd>
+                            <el-input placeholder="请输入关键字" v-model="queryName" size="small"  style="width: 100%">
+                                <template #append>
+                                    <el-button icon="el-icon-search" @click="queryDataWithName(queryName)"></el-button>
+                                </template>
+                            </el-input>
+                        </dd>
+                    </dl>
+                    <div class="screen-right">
+    <!--                        						<el-button type="primary" size="small" onclick="window.location.href ='js_xzschj'">新增市场环境</el-button>-->
+<!--                        <el-button type="primary" size="small" @click="add(1)" >新增人力成本维护</el-button>-->
+    <!--                        <el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button>-->
+                    </div>
+                </div>
+                <!--筛选-->
+                <div class="table">
+                    <!--表格-->
+                    <el-table
+                            :data="tableData"
+                            style="width: 100%"
+                            size="medium"
+                            @selection-change="handleSelectionChange"
+                            :default-sort = "{prop: 'list', order: 'descending'}">
+                        <el-table-column
+                                type="selection">
+                        </el-table-column>
+                        <el-table-column
+                                prop="proName"
+                                label="项目"
+                                width="250">
+                        </el-table-column>
+    <!--                        <el-table-column-->
+    <!--                                prop="stage"-->
+    <!--                                label="阶段"-->
+    <!--                                width="150">-->
+    <!--                        </el-table-column>-->
+                        <el-table-column
+                                prop="createTime"
+                                label="创建日期"
+                                align="center"
+                                sortable
+                                width="200">
+                        </el-table-column>
+                        <el-table-column
+                                prop="updateTime"
+                                label="更新时间"
+                                align="center"
+                                sortable
+                                width="170">
+                        </el-table-column>
+                        <el-table-column
+                                prop="status"
+                                label="状态"
+                                align="center"
+                                width="100">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                align="center"
+                                sortable>
+                            <template #default="scope" style="float:right">
+                                <el-button type="primary" plain size="small" @click="update(scope.row.proId,1)" >编辑</el-button>
+<!--                                <el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>-->
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <!--表格-->
+                    <!--分页-->
+                    <el-pagination :model="form" ref="form"
+                                   :current-page="form.pageNum"
+                                   :page-size="form.pageSize"
+                                   :total="form.total"
+                                   style="padding: 30px 0; text-align: center;"
+                                   layout="total, prev, pager, next, jumper"
+                                   @current-change="changePage"
+                    />
+                    <!--分页-->
+                </div>
+            </el-tab-pane>
+
+            <el-tab-pane label="随机种子" name="second">
+                <!--筛选-->
+                <div class="screen">
+                    <dl>
+                        <dt>标题</dt>
+                        <dd>
+                            <el-input placeholder="请输入关键字" v-model="tableData.title" size="small"  style="width: 100%">
+                                <template #append>
+                                    <el-button icon="el-icon-search" @click="queryData(tableData.title,'second')"></el-button>
+                                </template>
+                            </el-input>
+                        </dd>
+                    </dl>
+                    <div class="screen-right">
+                        <!--						<el-button type="primary" size="small" onclick="window.location.href ='js_xzschj'">新增市场环境</el-button>-->
+                        <el-button type="primary" size="small" @click="release(2)" >新增突发事件</el-button>
+                        <el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button>
+                    </div>
+                </div>
+                <!--筛选-->
+                <div class="table">
+                    <!--表格-->
+                    <el-table
+                            :data="tableData"
+                            style="width: 100%"
+                            size="medium"
+                            @selection-change="handleSelectionChange"
+                            :default-sort = "{prop: 'list', order: 'descending'}">
+                        <el-table-column
+                                type="selection">
+                        </el-table-column>
+                        <el-table-column
+                                prop="title"
+                                label="标题"
+                                width="450">
+                        </el-table-column>
+                        <el-table-column
+                                prop="createTime"
+                                label="创建日期"
+                                align="center"
+                                sortable
+                                width="200">
+                        </el-table-column>
+                        <el-table-column
+                                prop="createrUser"
+                                label="发布人"
+                                align="center"
+                                sortable
+                                width="170">
+                        </el-table-column>
+                        <el-table-column
+                                prop="status"
+                                label="状态"
+                                align="center"
+                                width="100">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                align="center"
+                                sortable>
+                            <template #default="scope" style="float:right">
+                                <el-button type="primary" plain size="small" @click="release()" >编辑</el-button>
+                                <el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <!--表格-->
+                    <!--分页-->
+                    <el-pagination :model="form" ref="form"
+                                   :current-page="form.pageNum"
+                                   :page-size="form.pageSize"
+                                   :total="form.total"
+                                   style="padding: 30px 0; text-align: center;"
+                                   layout="total, prev, pager, next, jumper"
+                                   @current-change="changePage"
+                    />
+                    <!--分页-->
+                </div>
+            </el-tab-pane>
+
+            <el-tab-pane label="发布消息" name="third">
+                <!--筛选-->
+                <div class="screen">
+                    <dl>
+                        <dt>标题</dt>
+                        <dd>
+                            <el-input placeholder="请输入关键字" v-model="tableData.title" size="small"  style="width: 100%">
+                                <template #append>
+                                    <el-button icon="el-icon-search" @click="queryData(tableData.title,'third')"></el-button>
+                                </template>
+                            </el-input>
+                        </dd>
+                    </dl>
+                    <div class="screen-right">
+                        <!--						<el-button type="primary" size="small" onclick="window.location.href ='js_xzschj'">新增市场环境</el-button>-->
+                        <el-button type="primary" size="small" @click="release(3)" >新增副本事件</el-button>
+                        <el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button>
+                    </div>
+                </div>
+                <!--筛选-->
+                <div class="table">
+                    <!--表格-->
+                    <el-table
+                            :data="tableData"
+                            style="width: 100%"
+                            size="medium"
+                            @selection-change="handleSelectionChange"
+                            :default-sort = "{prop: 'list', order: 'descending'}">
+                        <el-table-column
+                                type="selection">
+                        </el-table-column>
+                        <el-table-column
+                                prop="title"
+                                label="标题"
+                                width="450">
+                        </el-table-column>
+                        <el-table-column
+                                prop="createTime"
+                                label="创建日期"
+                                align="center"
+                                sortable
+                                width="200">
+                        </el-table-column>
+                        <el-table-column
+                                prop="createrUser"
+                                label="发布人"
+                                align="center"
+                                sortable
+                                width="170">
+                        </el-table-column>
+                        <el-table-column
+                                prop="status"
+                                label="状态"
+                                align="center"
+                                width="100">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                align="center"
+                                sortable>
+                            <template #default="scope" style="float:right">
+                                <el-button type="primary" plain size="small" @click="update(scope.row.id,1)" >编辑</el-button>
+                                <el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <!--表格-->
+                    <!--分页-->
+                    <el-pagination :model="form" ref="form"
+                                   :current-page="form.pageNum"
+                                   :page-size="form.pageSize"
+                                   :total="form.total"
+                                   style="padding: 30px 0; text-align: center;"
+                                   layout="total, prev, pager, next, jumper"
+                                   @current-change="changePage"
+                    />
+                </div>
+            </el-tab-pane>
+
+            <el-tab-pane label="风险预警" name="fourth">
+                <!--筛选-->
+                <div class="screen">
+                    <dl>
+                        <dt>标题</dt>
+                        <dd>
+                            <el-input placeholder="请输入关键字" v-model="tableData.title" size="small"  style="width: 100%">
+                                <template #append>
+                                    <el-button icon="el-icon-search" @click="queryData(tableData.title,'fourth')"></el-button>
+                                </template>
+                            </el-input>
+                        </dd>
+                    </dl>
+                    <div class="screen-right">
+                        <!--						<el-button type="primary" size="small" onclick="window.location.href ='js_xzschj'">新增市场环境</el-button>-->
+                        <el-button type="primary" size="small" @click="release(4)" >新增风险预警</el-button>
+<!--                        <el-button type="danger" plain size="small" @click="handleDelete()">批量删除</el-button>-->
+                    </div>
+                </div>
+                <!--筛选-->
+                <div class="table">
+                    <!--表格-->
+                    <el-table
+                            :data="tableData"
+                            style="width: 100%"
+                            size="medium"
+                            @selection-change="handleSelectionChange"
+                            :default-sort = "{prop: 'list', order: 'descending'}">
+                        <el-table-column
+                                type="selection">
+                        </el-table-column>
+                        <el-table-column
+                                prop="title"
+                                label="标题"
+                                width="450">
+                        </el-table-column>
+                        <el-table-column
+                                prop="createTime"
+                                label="创建日期"
+                                align="center"
+                                sortable
+                                width="200">
+                        </el-table-column>
+                        <el-table-column
+                                prop="createrUser"
+                                label="发布人"
+                                align="center"
+                                sortable
+                                width="170">
+                        </el-table-column>
+                        <el-table-column
+                                prop="status"
+                                label="状态"
+                                align="center"
+                                width="100">
+                        </el-table-column>
+                        <el-table-column
+                                label="操作"
+                                align="center"
+                                sortable>
+                            <template #default="scope" style="float:right">
+                                <el-button type="primary" plain size="small" @click="update(scope.row.id,4)" >编辑</el-button>
+                                <el-button type="danger" plain size="small"  @click="handleDelete(scope.row.id)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <!--表格-->
+                    <!--分页-->
+                    <el-pagination :model="form" ref="form"
+                                   :current-page="form.pageNum"
+                                   :page-size="form.pageSize"
+                                   :total="form.total"
+                                   style="padding: 30px 0; text-align: center;"
+                                   layout="total, prev, pager, next, jumper"
+                                   @current-change="changePage"
+                    />
+                    <!--分页-->
+                </div>
+            </el-tab-pane>
+
+        </el-tabs>
+    </div>
+</div>
+<!--main-->
+
+<!--footer-->
+<!--欢迎界面-->
+<div th:include="include/footer"></div>
+<!--footer-->
+
+</body>
+
+<script>
+    var Main = {
+            data () {
+                return {
+                    queryName:'',
+
+                    tableData: [],
+                    sideInfo: null,
+                    selectedData: [],
+                    tab:{},
+                    // pageNum: 1,  //当前页
+                    pageSize: 5, //每页记录数
+                    total: 20, //总记录数
+                    form: {
+                        pageNum: '1',
+                        pageSize: '5',
+                        total:'20'
+                    },
+                    //导航
+                    activeIndex: '8',
+                    //tabs
+                    activeName: 'first',
+                    //选择器
+                    options: [
+                        {
+                        value: '选项1',
+                        label: '选项1'
+                    }, {
+                        value: '选项2',
+                        label: '选项2'
+                    }],
+                    value: '',
+                    //分页
+                    currentPage1: 5,
+                    currentPage2: 5,
+                    currentPage3: 5,
+                    currentPage4: 4,
+                    //弹出经济形势
+                    dialogTableVisible: false,
+
+                }
+            },
+            methods: {
+                //tab
+                formatter   (row, column) {
+                    return row.address;
+                },
+                handleClick(tab, event) {
+                    this.queryData(null,tab.paneName)
+                    console.log(tab, event);
+                },
+                //分页
+                handleSizeChange(val) {
+                    console.log(`每页 ${val} 条`);
+                },
+                handleCurrentChange(val) {
+                    console.log(`当前页: ${val}`);
+                },
+                // 页码改变
+                changePage(pageNum) {
+
+                    this.form.pageNum = pageNum;
+                    this.queryData(null,this.activeName);
+                },
+                fillNull(list){
+                    for (let i = 0; i < list.length; i++) {
+                        if (list[i].createrUser == null) {
+                            list[i].createrUser = 0
+                        }
+                    }
+                },
+                queryDataWithName(proName){
+                    let that = this
+                    let form = this.form
+                    form.releaseType = 1
+
+                    axios({
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        method:'get',
+                        url:'queryAllProject',//相对路径即可，不用加/service
+                        // data:form,
+                        responseType:'json',
+                    }).then(function(resp){
+                        if(resp.status==200){
+                            console.log('proName',proName)
+                            if(proName !== ''){
+                                resp.data.data = resp.data.data.filter(item => item['proName'] === proName)
+                            }
+                            let data = resp.data
+                            this.total = data.total
+                            console.log("data=",data)
+                            that.form = data.data
+                            that.tableData = data.data
+                            console.log(that.tableData)
+                            // console.log("form=",that.form)
+                            // console.log("fileData=",that.fileData)
+                        }
+                    })
+                },
+                //查询
+                queryData(title,paneName){
+                    // console.log(this.activeName)
+                    let that = this
+                    let form = this.form
+                    if("first"==paneName||null==paneName){
+                        form.releaseType = 1
+                    }
+                    if("second"==paneName){
+                        form.releaseType = 2
+                    }
+                    if("third"==paneName){
+                        form.releaseType = 3
+                    }
+                    if("fourth"==paneName){
+                        form.releaseType = 4
+                    }
+                    form.title = title
+                    // console.log(form)
+
+                    axios({
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        method:'get',
+                        url:'queryAllProject',//相对路径即可，不用加/service
+                        // data:form,
+                        responseType:'json',
+                    }).then(function(resp){
+                        if(resp.status==200){
+
+                            let data = resp.data
+                            this.total = data.total
+                            console.log("data=",data)
+                            that.form = data.data
+                            that.tableData = data.data
+                            console.log(that.tableData)
+                            // console.log("form=",that.form)
+                            // console.log("fileData=",that.fileData)
+                        }
+                    })
+                },
+                print(x){
+                    console.log(x)
+                },
+                querySideInfo(){
+                    axios({
+                        headers:{
+                            'Content-Type':'application/json'
+                        },
+                        method:'get',
+                        url:'parPersonnelCost/queryAll',
+                        responseType:'json',//相对路径即可，不用加/service
+                    }).then(function(resp){
+                            if(resp.status==200){
+                                console.log(resp.data)
+                                // console.log("form=",that.form)
+                                // console.log("fileData=",that.fileData)
+                            }
+                        }
+                    );
+                },
+
+                //批量删除文件
+                handleDelete(id) {
+                    console.log(id)
+                    let that = this;
+                    that.$confirm('确定要删除吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let vals = this.selectedData;
+                        let ids =new Array();
+                        ids.push(id)
+                        for (let i = 0; i <vals.length; i++) {
+                            ids.push(vals[i].id)
+                        }
+                        console.log(ids)
+                        axios({
+                            method: 'post',
+                            url: 'tSceneManagement/deleteByIds',//相对路径即可，不用加/service
+                            data: ids,
+                            responseType: 'json',
+                        }).then(function (resp) {
+                            if (resp.status == 200) {
+                                let message = '删除成功'
+                                let type = "success"
+                                that.$message({
+                                    showClose: true,
+                                    message: message,
+                                    type: type
+                                });
+                                that.queryData();
+                            }
+                        })
+                    }).catch(() => {
+                    });
+                },
+                update(id,releaseType) {
+                    window.location.href ='hr_init_param?sysProId='+id+"&releaseType="+releaseType
+                },
+                release(sysProName,releaseType){
+                    window.location.href= 'add_params?releaseType='+releaseType + '&sysProName=' + sysProName
+                },
+                add(releaseType){
+                    window.location.href='new_params?releaseType='+releaseType
+                },
+                deleteRow(index, rows) {
+                    rows.splice(index, 1);
+                },
+                handleSelectionChange(data) {
+                    this.selectedData = data;
+                },
+            },
+            mounted:function(){
+                this.querySideInfo();
+                this.queryData();
+
+            },
+        }
+    ;const app = Vue.createApp(Main);
+    app.use(ElementPlus);
+    app.mount("#index");
+
+
+</script>
+
+
+</html>

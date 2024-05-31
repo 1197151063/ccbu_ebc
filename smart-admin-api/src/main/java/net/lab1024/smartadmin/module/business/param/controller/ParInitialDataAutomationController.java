@@ -7,6 +7,7 @@ import net.lab1024.smartadmin.common.domain.ValidateList;
 import net.lab1024.smartadmin.module.business.param.domain.dto.ParInitialDataAutomationAddDTO;
 import net.lab1024.smartadmin.module.business.param.domain.dto.ParInitialDataAutomationUpdateDTO;
 import net.lab1024.smartadmin.module.business.param.domain.dto.ParInitialDataAutomationQueryDTO;
+import net.lab1024.smartadmin.module.business.param.domain.entity.ParInitialDataAutomationEntity;
 import net.lab1024.smartadmin.module.business.param.domain.vo.ParInitialDataAutomationVO;
 import net.lab1024.smartadmin.module.business.param.domain.vo.ParInitialDataAutomationExcelVO;
 import net.lab1024.smartadmin.module.business.param.service.ParInitialDataAutomationService;
@@ -16,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -83,6 +85,14 @@ public class ParInitialDataAutomationController extends BaseController {
         ExportParams ex = new ExportParams("初始数据表-人事后勤数据表(自动化投资)", "Sheet1");
         Workbook workbook = ExcelExportUtil.exportExcel(ex, ParInitialDataAutomationExcelVO.class, parInitialDataAutomationList);
         downloadExcel("初始数据表-人事后勤数据表(自动化投资)", workbook, response);
+    }
+
+    @ApiOperation(value = "Query all initial data",notes = "Query all initial data")
+    @GetMapping("/parInitialDataAutomation/queryAll")
+    public List<ParInitialDataAutomationEntity> queryAll(Model model) {
+        List<ParInitialDataAutomationEntity> l = parInitialDataAutomationService.getAll();
+        model.addAttribute("data",l);
+        return  l;
     }
 
 }

@@ -115,5 +115,8 @@
             #{item}
         </foreach>
     </delete>
+    <select id="queryWithProId">
+        select
+    </select>
 
 </mapper>

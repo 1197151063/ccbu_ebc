@@ -63,4 +63,6 @@ public interface ParInitialDataAutomationDao extends BaseMapper<ParInitialDataAu
     List<ParInitialDataAutomationExcelVO> queryBatchExportData(@Param("idList")List<Long> idList);
 
     ParInitialDataAutomationVO selectInitialDataAutomationData(@Param("currentStageId")Long currentStageId, @Param("project")String project );
+
+    List<ParInitialDataAutomationVO> getAllInitialDataAutomationData(@Param("currentStageId")Long currentStageId);
 }

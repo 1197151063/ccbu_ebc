@@ -993,7 +993,7 @@
 				close-text="知道了">
 		</el-alert>
 	</div>
-	<div class="xxlr-tj" v-if="form.status!=1">
+	<div class="xxlr-tj" >
 <!--		<a type="primary" th:href="@{/service/yjs}" th:target="_blank">查看</a>-->
 		<el-button type="primary" v-if="form.currentStageId!=2" plain @click="preOperation('form')">预计算</el-button>
 <!--		<a type="primary" th:href="@{/service/yjs(currentProjectId=${form.currentProjectId},currentTeamId=${form.currentTeamId},currentStageId=${form.currentStageId})}"  th:target="_blank" plain @click="saveForm('form')">预计算</a>-->

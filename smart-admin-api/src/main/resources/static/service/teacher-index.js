@@ -324,6 +324,25 @@ var Main = {
                     }
                 })
             },
+            queryInitData(){
+                let params= new URLSearchParams()
+                params.append('currentProjectId', this.defaultId)
+                params.append('currentStageId', this.currentStageId)
+                axios({
+                    method:'get',
+                    url:'',
+                    params:params,
+                }).then(function(resp){
+                    if(resp.status==200){
+                        let aData = resp.data.data
+                        for(let key in aData){
+                            that.teamData=aData[key]
+                            break
+                        }
+                    }
+                })
+
+            },
             //tab
             formatter(row, column) {
                 return row.address;

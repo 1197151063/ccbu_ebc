@@ -57,8 +57,8 @@ public class QuartzTask extends QuartzJobBean {
             paramsStr = params.toString();
             taskLogEntity.setTaskParams(paramsStr);
         }
-        taskLogEntity.setUpdateTime(new Date());
-        taskLogEntity.setCreateTime(new Date());
+//        taskLogEntity.setUpdateTime(new Date());
+//        taskLogEntity.setCreateTime(new Date());
         //任务开始时间
         long startTime = System.currentTimeMillis();
         try {

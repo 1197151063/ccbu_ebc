@@ -408,6 +408,33 @@ public class LoginThymeleafController {
         model.setViewName("teacher/js_tdgl_tdxx");
         return model;
     }
+
+    /**
+     * edit personel-cost for one project
+     * @param model
+     * @param request
+     * @param sysProId
+     * @param releaseType
+     * @return
+     */
+    @GetMapping("/hr_init_param")
+    public ModelAndView hrInitParams(ModelAndView model, HttpServletRequest request,
+                                     @RequestParam("sysProId") Long sysProId,
+                                     @RequestParam("releaseType") Integer releaseType){
+        String sysProName = sysProjectService.queryData(sysProId).getProName();
+        this.modelAndViewObjects(model,request);
+        HttpSession session = request.getSession();
+        LoginDetailVO loginDetailVO = (LoginDetailVO)session.getAttribute("app_user_login");
+        if(releaseType==1){
+            model.addObject("releaseTypeName","人力成本维护");
+            model.addObject("releaseType",1);
+        }
+        model.addObject("sysProName",sysProName);
+        model.addObject("sysProId",sysProId);
+        model.addObject("loginDetailVO",loginDetailVO);
+        model.setViewName("teacher/parser_init_hr_data");
+        return model;
+    }
     //新增市场环境
     @GetMapping("/js_xzschj")
     public ModelAndView jsXzschj(ModelAndView model, HttpServletRequest request, @RequestParam("releaseType")Integer releaseType){
@@ -437,6 +464,38 @@ public class LoginThymeleafController {
         }
         model.addObject("loginDetailVO",loginDetailVO);
         model.setViewName("teacher/js_cjgl_tj");
+        return model;
+    }
+
+    @GetMapping("/add_params")
+    public ModelAndView addParams(ModelAndView model,
+                                  HttpServletRequest request,
+                                  @RequestParam("sysProName") String sysProName,
+                                  @RequestParam("releaseType") Integer releaseType
+                                  ){
+        this.modelAndViewObjects(model,request);
+        HttpSession session = request.getSession();
+        LoginDetailVO loginDetailVO = (LoginDetailVO)session.getAttribute("app_user_login");
+        if(releaseType==1){
+            model.addObject("releaseTypeName","人力成本");
+            model.addObject("releaseType","1");
+        }
+        model.addObject("sysProName",sysProName);
+        model.addObject("loginDetailVO",loginDetailVO);
+        model.setViewName("teacher/parser_init_hr_data");
+        return model;
+    }
+    @GetMapping("/new_params")
+    public ModelAndView newParams(ModelAndView model,HttpServletRequest request,@RequestParam("releaseType") Integer releaseType){
+        this.modelAndViewObjects(model,request);
+        HttpSession session = request.getSession();
+        LoginDetailVO loginDetailVO = (LoginDetailVO)session.getAttribute("app_user_login");
+        if(releaseType==1){
+            model.addObject("releaseTypeName","人力成本");
+            model.addObject("releaseType","1");
+        }
+        model.addObject("loginDetailVO",loginDetailVO);
+        model.setViewName("teacher/add_init_hr_data");
         return model;
     }
 
@@ -584,6 +643,13 @@ public class LoginThymeleafController {
     public ModelAndView jsXxgl(ModelAndView model, HttpServletRequest request){
         this.modelAndViewObjects(model,request);
         model.setViewName("teacher/js_xxgl");
+        return model;
+    }
+
+    @GetMapping("/params_parser")
+    public ModelAndView paramParser(ModelAndView model, HttpServletRequest request){
+        this.modelAndViewObjects(model,request);
+        model.setViewName("teacher/params_parser");
         return model;
     }
 

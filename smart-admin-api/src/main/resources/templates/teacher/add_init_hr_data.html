@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--header-->
+<!--main-->
+<!--nav-->
+<!--main-->
+<div class="form-bg">
+    <div class="form-title">
+        <div class="form-title-left"><img src="../images/form_title.png" alt=""/>新增人力成本参数</div>
+        <div class="form-title-right">
+            <el-button type="primary" size="small"  @click="submit(1)">提交</el-button>
+            <el-button type="primary" plain size="small" @click="submit(0)">保存</el-button>
+            <el-button size="small" onclick="window.location.href ='params_parser'">返回</el-button></div>
+    </div>
+    <div class="form-main">
+        <el-form :model="form" ref="form" :hide-required-asterisk="false" show-message :rules="">
+            <el-row>
+                <el-col :span="12">
+                    <dl>
+                        <dt>发布人</dt>
+                        <dt>
+                            [[${loginDetailVO.actualName}]]
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="12">
+                    <dl>
+                        <dt>项目</dt>
+                        <dt>
+                            <el-select v-model="value" size="large" placeholder="请选择">
+                                <el-option
+                                        v-for="item in projectOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                ></el-option>
+
+
+                            </el-select>
+                        </dt>
+                    </dl>
+                </el-col>
+
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <dl>
+                        <dt>贷款业务</dt>
+                        <dd>
+                            <el-input-number>
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="12">
+                    <dl>
+                        <dt>投资业务</dt>
+                        <dd>
+                            <el-input-number>
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <dl>
+                        <dt>中间业务</dt>
+                        <dd>
+                            <el-input-number>
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="12">
+                    <dl>
+                        <dt>存款业务</dt>
+                        <dd>
+                            <el-input-number>
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <dl>
+                        <dt>后勤及其他</dt>
+                        <dd>
+                            <el-input-number>
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+
+            </el-row>
+            <el-row>
+
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <dl>
+                        <dt>备注</dt>
+                        <dd>
+                            <el-input
+                                    type="textarea"
+                                    placeholder="请输入内容"
+                                    v-model="form.content"
+                                    maxlength="200"
+                                    show-word-limit
+                            >
+                            </el-input>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+        </el-form>
+    </div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div class="footer">
+
+    <div th:include="include/footer"></div>
+
+</div>
+</body>
+
+
+
+<script>
+    //输入框
+    const { defineComponent, ref } = Vue
+
+
+    var Main = {
+
+            //输入框
+            setup() {
+                return {
+                    text: ref(''),
+                    textarea: ref('')
+                }
+            },
+
+            data () {
+                return {
+                    //头像
+                    circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+                    squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+                    sizeList: ["large", "medium", "small"],
+                    defaultId:0,
+                    //导航
+                    activeIndex: '8',
+                    projectValue:0,
+                    form: {
+                        id:'',
+                        title:'',
+                        actualName:'',
+                        releaseType:'',
+                        content:'',
+                        status:0,
+                        team:'',
+                        releaseMode:'',
+                        releaseTime:'',
+                        endTime:'',
+                        createrUser:''
+                    },
+                    type:'',
+                    projectOptions:[],
+                    //选择器
+                    options: [{
+                        value: '自动发布',
+                        label: '自动发布'
+                    }, {
+                        value: '手动发布',
+                        label: '手动发布'
+                    }],
+                    optionsTeam: [{
+                        value: '全部团队',
+                        label: '全部团队'
+                    }, {
+                        value: '团队1',
+                        label: '团队1'
+                    }, {
+                        value: '团队2',
+                        label: '团队2'
+                    }],
+                    value: 0,
+                    //日期快捷选项
+                    shortcuts: [{
+                        text: '最近一周',
+                        value: (() => {
+                            const end = new Date()
+                            const start = new Date()
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+                            return [start, end]
+                        })(),
+                    }, {
+                        text: '最近一个月',
+                        value: (() => {
+                            const end = new Date()
+                            const start = new Date()
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+                            return [start, end]
+                        })(),
+                    }, {
+                        text: '最近三个月',
+                        value: (() => {
+                            const end = new Date()
+                            const start = new Date()
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+                            return [start, end]
+                        })(),
+                    }],
+                    value1: '',
+                    value2: '',
+                    //弹出经济形势
+                    dialogTableVisible: false
+                }
+            },
+            mounted:function(){
+                // this.queryData()
+                this.queryProjects();
+            },
+            methods: {
+                //查询已保存或填写的数据
+                queryProjects(){
+                    let that = this;
+                    axios({
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        method:'get',
+                        url:'queryAllProject',
+                        responseType:'json',
+                    }).then(function (resp){
+                        if(resp.status == 200 ){
+
+                            let data = resp.data.data;
+                            that.projectOptions = [];
+                            data.forEach(function(item,index){
+                                let temp = {value:'',label:''}
+                                temp.value = item.proId
+                                temp.label = item.proName
+                                that.projectOptions.push(temp)
+                            })
+                            //console.log(that.projectOptions)
+                            that.value = data[0].proName
+                            that.defaultId = data[0].proId
+                        }
+
+                    })
+                },
+                queryData(){
+                    let that = this
+                    let id=	'[[${id}]]'
+                    let params= new URLSearchParams()
+                    if(id!=''){
+                        params.append('id',id)
+                    }else {
+                        params.append('id',null)
+                    }
+
+                    // axios({
+                    //     method:'get',
+                    //     url:'tSceneManagement/queryData',//相对路径即可，不用加/service
+                    //     params:params,
+                    //     responseType:'json',
+                    // }).then(function(resp){
+                    //     if(resp.data.data!=null){
+                    //         that.form = resp.data.data
+                    //     }
+                    // })
+                },
+                submit(type1){
+                    let that =this
+                    let form = this.form
+                    form.id=[[${id}]]
+                    form.createrUser=[[${loginDetailVO.id}]]
+                    form.releaseType=[[${releaseType}]]
+                    form.releaseTime=that.value2[0]
+                    let begin = new Date(form.releaseTime);
+                    form.releaseTime=begin.getFullYear() + '-' + (begin.getMonth() + 1)
+                        + '-' + begin.getDate() + ' ' + begin.getHours() + ':' + begin.getMinutes() + ':' + begin.getSeconds();
+                    if(form.releaseTime=="NaN-NaN-NaN NaN:NaN:NaN"){
+                        form.releaseTime=null
+                    }
+                    form.endTime=that.value2[1]
+                    let end = new Date(form.endTime);
+                    form.endTime=end.getFullYear() + '-' + (end.getMonth() + 1)
+                        + '-' + end.getDate() + ' ' + end.getHours() + ':' + end.getMinutes() + ':' + end.getSeconds();
+                    if(form.endTime=="NaN-NaN-NaN NaN:NaN:NaN"){
+                        form.endTime=null
+                    }
+                    // axios({
+                    //     headers: {
+                    //         'Content-Type': 'application/json'
+                    //     },
+                    //     method: 'post',
+                    //     url: 'tSceneManagement/add',//相对路径即可，不用加/service
+                    //     data: form,
+                    //     responseType: 'json',
+                    // }).then(function (resp) {
+                    //     if (resp.status == 200) {
+                    //         let message
+                    //         if(type1==0){
+                    //             message = '保存成功'
+                    //         }
+                    //         if(type1==1){
+                    //             message = '提交成功'
+                    //         }
+                    //         let type = "success"
+                    //         that.$message({
+                    //             showClose: true,
+                    //             message: message,
+                    //             type: type
+                    //         });
+                    //         setTimeout( function(){
+                    //             window.location.href ='js_cjgl'
+                    //         }, 5 * 100 );//延迟500毫米
+                    //     }
+                    // })
+
+                }
+            }
+        }
+    ;const app = Vue.createApp(Main);
+    app.use(ElementPlus);
+    app.mount("#index");
+
+
+</script>
+
+
+</html>

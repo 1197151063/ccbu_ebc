@@ -1,0 +1,1095 @@
+<!doctype html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="include/import"></head>
+<body id="index" class="bg">
+<!--header-->
+<div th:include="include/js_header"></div>
+<!--header-->
+<!--main-->
+<!--nav-->
+<!--main-->
+<div class="form-bg">
+    <div class="form-title">
+        <div class="form-title-left"><img src="../images/form_title.png" alt=""/>编辑人力成本参数--[[${sysProName}]]</div>
+        <div class="form-title-right">
+            <el-button type="primary" size="small"  @click="submit(1)">提交</el-button>
+            <el-button type="primary" plain size="small" @click="submit(0)">保存</el-button>
+            <el-button size="small" onclick="window.location.href ='params_parser'">返回</el-button></div>
+    </div>
+    <div class="form-main">
+        <el-form :model="formData" ref="form" :hide-required-asterisk="false" show-message :rules="">
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+                        <dt></dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+                        <dt>贷款业务</dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+                        <dt>投资业务</dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+                        <dt>中间业务</dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+                        <dt>存款业务</dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+                        <dt>后勤及其他</dt>
+                    </dl>
+                </el-col>
+            </el-row>
+<!--            <el-divider></el-divider>-->
+<!--            <el-divider></el-divider>-->
+
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>指标类型</dt>-->
+                        <dt>
+                            {{indicatorNames[0]}}
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>贷款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="loanBusiness[0]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>投资业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[0]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>中间业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="middleBusiness[0]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>存款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="depositBusiness[0]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>后勤及其他</dt>-->
+                        <dd>
+                            <el-input-number v-model="otherBusiness[0]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+<!--            <el-row>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>中间业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="middleBusiness[0]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>存款业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="depositBusiness[0]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>后勤及其他</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="otherBusiness[0]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--            <el-divider></el-divider>-->
+<!--            <el-divider></el-divider>-->
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+    <!--                        <dt>指标类型</dt>-->
+                        <dt>
+                            {{indicatorNames[1]}}
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>贷款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="loanBusiness[1]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>投资业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[1]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>中间业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="middleBusiness[1]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>存款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="depositBusiness[1]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>后勤及其他</dt>-->
+                        <dd>
+                            <el-input-number v-model="otherBusiness[1]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+<!--            <el-row>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>中间业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="middleBusiness[1]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>存款业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="depositBusiness[1]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>后勤及其他</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="otherBusiness[1]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--            <el-divider></el-divider>-->
+<!--            <el-divider></el-divider>-->
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>指标类型</dt>-->
+                        <dt>
+                            {{indicatorNames[2]}}
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>贷款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="loanBusiness[2]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>投资业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[2]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>中间业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="middleBusiness[2]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>存款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="depositBusiness[2]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>后勤及其他</dt>-->
+                        <dd>
+                            <el-input-number v-model="otherBusiness[2]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+<!--            <el-row>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>中间业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="middleBusiness[2]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>存款业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="depositBusiness[2]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>后勤及其他</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="otherBusiness[2]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--            <el-divider></el-divider>-->
+<!--            <el-divider></el-divider>-->
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>指标类型</dt>-->
+                        <dt>
+                            {{indicatorNames[3]}}
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>贷款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="loanBusiness[3]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>投资业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[3]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>中间业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="middleBusiness[3]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>存款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[3]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>后勤及其他</dt>-->
+                        <dd>
+                            <el-input-number v-model="otherBusiness[3]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+    <!--            <el-row>-->
+
+    <!--                <el-col :span="8">-->
+    <!--                    <dl>-->
+    <!--                        <dt>中间业务</dt>-->
+    <!--                        <dd>-->
+    <!--                            <el-input-number v-model="middleBusiness[3]">-->
+
+    <!--                            </el-input-number>-->
+    <!--                        </dd>-->
+    <!--                    </dl>-->
+    <!--                </el-col>-->
+    <!--                <el-col :span="8">-->
+    <!--                    <dl>-->
+    <!--                        <dt>存款业务</dt>-->
+    <!--                        <dd>-->
+    <!--                            <el-input-number v-model="investmentBusiness[3]">-->
+
+    <!--                            </el-input-number>-->
+    <!--                        </dd>-->
+    <!--                    </dl>-->
+    <!--                </el-col>-->
+    <!--                <el-col :span="8">-->
+    <!--                    <dl>-->
+    <!--                        <dt>后勤及其他</dt>-->
+    <!--                        <dd>-->
+    <!--                            <el-input-number v-model="otherBusiness[3]">-->
+
+    <!--                            </el-input-number>-->
+    <!--                        </dd>-->
+    <!--                    </dl>-->
+    <!--                </el-col>-->
+    <!--            </el-row>-->
+
+    <!--            <el-divider></el-divider>-->
+<!--            <el-divider></el-divider>-->
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>指标类型</dt>-->
+                        <dt>
+                            {{indicatorNames[4]}}
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>贷款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="loanBusiness[4]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>投资业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[4]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>中间业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="middleBusiness[4]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>存款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="depositBusiness[4]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>后勤及其他</dt>-->
+                        <dd>
+                            <el-input-number v-model="otherBusiness[4]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+<!--            <el-row>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>中间业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="middleBusiness[4]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>存款业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="depositBusiness[4]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>后勤及其他</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="otherBusiness[4]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--            <el-divider></el-divider>-->
+<!--            <el-divider></el-divider>-->
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>指标类型</dt>-->
+                        <dt>
+                            {{indicatorNames[5]}}
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>贷款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="loanBusiness[5]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>投资业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[5]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>中间业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="middleBusiness[5]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>存款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="depositBusiness[5]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>后勤及其他</dt>-->
+                        <dd>
+                            <el-input-number v-model="otherBusiness[5]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+<!--            <el-row>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>中间业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="middleBusiness[5]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>存款业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="depositBusiness[5]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>后勤及其他</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="otherBusiness[5]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--            <el-divider></el-divider>-->
+<!--            <el-divider></el-divider>-->
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>指标类型</dt>-->
+                        <dt>
+                            {{indicatorNames[6]}}
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>贷款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="loanBusiness[6]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>投资业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[6]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>中间业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="middleBusiness[6]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>存款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="depositBusiness[6]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>后勤及其他</dt>-->
+                        <dd>
+                            <el-input-number v-model="otherBusiness[6]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+<!--            <el-row>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>中间业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="middleBusiness[6]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>存款业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="depositBusiness[6]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>后勤及其他</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="otherBusiness[6]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--            <el-divider></el-divider>-->
+<!--            <el-divider></el-divider>-->
+            <el-row>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>指标类型</dt>-->
+                        <dt>
+                            {{indicatorNames[7]}}
+                        </dt>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>贷款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="loanBusiness[7]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>投资业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="investmentBusiness[7]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>中间业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="middleBusiness[7]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+<!--                        <dt>存款业务</dt>-->
+                        <dd>
+                            <el-input-number v-model="depositBusiness[7]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+                <el-col :span="4">
+                    <dl>
+    <!--                        <dt>后勤及其他</dt>-->
+                        <dd>
+                            <el-input-number v-model="otherBusiness[7]">
+
+                            </el-input-number>
+                        </dd>
+                    </dl>
+                </el-col>
+            </el-row>
+            <el-divider></el-divider>
+<!--            <el-row>-->
+
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>中间业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="middleBusiness[7]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>存款业务</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="depositBusiness[7]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--                <el-col :span="8">-->
+<!--                    <dl>-->
+<!--                        <dt>后勤及其他</dt>-->
+<!--                        <dd>-->
+<!--                            <el-input-number v-model="otherBusiness[7]">-->
+
+<!--                            </el-input-number>-->
+<!--                        </dd>-->
+<!--                    </dl>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+
+        </el-form>
+    </div>
+</div>
+<!--main-->
+
+<!--footer-->
+<div class="footer">
+
+    <div th:include="include/footer"></div>
+
+</div>
+</body>
+
+
+
+<script>
+    //输入框
+    const { defineComponent, ref } = Vue
+
+
+    var Main = {
+
+            //输入框
+            setup() {
+                return {
+                    text: ref(''),
+                    textarea: ref('')
+                }
+            },
+
+            data () {
+                return {
+                    //头像
+                    circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+                    squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+                    sizeList: ["large", "medium", "small"],
+                    //导航
+                    activeIndex: '8',
+                    form: {
+                        id:'',
+                        title:'',
+                        actualName:'',
+                        releaseType:'',
+                        content:'',
+                        status:0,
+                        team:'',
+                        releaseMode:'',
+                        releaseTime:'',
+                        endTime:'',
+                        createrUser:'',
+                    },
+                    ids :[],
+                    formData : {},
+                    indicatorNames:[],
+                    loanBusiness:[],
+                    depositBusiness:[],
+                    investmentBusiness:[],
+                    middleBusiness:[],
+                    otherBusiness:[],
+                    type:'',
+                    //选择器
+                    options: [{
+                        value: '自动发布',
+                        label: '自动发布'
+                    }, {
+                        value: '手动发布',
+                        label: '手动发布'
+                    }],
+                    optionsTeam: [{
+                        value: '全部团队',
+                        label: '全部团队'
+                    }, {
+                        value: '团队1',
+                        label: '团队1'
+                    }, {
+                        value: '团队2',
+                        label: '团队2'
+                    }],
+                    value: '',
+                    //日期快捷选项
+                    shortcuts: [{
+                        text: '最近一周',
+                        value: (() => {
+                            const end = new Date()
+                            const start = new Date()
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+                            return [start, end]
+                        })(),
+                    }, {
+                        text: '最近一个月',
+                        value: (() => {
+                            const end = new Date()
+                            const start = new Date()
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+                            return [start, end]
+                        })(),
+                    }, {
+                        text: '最近三个月',
+                        value: (() => {
+                            const end = new Date()
+                            const start = new Date()
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+                            return [start, end]
+                        })(),
+                    }],
+                    value1: '',
+                    value2: '',
+                    //弹出经济形势
+                    dialogTableVisible: false
+                }
+            },
+            mounted:function(){
+                        this.queryData()
+            },
+            methods: {
+                //查询初始数据或者修改数据
+                fillNull(obj){
+                    for (let key in obj){
+                        if(obj[key] == null){
+                            obj[key] = 0
+                        }
+                    }
+                    return obj
+                },
+                queryData(){
+                    let that = this
+                    let proId = `[[${sysProId}]]`
+                    console.log(proId)
+                    axios({
+                        method:'get',
+                        url:'parPersonnelCost/queryAll',
+                        responseType:'json'
+                    }).then(function(resp){
+                        if(resp.status == 200){
+                            let data = resp.data
+                            let filterData = data.data.filter(item => item.sysProjectId === parseInt(proId))
+                            that.formData = filterData
+                            console.log(that.formData)
+                            for (let i = 0 ; i < filterData.length; i ++ ){
+                                that.ids[i] = filterData[i]['id']
+                                that.indicatorNames[i] = filterData[i]['project']
+                                that.loanBusiness[i] = filterData[i]['loanBusiness']
+                                that.depositBusiness[i] = filterData[i]['depositBusiness']
+                                that.investmentBusiness[i] = filterData[i]['investmentBusiness']
+                                that.middleBusiness[i] = filterData[i]['middleBusiness']
+                                that.otherBusiness[i] = filterData[i]['otherBusiness']
+                            }
+                            console.log(that.indicatorNames)
+
+
+                        }
+
+                    })
+
+                    // axios({
+                    //     method:'get',
+                    //     url:'tSceneManagement/queryData',//相对路径即可，不用加/service
+                    //     params:params,
+                    //     responseType:'json',
+                    // }).then(function(resp){
+                    //     if(resp.data.data!=null){
+                    //         that.form = resp.data.data
+                    //     }
+                    // })
+                },
+                batchInsert(){
+                    let that = this
+
+                },
+                submit(type1){
+                    let sysProId=    '[[${sysProId}]]'
+                    let releaseType=    '[[${releaseType}]]'
+                    let that = this
+                    let loanBusiness = that.loanBusiness
+                    let depositBusiness = that.depositBusiness
+                    let investmentBusiness = that.investmentBusiness
+                    let middleBusiness = that.middleBusiness
+                    let otherBusiness = that.otherBusiness
+                    let ids = that.ids
+
+                    let record = []
+                    for (let i = 0; i < loanBusiness.length; i ++){
+                        let obj = {
+                            id: ids[i],
+                            project: that.indicatorNames[i],
+                            loanBusiness: loanBusiness[i],
+                            depositBusiness: depositBusiness[i],
+                            investmentBusiness: investmentBusiness[i],
+                            middleBusiness: middleBusiness[i],
+                            otherBusiness: otherBusiness[i]
+                        }
+                        record.push(this.fillNull(obj))
+                    }
+                    for (let i = 0 ; i < record.length; i ++ ){
+
+                        setTimeout(() => axios({
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            method: 'post',
+                            url: 'parPersonnelCost/update',
+                            data: record[i],
+                        }),100)
+
+                    }
+                    let message = '提交成功'
+                    let type = "success"
+                    that.$message({
+                        showClose: true,
+                        message: message,
+                        type: type
+                    });
+                    // window.location.href = 'params_parser'
+                    // let that =this
+                    // let form = this.form
+                    // form.id=[[${id}]]
+                    // form.createrUser=[[${loginDetailVO.id}]]
+                    // form.releaseType=[[${releaseType}]]
+                    // form.releaseTime=that.value2[0]
+                    // let begin = new Date(form.releaseTime);
+                    // form.releaseTime=begin.getFullYear() + '-' + (begin.getMonth() + 1)
+                    //     + '-' + begin.getDate() + ' ' + begin.getHours() + ':' + begin.getMinutes() + ':' + begin.getSeconds();
+                    // if(form.releaseTime=="NaN-NaN-NaN NaN:NaN:NaN"){
+                    //     form.releaseTime=null
+                    // }
+                    // form.endTime=that.value2[1]
+                    // let end = new Date(form.endTime);
+                    // form.endTime=end.getFullYear() + '-' + (end.getMonth() + 1)
+                    //     + '-' + end.getDate() + ' ' + end.getHours() + ':' + end.getMinutes() + ':' + end.getSeconds();
+                    // if(form.endTime=="NaN-NaN-NaN NaN:NaN:NaN"){
+                    //     form.endTime=null
+                    // }
+                    // axios({
+                    //     headers: {
+                    //         'Content-Type': 'application/json'
+                    //     },
+                    //     method: 'post',
+                    //     url: 'tSceneManagement/add',//相对路径即可，不用加/service
+                    //     data: form,
+                    //     responseType: 'json',
+                    // }).then(function (resp) {
+                    //     if (resp.status == 200) {
+                    //         let message
+                    //         if(type1==0){
+                    //             message = '保存成功'
+                    //         }
+                    //         if(type1==1){
+                    //             message = '提交成功'
+                    //         }
+                    //         let type = "success"
+                    //         that.$message({
+                    //             showClose: true,
+                    //             message: message,
+                    //             type: type
+                    //         });
+                    //         setTimeout( function(){
+                    //             window.location.href ='js_cjgl'
+                    //         }, 5 * 100 );//延迟500毫米
+                    //     }
+                    // })
+
+                }
+            }
+        }
+    ;const app = Vue.createApp(Main);
+    app.use(ElementPlus);
+    app.mount("#index");
+
+
+</script>
+<style>
+    dt{
+        font-weight: bold;
+        display: inline;
+    }
+    dl{
+        /*display: flex;*/
+        /*flex-wrap: nowrap;*/
+        /*width: 100%;*/
+        /*overflow: hidden;*/
+    }
+</style>
+
+</html>

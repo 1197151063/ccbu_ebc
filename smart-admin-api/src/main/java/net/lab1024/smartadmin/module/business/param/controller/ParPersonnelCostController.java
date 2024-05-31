@@ -11,16 +11,14 @@ import net.lab1024.smartadmin.common.domain.ValidateList;
 import net.lab1024.smartadmin.module.business.param.domain.dto.ParPersonnelCostAddDTO;
 import net.lab1024.smartadmin.module.business.param.domain.dto.ParPersonnelCostQueryDTO;
 import net.lab1024.smartadmin.module.business.param.domain.dto.ParPersonnelCostUpdateDTO;
+import net.lab1024.smartadmin.module.business.param.domain.entity.ParPersonnelCostEntity;
 import net.lab1024.smartadmin.module.business.param.domain.vo.ParPersonnelCostExcelVO;
 import net.lab1024.smartadmin.module.business.param.domain.vo.ParPersonnelCostVO;
 import net.lab1024.smartadmin.module.business.param.service.ParPersonnelCostService;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -88,10 +86,18 @@ public class ParPersonnelCostController extends BaseController {
         Workbook workbook = ExcelExportUtil.exportExcel(ex, ParPersonnelCostExcelVO.class, parPersonnelCostList);
         downloadExcel("人员成本表", workbook, response);
     }
+
+    @ApiOperation(value = "查询所有人员成本表",notes = "")
+    @GetMapping("/parPersonnelCost/queryAll")
+    public ResponseDTO<List<ParPersonnelCostEntity>> queryAll(){
+        return parPersonnelCostService.queryAll();
+    }
+
 //    @ApiOperation(value = "查询投资业务的附加人员成本",notes = "")
-//    @GetMapping("/parPersonnelCost/queryAdditional")
+//    @GetMapping("/parPersonnelCo  st/queryAdditional")
 //    public ParPersonnelCostVO queryAdditional(@RequestBody ParPersonnelCostEntity parPersonnelCostEntity){
 //        return parPersonnelCostService.queryAdditional(parPersonnelCostEntity);
 //    }
+
 
 }

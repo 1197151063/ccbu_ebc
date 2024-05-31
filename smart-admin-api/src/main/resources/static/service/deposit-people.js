@@ -1,6 +1,6 @@
 import {loading_close, loading_open, quertProjectEndStage} from "../util/util.js";
 var Main = {
-        data () {
+    data () {
             const validateRules = (rule, value, callback) => {
                 let reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g;
                 if (value === '') {

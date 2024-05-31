@@ -105,4 +105,8 @@ public class ParInitialDataAutomationService {
     public List<ParInitialDataAutomationExcelVO> queryBatchExportData(List<Long> idList) {
         return parInitialDataAutomationDao.queryBatchExportData(idList);
     }
+
+    public List<ParInitialDataAutomationEntity> getAll(){
+        return parInitialDataAutomationDao.selectList(null);
+    }
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.module.business.basics.domain.vo.SysProjectVO;
 import net.lab1024.smartadmin.module.business.param.dao.ParPersonnelCostDao;
 import net.lab1024.smartadmin.module.business.param.domain.dto.ParPersonnelCostAddDTO;
 import net.lab1024.smartadmin.module.business.param.domain.dto.ParPersonnelCostUpdateDTO;
@@ -108,5 +109,10 @@ public class ParPersonnelCostService {
 
     public ParPersonnelCostVO queryAdditional(ParPersonnelCostEntity parPersonnelCostEntity) {
         return parPersonnelCostDao.queryAdditional(parPersonnelCostEntity);
+    }
+
+    public ResponseDTO<List<ParPersonnelCostEntity>> queryAll() {
+        List<ParPersonnelCostEntity> entityList = parPersonnelCostDao.selectList(null);
+        return ResponseDTO.succData(entityList);
     }
 }

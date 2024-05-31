@@ -4,9 +4,7 @@
 <head th:include="include/import"></head>
 
 <body id="index" class="bg">
-<!--在线交流-->
-<div class="zxjl"><a href="#"><img th:src="@{/images/zxjl.png}" alt=""/></a></div>
-<!--在线交流-->
+
 <!--header-->
 <div th:include="include/header"></div>
 <!--main-->
@@ -203,7 +201,7 @@
                 close-text="知道了">
         </el-alert>
     </div>
-    <div class="xxlr-tj" v-if="form.status!=1">
+    <div class="xxlr-tj">
         <el-button type="primary" v-if="form.currentStageId!=2" plain @click="preOperation('form')">预计算</el-button>
         <el-button type="primary" plain @click="saveForm('form')">保存</el-button>
         <el-button type="primary" @click="submitFormBefore('form')">提交</el-button>

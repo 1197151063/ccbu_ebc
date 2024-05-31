@@ -34,7 +34,7 @@ import java.util.List;
  */
 @RestController
 @Api(tags = {"自动化投资指数"})
-public class ParIndexNumberController extends BaseController {
+public class    ParIndexNumberController extends BaseController {
 
     @Autowired
     private ParIndexNumberService parIndexNumberService;

@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @since JDK1.8
  */
 @Data
-public class ParPersonnelCostAddDTO {
+public class  ParPersonnelCostAddDTO {
     @ApiModelProperty("项目")
     private String project;
 
